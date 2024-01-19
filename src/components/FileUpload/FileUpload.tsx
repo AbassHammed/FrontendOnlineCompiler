@@ -1,0 +1,98 @@
+import { authModalState } from "@/atoms/authModalAtom";
+import { auth } from "@/firebase/firebase";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useSetRecoilState } from "recoil";
+import { toast } from "react-toastify";
+import { FaRegClipboard } from "react-icons/fa";
+type CreateSessionProps = {};
+
+const CreateSession: React.FC<CreateSessionProps> = () => {
+	const [sessionId, setSessionId] = useState('');
+
+	const handleGenerateSessionId = () => {
+    	setSessionId(generateSessionId());
+  	};
+
+	const [inputs, setInputs] = useState({ email: "", password: "" });
+
+	const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+
+	const router = useRouter();
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+	};
+
+	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!inputs.email || !inputs.password) return toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark"});
+		try {
+			const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
+			if (!newUser) return;
+			router.push("/");
+		} catch (error: any) {
+			toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
+		}
+	};
+
+	useEffect(() => {
+		if (error) toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
+	}, [error]);
+	return (
+		<form className='space-y-6 px-6 pb-4' onSubmit={handleLogin}>
+			<h3 className='text-xl font-medium text-white'>Create a session</h3>
+			<div>
+				<label htmlFor='email' className='text-sm font-medium block mb-2 text-gray-300'>
+					Give your session a name
+				</label>
+				<input
+					onChange={handleInputChange}
+					type='email'
+					name='email'
+					id='email'
+					className='
+            border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+            bg-gray-600 border-gray-500 placeholder-gray-400 text-white
+        '
+					placeholder='TP Algorithmique'
+				/>
+			</div>
+
+			<div>
+				<label htmlFor='sessionId' className='text-sm font-medium block mb-2 text-gray-300'>
+					Session ID
+				</label>
+				<div className='relative flex items-center'>
+					<input
+					value={sessionId}
+					type='text'
+					name='sessionId'
+					id='sessionId'
+					className='border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-10
+						bg-gray-600 border-gray-500 placeholder-gray-400 text-white'
+					placeholder='Session ID'
+					/>
+					<FaRegClipboard 
+					className='absolute right-3 text-white cursor-pointer' 
+					onClick={handleGenerateSessionId} 
+					/>
+				</div>
+			</div>
+			
+			<button
+				type='submit'
+				className='w-full text-white focus:ring-blue-300 font-medium rounded-lg
+                text-sm px-5 py-2.5 text-center bg-brand-purple hover:bg-brand-purple-s
+            '
+			>
+				{loading ? "Creating..." : "Create"}
+			</button>
+		</form>
+	);
+};
+export default CreateSession;
+
+const generateSessionId = () => Math.random().toString(36).slice(-8).toUpperCase();
+
