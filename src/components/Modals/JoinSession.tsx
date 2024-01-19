@@ -1,51 +1,64 @@
-import { authModalState } from "@/atoms/authModalAtom";
-import { auth } from "@/firebase/firebase";
+import { firestore } from "@/firebase/firebase";
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { useSetRecoilState } from "recoil";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 type JoinSessionProps = {};
 
 const JoinSession: React.FC<JoinSessionProps> = () => {
-	const setAuthModalState = useSetRecoilState(authModalState);
-	const handleClick = (type: "login" | "register" | "forgotPassword") => {
-		setAuthModalState((prev) => ({ ...prev, type }));
-	};
-	const [inputs, setInputs] = useState({ email: "", password: "" });
-	const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+	const [inputs, setInputs] = useState({ sessionId: "", UserName: "" });
 	const router = useRouter();
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		if (!inputs.email || !inputs.password) return toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark"});
-		try {
-			const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
-			if (!newUser) return;
-			router.push("/");
-		} catch (error: any) {
-			toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
-		}
-	};
+  const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // const { sessionId, userName } = inputs;
+    if (!inputs.sessionId || !inputs.UserName) {
+      toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark" });
+      return;
+    }
 
-	useEffect(() => {
-		if (error) toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
-	}, [error]);
+    // Query for a session with the given sessionId
+    const sessionsQuery = query(collection(firestore, "sessions"), where("sessionId", "==", inputs.sessionId));
+    const querySnapshot = await getDocs(sessionsQuery);
+
+    if (!querySnapshot.empty) {
+      // Session exists
+      const sessionDoc = querySnapshot.docs[0]; // Take the first document found with the sessionId
+      const sessionData = sessionDoc.data();
+      const filePath = sessionData.filePath;
+      const sessionName = sessionData.sessionName;
+      
+      // Reference to the users sub-collection for the session
+      const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
+      // Add user to this session's users collection
+      await addDoc(usersRef, {
+        name: inputs.UserName,
+        joinedAt: new Date()
+      });
+
+      // You may want to do something with filePath and sessionName, like storing them in state or passing to another component
+      // Redirect to the session page or next relevant page with session details
+      router.push(`/compiler/${inputs.sessionId}`);
+    } else {
+      // Session does not exist
+      toast("Session ID not found", { position: "top-center", autoClose: 3000, theme: "dark" });
+    }
+  };
 	return (
-		<form className='space-y-6 px-6 pb-4' onSubmit={handleLogin}>
+		<form className='space-y-6 px-6 pb-4' onSubmit={handleJoin}>
 			<h3 className='text-xl font-medium text-white'>Join a session</h3>
 			<div>
-				<label htmlFor='email' className='text-sm font-medium block mb-2 text-gray-300'>
+				<label htmlFor='sessionId' className='text-sm font-medium block mb-2 text-gray-300'>
 					Your session ID
 				</label>
 				<input
 					onChange={handleInputChange}
-					type='email'
-					name='email'
-					id='email'
+					type='sessionId'
+					name='sessionId'
+					id='sessionId'
 					className='
             border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
             bg-gray-600 border-gray-500 placeholder-gray-400 text-white
@@ -54,14 +67,14 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
 				/>
             </div>
             <div>
-				<label htmlFor='email' className='text-sm font-medium block mb-2 text-gray-300'>
+				<label htmlFor='UserName' className='text-sm font-medium block mb-2 text-gray-300'>
 					Your name
 				</label>
 				<input
 					onChange={handleInputChange}
-					type='email'
-					name='email'
-					id='email'
+					type='UserName'
+					name='UserName'
+					id='UserName'
 					className='
             border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
             bg-gray-600 border-gray-500 placeholder-gray-400 text-white
@@ -76,7 +89,7 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
                 text-sm px-5 py-2.5 text-center bg-brand-purple hover:bg-brand-purple-s
             '
 			>
-				{loading ? "Joining..." : "Join"}
+				Join
 			</button>
 		</form>
 	);

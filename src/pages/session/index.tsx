@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
@@ -32,7 +32,7 @@ const SessionPage: React.FC<SessionPageProps> = () => {
           Create a session
         </button>
       </div>
-      {authModal.isOpen && <AuthModal />}
+        { authModal.isOpen && <AuthModal /> }
     </div>
   );
 };

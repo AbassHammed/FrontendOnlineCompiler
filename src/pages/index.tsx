@@ -1,12 +1,12 @@
-import Topbar from "@/components/Topbar/Topbar";
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
-  return (
-    <>
-      <main>
-        <Topbar />
+  const router = useRouter();
 
-      </main>
-    </>
-  )
+  useEffect(() => {
+    router.push('/auth');
+  }, [router]);
+
+  return null;
 }

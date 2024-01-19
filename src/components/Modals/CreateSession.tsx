@@ -28,7 +28,6 @@ const CreateSession = () => {
         setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
     }, []);
 
-	console.log(inputs);
     const handleSelectedFile = (files: FileList | null) => {
 		if (!files || files.length === 0) {
 			return toast('No file selected', toastSettings);
@@ -64,17 +63,19 @@ const CreateSession = () => {
         if (!inputs.sessionName) return toast('Please fill all fields', toastSettings);
 
         try {
-            const filePath = await handleUploadFile();
-            await addDoc(collection(firestore, "sessions"), {
+			const filePath = await handleUploadFile();
+            const docRef = await addDoc(collection(firestore, "sessions"), {
                 userId: user.email,
                 sessionName: inputs.sessionName,
                 sessionId: sessionId || generateSessionId(),
                 filePath,
                 timestamp: serverTimestamp(),
-            });
-            router.push("/");
-        } catch (error: any) {
-            toast.error(error.message, toastSettings);
+			});
+			console.log("Document written with ID: ", docRef.id);
+            router.push("/Dashboard");
+		} catch (e) {
+			console.log(e);
+            toast.error("A problem when saving your data", toastSettings);
         }
     };
 
