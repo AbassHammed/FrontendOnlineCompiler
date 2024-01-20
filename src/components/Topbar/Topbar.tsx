@@ -5,14 +5,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import Image from "next/image";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { BsList } from "react-icons/bs";
 import Timer from "../Timer/Timer";
 import styled from "styled-components";
 import Logout from "../Buttons/Logout";
 
 type TopbarProps = {
 	compilerPage?: boolean;
+	sessionName?: string;
 };
 
 const TopLeftContainer = styled.div`
@@ -25,7 +24,7 @@ const TopLeftContainer = styled.div`
 `;
 
 
-const Topbar: React.FC<TopbarProps> = ({ compilerPage }) => {
+const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName }) => {
 	const [user] = useAuthState(auth);
 	const setAuthModalState = useSetRecoilState(authModalState);
 
@@ -40,30 +39,9 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage }) => {
 					</Link>
 				</TopLeftContainer>
 
-				{/* {compilerPage && (
-					<div className='flex items-center gap-4 flex-1 justify-center'>
-						<div
-							className='flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
-						>
-							<FaChevronLeft />
-						</div>
-						<Link
-							href='/'
-							className='flex items-center gap-2 font-medium max-w-[170px] text-dark-gray-8 cursor-pointer'
-						>
-							<div>
-								<BsList />
-							</div>
-							<p>Problem List</p>
-						</Link>
-						<div
-							className='flex items-center justify-center rounded bg-dark-fill-3 hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
-
-						>
-							<FaChevronRight />
-						</div>
-					</div>
-				)} */}
+				<div className='flex items-center gap-6 flex-1 justify-center'>
+					<span className='font-bold'>{ sessionName}</span>
+            	</div>
 
 				<div className='flex items-center space-x-4 flex-1 justify-end'>
 
@@ -90,7 +68,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage }) => {
 					)}
 					<div>
 						<a
-							href='https://www.buymeacoffee.com/burakorkmezz'
+							href='/session'
 							target='_blank'
 							rel='noreferrer'
 							className='bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-purple hover:bg-dark-fill-2'

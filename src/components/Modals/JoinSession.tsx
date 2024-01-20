@@ -41,7 +41,10 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
 
       // You may want to do something with filePath and sessionName, like storing them in state or passing to another component
       // Redirect to the session page or next relevant page with session details
-      router.push(`/compiler/${inputs.sessionId}`);
+		router.push({
+			pathname: `/compiler/${inputs.sessionId}`,
+			query: { filePath: sessionData.filePath, sessionName: sessionData.sessionName },
+		});
     } else {
       // Session does not exist
       toast("Session ID not found", { position: "top-center", autoClose: 3000, theme: "dark" });
