@@ -1,8 +1,10 @@
 import { useState, useCallback } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 interface PDFViewerProps {
   file: string;
@@ -55,7 +57,7 @@ const PDFViewer = ({ file }: PDFViewerProps) => {
       />
       <div className='flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto'>
         <div className='px-5'>
-            <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="w-full">
+            <Document file={file} onLoadSuccess={onDocumentLoadSuccess} className="w-full" renderMode="canvas">
               <Page pageNumber={pageNumber} />
             </Document>
         </div>

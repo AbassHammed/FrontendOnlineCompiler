@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
 
-type NavbarProps = {};
+type NavbarProps = {
+  showSign?: boolean;
+};
 
 const Container = styled.div`
   display: flex;
@@ -12,7 +14,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 5rem;
-  background-color: #282828;
+  background-color: #1A1A1A;
   color: white;
   position: relative;
 `;
@@ -51,7 +53,7 @@ const SignInButton = styled.button`
   }
 `;
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar: React.FC<NavbarProps> = ({showSign}) => {
     const setAuthModalStet = useSetRecoilState(authModalState)
   const handleClick = () => {
     setAuthModalStet((prev) => ({ ...prev, isOpen: true }));
@@ -62,7 +64,7 @@ const Navbar: React.FC<NavbarProps> = () => {
                 <Image src="/Icon.png" alt="LetsCode Logo" width={50} height={50} />
                 <LogoText>LetsCode</LogoText>
             </TopLeftContainer>
-            <SignInButton onClick={handleClick}>Sign In</SignInButton>
+            {(showSign && <SignInButton onClick={handleClick}>Sign In</SignInButton>)}
         </Container>
     );
 }

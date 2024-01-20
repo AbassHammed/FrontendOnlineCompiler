@@ -7,49 +7,72 @@ type JoinSessionProps = {};
 
 const JoinSession: React.FC<JoinSessionProps> = () => {
 	const [inputs, setInputs] = useState({ sessionId: "", UserName: "" });
+	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
+
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
 
-  const handleJoin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // const { sessionId, userName } = inputs;
-    if (!inputs.sessionId || !inputs.UserName) {
-      toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark" });
-      return;
-    }
+	const validateInputs = () => {
+		if (!inputs.sessionId || !inputs.UserName) {
+			toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark" });
+			return false;
+		}
+		return true;
+	};
 
-    // Query for a session with the given sessionId
-    const sessionsQuery = query(collection(firestore, "sessions"), where("sessionId", "==", inputs.sessionId));
-    const querySnapshot = await getDocs(sessionsQuery);
+	const joinSession = async () => {
+		try {
+			setIsLoading(true);
+			const sessionsQuery = query(collection(firestore, "sessions"), where("sessionId", "==", inputs.sessionId));
+			const querySnapshot = await getDocs(sessionsQuery);
 
-    if (!querySnapshot.empty) {
-      // Session exists
-      const sessionDoc = querySnapshot.docs[0]; // Take the first document found with the sessionId
-      const sessionData = sessionDoc.data();
-      const filePath = sessionData.filePath;
-      const sessionName = sessionData.sessionName;
-      
-      // Reference to the users sub-collection for the session
-      const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
-      // Add user to this session's users collection
-      await addDoc(usersRef, {
-        name: inputs.UserName,
-        joinedAt: new Date()
-      });
+			if (querySnapshot.empty) {
+				toast("Session ID not found", { position: "top-center", autoClose: 3000, theme: "dark" });
+				return;
+			}
 
-      // You may want to do something with filePath and sessionName, like storing them in state or passing to another component
-      // Redirect to the session page or next relevant page with session details
-		router.push({
-			pathname: `/compiler/${inputs.sessionId}`,
-			query: { filePath: sessionData.filePath, sessionName: sessionData.sessionName },
-		});
-    } else {
-      // Session does not exist
-      toast("Session ID not found", { position: "top-center", autoClose: 3000, theme: "dark" });
-    }
-  };
+			const sessionDoc = querySnapshot.docs[0];
+			const sessionData = sessionDoc.data();
+			const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
+
+			const userQuery = query(usersRef, where("name", "==", inputs.UserName));
+			const userSnapshot = await getDocs(userQuery);
+			const userDoc = userSnapshot.docs[0];
+			if (userSnapshot.empty) {
+				await addDoc(usersRef, {
+					name: inputs.UserName,
+					joinedAt: new Date(),
+					connected: true,
+					quitedAt: null
+				});
+			} else {
+				// await updateDoc(doc(firestore, `sessions/${sessionDoc.id}/users`, userDoc.id), {
+				// 	connected: true,
+				// 	quitedAt: null
+				// });
+				router.push({
+					pathname: `/compiler/${inputs.sessionId}`,
+					query: { filePath: sessionData.filePath, sessionName: sessionData.sessionName, sessionId: sessionDoc.id, UserId: userDoc.id },
+				});
+			}
+
+		} catch (error) {
+			toast("Error joining session", { position: "top-center", autoClose: 3000, theme: "dark" });
+			console.error("Error joining session: ", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleJoin = async (e:any) => {
+		e.preventDefault();
+		if (validateInputs()) {
+			await joinSession();
+		}
+	};
+
 	return (
 		<form className='space-y-6 px-6 pb-4' onSubmit={handleJoin}>
 			<h3 className='text-xl font-medium text-white'>Join a session</h3>
@@ -92,7 +115,7 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
                 text-sm px-5 py-2.5 text-center bg-brand-purple hover:bg-brand-purple-s
             '
 			>
-				Join
+				{isLoading ? "Joining..." : "Join"}
 			</button>
 		</form>
 	);

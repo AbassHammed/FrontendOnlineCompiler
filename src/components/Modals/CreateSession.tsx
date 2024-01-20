@@ -17,7 +17,8 @@ const CreateSession = () => {
     const [sessionId, setSessionId] = useState('');
     const [progressUpload, setProgressUpload] = useState(0);
     const [inputs, setInputs] = useState({ sessionName: "" });
-    const [user] = useAuthState(auth);
+	const [user] = useAuthState(auth);
+	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 	
 	const handleGenerateSessionId = () => {
@@ -57,7 +58,8 @@ const CreateSession = () => {
         }
     };
 
-    const handleCreate = async (e: any) => {
+	const handleCreate = async (e: any) => {
+		setIsLoading(true);
         e.preventDefault();
         if (!user) return toast.error('No user logged in', toastSettings);
         if (!inputs.sessionName) return toast('Please fill all fields', toastSettings);
@@ -76,7 +78,9 @@ const CreateSession = () => {
 		} catch (e) {
 			console.log(e);
             toast.error("A problem when saving your data", toastSettings);
-        }
+		} finally {
+			setIsLoading(false);
+		} 
     };
 
     const handleRemoveFile = () => setPdfFile(undefined);
@@ -165,7 +169,7 @@ const CreateSession = () => {
                 text-sm px-5 py-2.5 text-center bg-brand-purple hover:bg-brand-purple-s
             '
 			>
-				Create
+				{isLoading ? "Creating..." : "Create"}
 			</button>
 		</form>
 	);

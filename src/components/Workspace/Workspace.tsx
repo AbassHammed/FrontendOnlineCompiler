@@ -5,13 +5,15 @@ import Playground from './Playground/Playground';
 
 type WorkspaceProps = { 
     filePath: string;
+    sessionId: string;
+    UserId: string;
 };
 
-const Workspace: React.FC<WorkspaceProps> = ({filePath}) => {
+const Workspace: React.FC<WorkspaceProps> = ({filePath, sessionId, UserId}) => {
     
     return (
         <Split sizes={[59, 75]} className="split bg-[#0f0f0f]">
-            <PDFViewer file="https://www.africau.edu/images/default/sample.pdf" />
+            <PDFViewer file={filePath} />
             <Playground />
         </Split>
     );

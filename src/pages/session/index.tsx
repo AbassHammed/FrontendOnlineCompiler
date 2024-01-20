@@ -3,18 +3,23 @@ import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
 import AuthModal from '@/components/Modals/AuthModal';
-import Topbar from '@/components/Topbar/Topbar';
+import Navbar from '@/components/Navbar/Navbar';
+import { useAuth } from '@/hooks/useAuth';
 
 type SessionPageProps = {};
 
 const SessionPage: React.FC<SessionPageProps> = () => {
+  const { user, loading } = useAuth();
   const authModal = useRecoilValue(authModalState);
   const setAuthModalState = useSetRecoilState(authModalState);
+
+  if (loading || !user)
+    return <div>loading ... </div>
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">
       <div className="absolute w-full top-0">
-        <Topbar />
+        <Navbar />
       </div>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4">
         <button
