@@ -35,13 +35,9 @@ const ResestPasswordPage: React.FC<ResestPasswordPageProps> = () => {
 		setIsFormValid(isValid);
 		
 		if (!passwordRegex.test(inputs.password))
-		{
 			setPasswordError("Password must be at least 8 characters long and include uppercase, lowercase, numeric, and special characters.");
-		}
 		else if (inputs.password != inputs.confirmPassword)
-		{
 			setPasswordError("Passwords do not match");
-		}
 		else
 			setPasswordError("");
 	}, [inputs]);
