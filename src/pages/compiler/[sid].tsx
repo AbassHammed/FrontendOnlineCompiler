@@ -5,7 +5,7 @@ import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const Compiler: React.FC = () => {
     const { user, loading: authLoading } = useAuth();
@@ -15,7 +15,7 @@ const Compiler: React.FC = () => {
     const [warningTimeoutId, setWarningTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
     const notifyUserOfDisconnection = () => {
-        toast('You will be disconnected if you leave the page.', { position: "top-center", autoClose: 8000, theme: "dark" });
+        toast.warning('You will be disconnected if you leave the page.');
     };
 
     const setDisconnectedAfterTimeout = () => {
@@ -24,7 +24,7 @@ const Compiler: React.FC = () => {
                 const userRef = doc(firestore, `sessions/${sessionId}/users`, UserId);
                 await updateDoc(userRef, { connected: false });
             }
-        }, 10000);
+        }, 1000);
         setWarningTimeoutId(timeoutId);
     };
 
@@ -49,10 +49,13 @@ const Compiler: React.FC = () => {
             }
         });
 
+        document.addEventListener('mouseleave', notifyUserOfDisconnection);
+
         document.addEventListener('visibilitychange', handleVisibilityChange);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            document.addEventListener('mouseleave', notifyUserOfDisconnection);
             if (warningTimeoutId) clearTimeout(warningTimeoutId);
             unsubscribe();
         };

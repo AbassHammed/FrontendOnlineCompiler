@@ -2,9 +2,8 @@ import "@/styles/globals.css";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
+import { Toaster } from 'sonner';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -24,7 +23,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png"/>
       </Head>
-      <ToastContainer className="no-select"/>
+      <Toaster richColors position="top-center" closeButton />
       <Component {...pageProps} />
     </RecoilRoot>
   );

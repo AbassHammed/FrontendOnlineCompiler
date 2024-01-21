@@ -2,7 +2,7 @@ import { firestore } from "@/firebase/firebase";
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 type JoinSessionProps = {};
 
 const JoinSession: React.FC<JoinSessionProps> = () => {
@@ -16,7 +16,7 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
 
 	const validateInputs = () => {
 		if (!inputs.sessionId || !inputs.UserName) {
-			toast("Please fill all fields", { position: "top-center", autoClose: 3000, theme: "dark" });
+			toast.warning("Please fill all fields");
 			return false;
 		}
 		return true;
@@ -29,7 +29,7 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
 			const querySnapshot = await getDocs(sessionsQuery);
 
 			if (querySnapshot.empty) {
-				toast("Session ID not found", { position: "top-center", autoClose: 3000, theme: "dark" });
+				toast.error("Session ID not found");
 				return;
 			}
 
@@ -48,19 +48,26 @@ const JoinSession: React.FC<JoinSessionProps> = () => {
 					quitedAt: null
 				});
 			} else {
-				// await updateDoc(doc(firestore, `sessions/${sessionDoc.id}/users`, userDoc.id), {
-				// 	connected: true,
-				// 	quitedAt: null
-				// });
+				try {
+					const userRef = doc(firestore, `sessions/${sessionDoc.id}/users`, userDoc.id);
+					const docSnapshot = await getDoc(userRef);
+
+					if (docSnapshot.exists()) {
+						const userData = docSnapshot.data();
+						if (!userData.connected) {
+							toast.error("You've been disconnected, please contact your session Admin");
+						} 
+					}
+				} catch {
+					
+				}
 				router.push({
 					pathname: `/compiler/${inputs.sessionId}`,
 					query: { filePath: sessionData.filePath, sessionName: sessionData.sessionName, sessionId: sessionDoc.id, UserId: userDoc.id },
 				});
 			}
-
 		} catch (error) {
-			toast("Error joining session", { position: "top-center", autoClose: 3000, theme: "dark" });
-			console.error("Error joining session: ", error);
+			toast.error("Error joining session");
 		} finally {
 			setIsLoading(false);
 		}

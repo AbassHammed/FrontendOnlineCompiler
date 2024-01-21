@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { toast, ToastPosition } from "react-toastify";
+import { toast} from "sonner";
 import { FaRegClipboard } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { auth, firestore, storage } from "@/firebase/firebase";
@@ -31,12 +31,12 @@ const CreateSession = () => {
 
     const handleSelectedFile = (files: FileList | null) => {
 		if (!files || files.length === 0) {
-			return toast('No file selected', toastSettings);
+			return toast.warning('No file selected');
         }
 		const file = files[0];
 
         if (file.size > MAX_FILE_SIZE || file.type !== FILE_TYPE) {
-            return toast('Invalid file. Only PDF up to 10MB.', toastSettings);
+            return toast.warning('Invalid file. Only PDF up to 10MB.');
         }
         setPdfFile(file);
     };
@@ -53,7 +53,7 @@ const CreateSession = () => {
             setProgressUpload((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
             return await getDownloadURL(snapshot.ref);
         } catch (error) {
-            toast.error('Upload failed', toastSettings);
+            toast.error('Upload failed');
             throw error;
         }
     };
@@ -61,8 +61,8 @@ const CreateSession = () => {
 	const handleCreate = async (e: any) => {
 		setIsLoading(true);
         e.preventDefault();
-        if (!user) return toast.error('No user logged in', toastSettings);
-        if (!inputs.sessionName) return toast('Please fill all fields', toastSettings);
+        if (!user) return toast.error('No user logged in');
+        if (!inputs.sessionName) return toast.warning('Please fill all fields');
 
         try {
 			const filePath = await handleUploadFile();
@@ -73,11 +73,9 @@ const CreateSession = () => {
                 filePath,
                 timestamp: serverTimestamp(),
 			});
-			console.log("Document written with ID: ", docRef.id);
             router.push("/Dashboard");
 		} catch (e) {
-			console.log(e);
-            toast.error("A problem when saving your data", toastSettings);
+            toast.error("A problem when saving your data");
 		} finally {
 			setIsLoading(false);
 		} 
@@ -120,8 +118,8 @@ const CreateSession = () => {
 					placeholder='Session ID'
 					/>
 					<FaRegClipboard 
-					className='absolute right-3 text-white cursor-pointer' 
-					onClick={handleGenerateSessionId} 
+						className='absolute right-3 text-white cursor-pointer' 
+						onClick={handleGenerateSessionId} 
 					/>
 				</div>
             </div>
@@ -178,13 +176,4 @@ export default CreateSession;
 
 const generateSessionId = () => Math.random().toString(36).slice(-8).toUpperCase();
 
-const toastSettings: {
-    position: ToastPosition;
-    autoClose: number;
-    theme: string;
-} = {
-    position: "top-center",
-    autoClose: 3000,
-    theme: "dark"
-};
 

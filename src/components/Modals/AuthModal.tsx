@@ -2,7 +2,7 @@ import { authModalState } from "@/atoms/authModalAtom";
 import React, { useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import Login from "./Login";
-import ResetPassword from "./ResetPassword";
+import SendResetPassword from "./SendResetPassword";
 import Signup from "./Signup";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import CreateSession from "./CreateSession";
@@ -31,7 +31,7 @@ const AuthModal: React.FC<AuthModalProps> = () => {
 								<IoClose className='h-5 w-5' />
 							</button>
 						</div>
-						{authModal.type === "login" ? <Login /> : authModal.type === "register" ? <Signup /> :authModal.type === "create" ? <CreateSession /> : authModal.type === "join" ? <JoinSession /> : <ResetPassword />}
+						{authModal.type === "login" ? <Login /> : authModal.type === "register" ? <Signup /> :authModal.type === "create" ? <CreateSession /> : authModal.type === "join" ? <JoinSession /> : <SendResetPassword />}
 					</div>
 				</div>
 			</div>

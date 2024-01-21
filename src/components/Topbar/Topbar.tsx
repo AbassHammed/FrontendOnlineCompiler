@@ -11,6 +11,7 @@ import Logout from "../Buttons/Logout";
 import { firestore } from "@/firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { toast } from "sonner";
 
 type TopbarProps = {
 	compilerPage?: boolean;
@@ -36,7 +37,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 
 	const handleQuit = async () => {
         if (!sessionId || !UserId) {
-            console.error("Session ID or User ID is missing");
+            toast.info("An internal error occured");
             return;
         }
 
@@ -49,8 +50,8 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 
             // Redirect to the join/create session page or home page
             router.push('/');
-        } catch (error) {
-            console.error("Error quitting session: ", error);
+		} catch (error) {
+			toast.error("Error quitting session");
         }
     };
 

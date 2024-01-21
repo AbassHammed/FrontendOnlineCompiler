@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useSetRecoilState } from "recoil";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 type LoginProps = {};
 
 const Login: React.FC<LoginProps> = () => {
@@ -21,18 +21,18 @@ const Login: React.FC<LoginProps> = () => {
 
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		if (!inputs.email || !inputs.password) return alert("Please fill all fields");
+		if (!inputs.email || !inputs.password) return toast.warning("Please fill all fields");
 		try {
 			const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
 			if (!newUser) return;
 			router.push("/");
 		} catch (error: any) {
-			toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
+			toast.error(error.message);
 		}
 	};
 
 	useEffect(() => {
-		if (error) toast.error(error.message, { position: "top-center", autoClose: 3000, theme: "dark" });
+		if (error) toast.error(error.message);
 	}, [error]);
 	return (
 		<form className='space-y-6 px-6 pb-4' onSubmit={handleLogin}>
