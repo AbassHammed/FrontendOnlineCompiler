@@ -10,7 +10,7 @@ import EditorFooter from './EditorFooter';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/firebase';
-import CodeExec from '@/pages/api/codeExec';
+import { CodeExec } from '@/pages/api/CodeExec';
 
 export interface ISettings {
     fontSize: string;

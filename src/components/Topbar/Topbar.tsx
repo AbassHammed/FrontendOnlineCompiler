@@ -36,10 +36,15 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 	const router = useRouter();
 
 	const handleQuit = async () => {
-        if (!sessionId || !UserId) {
-            toast.info("An internal error occured");
+		if (!sessionId) {
+			toast.warning("Something Fishy");
+			return;
+		}
+        if (!UserId) {
+            toast.warning("An int error occured");
             return;
-        }
+		}
+		
 
         try {
             const userDocRef = doc(firestore, `sessions/${sessionId}/users`, UserId);
@@ -48,7 +53,6 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
                 quitedAt: new Date()
             });
 
-            // Redirect to the join/create session page or home page
             router.push('/');
 		} catch (error) {
 			toast.error("Error quitting session");

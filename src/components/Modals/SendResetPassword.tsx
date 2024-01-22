@@ -1,16 +1,20 @@
+import { authModalState } from "@/atoms/authModalAtom";
 import { auth } from "@/firebase/firebase";
 import React, { useState, useEffect } from "react";
 import { useSendPasswordResetEmail } from "react-firebase-hooks/auth";
+import { useSetRecoilState } from "recoil";
 import { toast } from "sonner";
 type SendResetPasswordProps = {};
 
 const SendResetPassword: React.FC<SendResetPasswordProps> = () => {
+	const setAuthModalState = useSetRecoilState(authModalState);
 	const [email, setEmail] = useState("");
 	const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
 	const handleReset = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const success = await sendPasswordResetEmail(email);
 		if (success) {
+			setAuthModalState(prev => ({ ...prev, isOpen: false }));
 			toast.success("Password reset email sent");
 		}
 	};
@@ -46,7 +50,7 @@ const SendResetPassword: React.FC<SendResetPasswordProps> = () => {
 				className={`w-full text-white  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center 
                 bg-brand-purple hover:bg-brand-purple-s `}
 			>
-				Reset Password
+				{sending ? "Sending" :"Send"}
 			</button>
 		</form>
 	);

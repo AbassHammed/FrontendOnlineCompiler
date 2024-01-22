@@ -4,6 +4,7 @@ import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 import { useEffect } from "react";
 import { Toaster } from 'sonner';
+import { SessionProvider } from "@/hooks/useSession";
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -24,7 +25,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.png"/>
       </Head>
       <Toaster richColors position="top-center" closeButton />
-      <Component {...pageProps} />
+      <SessionProvider>
+        <Component {...pageProps} />
+      </SessionProvider>
     </RecoilRoot>
   );
 }
