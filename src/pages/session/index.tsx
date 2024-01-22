@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
@@ -12,6 +12,10 @@ const SessionPage: React.FC<SessionPageProps> = () => {
   const { user, loading } = useAuth();
   const authModal = useRecoilValue(authModalState);
   const setAuthModalState = useSetRecoilState(authModalState);
+
+  useEffect(() => {
+    setAuthModalState(prev => ({ ...prev, isOpen: false }));
+  }, [setAuthModalState]);
 
   if (loading || !user)
     return <div>loading ... </div>
