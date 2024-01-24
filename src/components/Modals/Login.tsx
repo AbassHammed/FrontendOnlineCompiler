@@ -3,11 +3,13 @@ import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { useSetRecoilState } from "recoil";
 import { toast } from "sonner";
 type LoginProps = {};
 
 const Login: React.FC<LoginProps> = () => {
+	const [showPassword, setShowPassword] = useState(false);
 	const setAuthModalState = useSetRecoilState(authModalState);
 	const handleClick = (type: "login" | "register" | "forgotPassword") => {
 		setAuthModalState((prev) => ({ ...prev, type }));
@@ -18,6 +20,8 @@ const Login: React.FC<LoginProps> = () => {
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 	};
+
+	const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
 	const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -57,17 +61,26 @@ const Login: React.FC<LoginProps> = () => {
 				<label htmlFor='password' className='text-sm font-medium block mb-2 text-gray-300'>
 					Your Password
 				</label>
-				<input
-					onChange={handleInputChange}
-					type='password'
-					name='password'
-					id='password'
-					className='
-            border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-            bg-gray-600 border-gray-500 placeholder-gray-400 text-white
-        '
-					placeholder='*******'
-				/>
+				<div className='relative flex items-center'>
+					<input
+						onChange={handleInputChange}
+						type={showPassword ? 'text' : 'password'}
+						name='password'
+						id='password'
+						className='
+				border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+				bg-gray-600 border-gray-500 placeholder-gray-400 text-white
+			'
+						placeholder='*******'
+					/>
+					<div className='absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5'>
+						{showPassword ? (
+							<FaRegEyeSlash className='h-5 w-5 text-white' onClick={togglePasswordVisibility} />
+						) : (
+							<FaRegEye className='h-5 w-5 text-white' onClick={togglePasswordVisibility} />
+						)}
+					</div>
+				</div>
 			</div>
 
 			<button
@@ -79,7 +92,7 @@ const Login: React.FC<LoginProps> = () => {
 				{loading ? "Loading..." : "Log In"}
 			</button>
 			<button className='flex w-full justify-end' onClick={() => handleClick("forgotPassword")}>
-				<a href='#' className='text-sm block text-brand-purple hover:underline w-full text-right'>
+				<a href='#' className='text-sm block text-gray-300 hover:underline w-full text-right'>
 					Forgot Password?
 				</a>
 			</button>

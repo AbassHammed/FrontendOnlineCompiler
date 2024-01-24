@@ -12,13 +12,12 @@ interface ExecuteCodeParams {
 
 const executeJavaScript = async (code: string): Promise<ExecuteCodeResponse> => {
   try {
-    // Note: Using `eval` is generally not recommended due to security risks.
-    const result = await eval(code);
+    const result = safeJavaScriptEvaluator(code);
     return { statusCode: 200, messageContent: String(result) };
   } catch (error) {
     return {
       statusCode: 500,
-      messageContent: (error instanceof Error) ? error.message : 'Unknown error',
+      messageContent: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
@@ -31,20 +30,24 @@ const executeRemoteCode = async ({ code, language }: ExecuteCodeParams): Promise
       body: JSON.stringify({ code, language }),
     });
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      const responseBody = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status} - ${responseBody}`);
     }
     return await response.json();
   } catch (error) {
     return {
       statusCode: 500,
-      messageContent: (error instanceof Error) ? error.message : 'Unknown error',
+      messageContent: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 };
 
- export const CodeExec = async ({ code, language }: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
-  if (language === 'javascript') {
-    return executeJavaScript(code);
-  }
-  return executeRemoteCode({ code, language });
+export const CodeExec = async ({ code, language }: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
+  return language === 'javascript' ? executeJavaScript(code) : executeRemoteCode({ code, language });
 };
+
+
+function safeJavaScriptEvaluator(code: string) {
+  throw new Error('Function not implemented.');
+}
+

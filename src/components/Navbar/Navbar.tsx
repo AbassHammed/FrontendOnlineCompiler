@@ -47,16 +47,17 @@ const SignInButton = styled.button`
   transition: all 0.3s ease-in-out;
 
   &:hover {
-    background-color: white;
-    color: #610C9F;
+    background-color: rgb(77, 7, 125);
+    color: rgb(179, 179, 179);
     border: 2px solid #610C9F;
   }
 `;
 
 const Navbar: React.FC<NavbarProps> = ({showSign}) => {
-    const setAuthModalStet = useSetRecoilState(authModalState)
+    const setAuthModalState = useSetRecoilState(authModalState)
   const handleClick = () => {
-    setAuthModalStet((prev) => ({ ...prev, isOpen: true }));
+    setAuthModalState((prev) => ({ ...prev, isOpen: false, type: "login" }));
+    setAuthModalState((prev) => ({ ...prev, isOpen: true }));
   };
     return (
         <Container>

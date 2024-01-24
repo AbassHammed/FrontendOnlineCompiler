@@ -1,5 +1,6 @@
 import React from "react";
-import { BsChevronUp } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
+import { IoCloudDownloadSharp } from "react-icons/io5";
 
 type EditorFooterProps = {
 	handleSubmit: () => void;
@@ -15,7 +16,8 @@ const EditorFooter: React.FC<EditorFooterProps> = ({ handleSubmit , handleGenera
 						className='px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-green-s hover:bg-green-3 rounded-lg'
 						onClick={handleGenerate}
 					>
-						Generate
+						<IoCloudDownloadSharp className="mr-2"/>
+						Export file
 					</button>
 				</div>
 				<div className='ml-auto flex items-center space-x-4'>
@@ -23,6 +25,7 @@ const EditorFooter: React.FC<EditorFooterProps> = ({ handleSubmit , handleGenera
 						className='px-3 py-1.5 text-sm font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-dark-fill-3  hover:bg-dark-fill-2 text-dark-label-2 rounded-lg'
 						onClick={handleSubmit}
 					>
+						<FaPlay  className="mr-2"/>
 						Run
 					</button>
 				</div>

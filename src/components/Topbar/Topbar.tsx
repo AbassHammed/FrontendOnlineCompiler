@@ -12,6 +12,8 @@ import { firestore } from "@/firebase/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
+import ProfilePicture from "@/utils/profilePic";
+
 
 type TopbarProps = {
 	compilerPage?: boolean;
@@ -36,12 +38,8 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 	const router = useRouter();
 
 	const handleQuit = async () => {
-		if (!sessionId) {
-			toast.warning("Something Fishy");
-			return;
-		}
-        if (!UserId) {
-            toast.warning("An int error occured");
+        if (!UserId || !sessionId) {
+            toast.warning("An internal error occured");
             return;
 		}
 		
@@ -86,15 +84,15 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 						{user && compilerPage && <Timer />}
 						{user && (
 							<div className='cursor-pointer group relative'>
-								<Image src='/avatar.jpeg' alt='Avatar' width={30} height={30} className='rounded-full' />
-								<div className='absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-purple p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out'>
+								<ProfilePicture email={user.email} />
+								<div className='absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out'>
 									<p className='text-sm'>{user.email}</p>
 								</div>
 							</div>
 						)}
 						<button
 							onClick={handleQuit}
-							className='bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-purple hover:bg-dark-fill-2'
+							className='py-1.5 px-3 cursor-pointer rounded hover:bg-dark-fill-2 hover:text-[e99517]'
 						>
 							Quit
 						</button>
