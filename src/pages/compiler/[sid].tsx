@@ -30,7 +30,7 @@ const Compiler: React.FC = () => {
             const timeoutId = setTimeout(async () => {
                 if (user && typeof sessionData.sessionId === 'string' && typeof sessionData.userId === 'string') {
                     const userRef = doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userId);
-                    // await updateDoc(userRef, { connected: false });
+                    await updateDoc(userRef, { connected: false });
                 }
             }, 1000);
             setWarningTimeoutId(timeoutId);

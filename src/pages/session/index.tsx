@@ -27,18 +27,19 @@ const SessionPage: React.FC<SessionPageProps> = () => {
         <Navbar />
       </div>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+       <button
+        className="w-64 h-40 bg-[#610C9F] rounded-lg shadow-md flex flex-col items-center justify-center text-2xl font-bold cursor-pointer relative"
+        onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, type: "join" }))}
+      >
+        <FaPlus className="text-3xl mb-2" />
+        Join a session
+      </button>
+
         <button
-          className="w-64 h-40 bg-[#610C9F] rounded-lg shadow-md flex items-center justify-center text-2xl font-bold cursor-pointer relative"
-          onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, type: "join" }))}
-        >
-          <FaPlus className="mr-2 text-3xl" />
-          Join a session
-        </button>
-        <button
-          className="w-64 h-40 bg-[#03C988] rounded-lg shadow-md flex items-center justify-center text-2xl font-bold cursor-pointer relative"
+          className="w-64 h-40 bg-[#03C988] rounded-lg shadow-md flex flex-col items-center justify-center text-2xl font-bold cursor-pointer relative"
           onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, type: "create" }))}
         >
-          <FaPlus className="mr-2 text-3xl" />
+          <FaPlus className="mb-2 text-3xl" />
           Create a session
         </button>
       </div>

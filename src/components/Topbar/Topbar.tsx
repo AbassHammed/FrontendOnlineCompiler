@@ -93,7 +93,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 						)}
 						<button
 							onClick={handleQuit}
-							className='py-1.5 px-3 cursor-pointer rounded hover:bg-dark-fill-2 hover:text-[e99517]'
+							className='bg-[#2c2110] py-1.5 px-3 cursor-pointer text-[#FFBB64] rounded hover:bg-dark-fill-2 hover:text-[e99517]'
 						>
 							Quit
 						</button>

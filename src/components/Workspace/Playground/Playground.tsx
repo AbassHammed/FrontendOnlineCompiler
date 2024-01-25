@@ -23,7 +23,7 @@ const Playground = () => {
     const [output, setOutput] = useState('You have to run your code to see results');
     const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
     const [settings, setSettings] = useState({ fontSize, settingsModalIsOpen: false, dropdownIsOpen: false });
-    const [selectedLanguage, setSelectedLanguage] = useState('JavaScript');
+    const [selectedLanguage, setSelectedLanguage] = useState('C++');
     const [currentCode, setCurrentCode] = useState("");
 
     const languages = useMemo(() => ({
