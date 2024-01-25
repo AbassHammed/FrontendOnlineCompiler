@@ -5,6 +5,7 @@ import { RecoilRoot } from "recoil";
 import { useEffect } from "react";
 import { Toaster } from 'sonner';
 import { SessionProvider } from "@/hooks/useSession";
+import { NextUIProvider } from '@nextui-org/react';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -26,7 +27,9 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <Toaster richColors position="top-center" closeButton />
       <SessionProvider>
-        <Component {...pageProps} />
+        <NextUIProvider>
+          <Component {...pageProps} />
+        </NextUIProvider>
       </SessionProvider>
     </RecoilRoot>
   );

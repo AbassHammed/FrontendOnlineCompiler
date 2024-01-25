@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import { useSession } from '@/hooks/useSession';
+import Loadin from '@/components/Loading/Loading';
 
 const Compiler: React.FC = () => {
     const { sessionData } = useSession();
@@ -29,7 +30,7 @@ const Compiler: React.FC = () => {
             const timeoutId = setTimeout(async () => {
                 if (user && typeof sessionData.sessionId === 'string' && typeof sessionData.userId === 'string') {
                     const userRef = doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userId);
-                    await updateDoc(userRef, { connected: false });
+                    // await updateDoc(userRef, { connected: false });
                 }
             }, 1000);
             setWarningTimeoutId(timeoutId);
@@ -68,12 +69,12 @@ const Compiler: React.FC = () => {
     }, [user, authLoading, sessionData, sessionData, router]);
 
     if (!user || authLoading || !sessionData) {
-        return <div>Loading...</div>;
+        return <Loadin/>;
     }
 
     return (
         <div>
-            <Topbar compilerPage={true} sessionName={typeof sessionData.sessionName === 'string' ? sessionData.sessionName : ''} sessionId={sessionData.sessionId as string} UserId={sessionData.userId as string}/>
+            <Topbar compilerPage={true} sessionName={typeof sessionData.sessionName === 'string' ? sessionData.sessionName : ''} sessionId={sessionData.sessionId as string} UserId={sessionData.userId as string} UserName={ sessionData.userName} />
             <Workspace filePath={typeof sessionData.filePath === 'string' ? sessionData.filePath : ''} sessionId={sessionData.sessionId as string} UserId={sessionData.userId as string} />
         </div>
     );

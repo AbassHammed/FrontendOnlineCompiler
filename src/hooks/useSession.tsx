@@ -1,37 +1,56 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 interface SessionProviderProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 interface SessionData {
-    filePath?: string;
-    sessionName?: string;
-    sessionId?: string;
-    userId?: string;
+  filePath?: string;
+  sessionName?: string;
+  sessionId?: string;
+  userId?: string;
+  userName?: string;
 }
 
 interface SessionContextProps {
-    sessionData: SessionData | null;
-    setSessionData: React.Dispatch<React.SetStateAction<SessionData | null>>;
+  sessionData: SessionData | null;
+  setSessionData: React.Dispatch<React.SetStateAction<SessionData | null>>;
 }
 
 const SessionContext = createContext<SessionContextProps | undefined>(undefined);
 
 export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) => {
-    const [sessionData, setSessionData] = useState<SessionData | null>(null);
+    const [sessionData, setSessionData] = useState<SessionData | null>(() => {
+    // Check if window is defined which indicates we're running in the browser
+        if (typeof window !== 'undefined') {
+            const storedSessionData = sessionStorage.getItem('sessionData');
+            return storedSessionData ? JSON.parse(storedSessionData) : null;
+        }
+        return null;
+    });
 
-    return (
-        <SessionContext.Provider value={{ sessionData, setSessionData }}>
-            {children}
-        </SessionContext.Provider>
-    );
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            if (sessionData) {
+            sessionStorage.setItem('sessionData', JSON.stringify(sessionData));
+            } else {
+            sessionStorage.removeItem('sessionData');
+            }
+        }
+    }, [sessionData]);
+
+  return (
+    <SessionContext.Provider value={{ sessionData, setSessionData }}>
+      {children}
+    </SessionContext.Provider>
+  );
 };
 
 export const useSession = () => {
-    const context = useContext(SessionContext);
-    if (context === undefined) {
-        throw new Error('useSession must be used within a SessionProvider');
-    }
-    return context;
+  const context = useContext(SessionContext);
+  if (context === undefined) {
+    throw new Error('useSession must be used within a SessionProvider');
+  }
+  return context;
 };

@@ -19,7 +19,8 @@ type TopbarProps = {
 	compilerPage?: boolean;
 	sessionName?: string;
 	sessionId?: string;
-    UserId?: string
+	UserId?: string
+	UserName?: string;
 };
 
 const TopLeftContainer = styled.div`
@@ -32,7 +33,7 @@ const TopLeftContainer = styled.div`
 `;
 
 
-const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, UserId }) => {
+const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, UserId, UserName }) => {
 	const [user] = useAuthState(auth);
 	const setAuthModalState = useSetRecoilState(authModalState);
 	const router = useRouter();
@@ -84,9 +85,9 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, sessionId, U
 						{user && compilerPage && <Timer />}
 						{user && (
 							<div className='cursor-pointer group relative'>
-								<ProfilePicture email={user.email} />
+								<ProfilePicture email={UserName} />
 								<div className='absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out'>
-									<p className='text-sm'>{user.email}</p>
+									<p className='text-sm'>{UserName}</p>
 								</div>
 							</div>
 						)}

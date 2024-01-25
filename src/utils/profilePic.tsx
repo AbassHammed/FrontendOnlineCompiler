@@ -1,5 +1,5 @@
 type ProfilePictureProps = {
-    email: string | null;
+    email: string | null | undefined;
 };
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ email }) => {
     

@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useSession } from "@/hooks/useSession";
-import { useSetRecoilState } from "recoil";
-import { authModalState } from "@/atoms/authModalAtom";
 
 const JoinSession = () => {
     const [inputs, setInputs] = useState({ sessionId: "", userName: "" });
@@ -24,24 +22,6 @@ const JoinSession = () => {
             return false;
         }
         return true;
-    };
-
-    const addUserToSession = async (sessionDoc: QueryDocumentSnapshot<DocumentData, DocumentData>, userDoc: QueryDocumentSnapshot<DocumentData, DocumentData> | null) => {
-        if (!userDoc) {
-            await addDoc(collection(firestore, `sessions/${sessionDoc.id}/users`), {
-                name: inputs.userName,
-                joinedAt: new Date(),
-                connected: true,
-                quitedAt: null
-            });
-        } else {
-            const userRef = doc(firestore, `sessions/${sessionDoc.id}/users`, userDoc.id);
-            const docSnapshot = await getDoc(userRef);
-            if (docSnapshot.exists() && !docSnapshot.data().connected) {
-                toast.error("You've been disconnected, please contact your session Admin");
-                return;
-            }
-        }
     };
 
 	const joinSession = async () => {
@@ -74,6 +54,7 @@ const JoinSession = () => {
 					sessionName: sessionData.sessionName,
 					sessionId: sessionDoc.id,
 					userId: userRef.id,
+					userName: inputs.userName,
 				});
 				// After adding the user, redirect them to the compiler page
 				router.push(`/compiler/${inputs.sessionId}`);
@@ -89,6 +70,7 @@ const JoinSession = () => {
 					sessionName: sessionData.sessionName,
 					sessionId: sessionDoc.id,
 					userId: userDoc.id,
+					userName: inputs.userName,
 				});
 				// If connected, redirect to the compiler page
 				router.push(`/compiler/${inputs.sessionId}`);

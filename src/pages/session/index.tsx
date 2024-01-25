@@ -5,6 +5,7 @@ import { authModalState } from '@/atoms/authModalAtom';
 import AuthModal from '@/components/Modals/AuthModal';
 import Navbar from '@/components/Navbar/Navbar';
 import { useAuth } from '@/hooks/useAuth';
+import Loadin from '@/components/Loading/Loading';
 
 type SessionPageProps = {};
 
@@ -18,7 +19,7 @@ const SessionPage: React.FC<SessionPageProps> = () => {
   }, [setAuthModalState]);
 
   if (loading || !user)
-    return <div>loading ... </div>
+    return <Loadin />
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">

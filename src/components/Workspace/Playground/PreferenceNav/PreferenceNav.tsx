@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from "react-icons/ai";
 import { ISettings } from '../Playground';
 import SettingsModal from '@/components/Modals/SettingsModal';
+import DropDown from '@/components/Buttons/Dropdown';
 
 type PreferenceNavProps = {
 	settings: ISettings;
@@ -22,13 +23,6 @@ const Tooltip = ({ show, children }: TooltipProps) => (
 const PreferenceNav = ({ onLanguageSelect, setSettings, settings  }: PreferenceNavProps) => {
     const [isFullScreen, setIsFullScreen] = useState(false);
 	const [showTooltip, setShowTooltip] = useState<string | null>(null);
-	const [selectedLanguage, setSelectedLanguage] = useState('JavaScript');
-
-	const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const newLanguage = event.target.value;
-        setSelectedLanguage(newLanguage);
-        onLanguageSelect(newLanguage);
-    };
 
     const handleFullScreenToggle = () => {
         if (isFullScreen) {
@@ -60,16 +54,7 @@ const PreferenceNav = ({ onLanguageSelect, setSettings, settings  }: PreferenceN
     return (
         <div className="flex items-center justify-between bg-[#303030] h-9 w-full overflow-x-hidden rounded-t-lg shadow-md">
             <div className='flex items-center text-white'>
-                <button className='flex cursor-pointer items-center rounded focus:outline-none bg-[#303030] text-dark-label-2 hover:bg-[#303030] px-2 py-1.5 font-medium'>
-                    <div className='flex items-center pl-8 pr-4'>
-                        <select value={selectedLanguage} onChange={handleLanguageChange} className="bg-[#303030] text-xs text-label-2 dark:text-dark-label-2">
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="C">C</option>
-                            <option value="C++">C++</option>
-                            <option value="Python">Python</option>
-                        </select>
-                    </div>
-                </button>
+                <DropDown onLanguageSelect={onLanguageSelect} />    
             </div>
             <div className='flex items-center m-1 relative'>
                 <button

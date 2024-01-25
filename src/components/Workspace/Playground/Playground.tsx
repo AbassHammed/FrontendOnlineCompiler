@@ -94,7 +94,7 @@ const Playground = () => {
                     />
                 </div>
                 <div className="bg-black text-white font-mono text-xs rounded-t-lg">
-                    <div className="flex items-center justify-between bg-[#303030] h-9 w-full overflow-x-hidden rounded-t-lg shadow-md"></div>
+                    <div className="flex items-center justify-between bg-[#303030] h-9 w-full rounded-t-lg shadow-md"></div>
                     {output}
                 </div>
             </Split>
