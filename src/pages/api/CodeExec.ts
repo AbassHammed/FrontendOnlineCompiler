@@ -22,7 +22,10 @@ const executeJavaScript = async (code: string): Promise<ExecuteCodeResponse> => 
   }
 };
 
-const executeRemoteCode = async ({ code, language }: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
+const executeRemoteCode = async ({
+  code,
+  language,
+}: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
   try {
     const response = await fetch('http://localhost:8000/runcode', {
       method: 'POST',
@@ -42,12 +45,15 @@ const executeRemoteCode = async ({ code, language }: ExecuteCodeParams): Promise
   }
 };
 
-export const CodeExec = async ({ code, language }: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
-  return language === 'javascript' ? executeJavaScript(code) : executeRemoteCode({ code, language });
+export const CodeExec = async ({
+  code,
+  language,
+}: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
+  return language === 'javascript'
+    ? executeJavaScript(code)
+    : executeRemoteCode({ code, language });
 };
-
 
 function safeJavaScriptEvaluator(code: string) {
   throw new Error('Function not implemented.');
 }
-

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { authModalState } from "@/atoms/authModalAtom";
+import { authModalState } from '@/atoms/authModalAtom';
 import Navbar from '@/components/Navbar/Navbar';
 import AuthModal from '@/components/Modals/AuthModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -11,29 +11,30 @@ import Image from 'next/image';
 type AuthPageProps = {};
 
 const AuthPage: React.FC<AuthPageProps> = () => {
-    const authModal = useRecoilValue(authModalState);
-	const [user, loading, error] = useAuthState(auth);
-    const [pageLoading, setPageLoading] = useState(true);
-    const setAuthModalState = useSetRecoilState(authModalState);
-	const router = useRouter();
+  const authModal = useRecoilValue(authModalState);
+  const [user, loading, error] = useAuthState(auth);
+  const [pageLoading, setPageLoading] = useState(true);
+  const setAuthModalState = useSetRecoilState(authModalState);
+  const router = useRouter();
 
-    useEffect(() => {
-        setAuthModalState(prev => ({ ...prev, isOpen: false }));
-		if (user) router.push("/session");
-		if (!loading && !user) setPageLoading(false);
-	}, [user, router, loading, setAuthModalState]);
+  useEffect(() => {
+    setAuthModalState(prev => ({ ...prev, isOpen: false }));
+    if (user) router.push('/session');
+    if (!loading && !user) setPageLoading(false);
+  }, [user, router, loading, setAuthModalState]);
 
-	if (pageLoading) return null;
-    
-    return (<div className="bg-[#1A1A1A] h-screen relative">
-        <div className="mx-auto">
-            <Navbar showSign={true} />
-            <div className="flex items-center justify-center h-[calc(100vh-5rem)] pointer-events-none select-none">
-                <Image src="/hero.png" alt="Hero image" width={700} height={700} />
-            </div>
-            {authModal.isOpen && <AuthModal />}
+  if (pageLoading) return null;
+
+  return (
+    <div className="bg-[#1A1A1A] h-screen relative">
+      <div className="mx-auto">
+        <Navbar showSign={true} />
+        <div className="flex items-center justify-center h-[calc(100vh-5rem)] pointer-events-none select-none">
+          <Image src="/hero.png" alt="Hero image" width={700} height={700} />
         </div>
-    </div>);
-
-}
+        {authModal.isOpen && <AuthModal />}
+      </div>
+    </div>
+  );
+};
 export default AuthPage;

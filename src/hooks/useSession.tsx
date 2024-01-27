@@ -20,25 +20,24 @@ interface SessionContextProps {
 const SessionContext = createContext<SessionContextProps | undefined>(undefined);
 
 export const SessionProvider: React.FC<SessionProviderProps> = ({ children }) => {
-    const [sessionData, setSessionData] = useState<SessionData | null>(() => {
+  const [sessionData, setSessionData] = useState<SessionData | null>(() => {
     // Check if window is defined which indicates we're running in the browser
-        if (typeof window !== 'undefined') {
-            const storedSessionData = sessionStorage.getItem('sessionData');
-            return storedSessionData ? JSON.parse(storedSessionData) : null;
-        }
-        return null;
-    });
+    if (typeof window !== 'undefined') {
+      const storedSessionData = sessionStorage.getItem('sessionData');
+      return storedSessionData ? JSON.parse(storedSessionData) : null;
+    }
+    return null;
+  });
 
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            if (sessionData) {
-            sessionStorage.setItem('sessionData', JSON.stringify(sessionData));
-            } else {
-            sessionStorage.removeItem('sessionData');
-            }
-        }
-    }, [sessionData]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (sessionData) {
+        sessionStorage.setItem('sessionData', JSON.stringify(sessionData));
+      } else {
+        sessionStorage.removeItem('sessionData');
+      }
+    }
+  }, [sessionData]);
 
   return (
     <SessionContext.Provider value={{ sessionData, setSessionData }}>

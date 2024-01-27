@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { IconType } from 'react-icons';
-import { SiJavascript, SiCplusplus, SiPython, SiC } from "react-icons/si";
+import { SiJavascript, SiCplusplus, SiPython, SiC } from 'react-icons/si';
 
 interface LanguageOption {
   name: string;
@@ -42,16 +42,22 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
               </div>
             </Listbox.Button>
-            <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+            <Transition
+              as={Fragment}
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0">
               <Listbox.Options className="absolute z-1000 mt-1 max-h-60 w-full overflow-auto rounded-md bg-[#0f0f0f] py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {languages.map((language) => (
+                {languages.map(language => (
                   <Listbox.Option
                     key={language.name}
-                    className={({ active }) => `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-[#282828] text-dark-gray-6' : 'text-white'}`}
-                    value={language}
-                  >
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-[#282828] text-dark-gray-6' : 'text-white'}`
+                    }
+                    value={language}>
                     {({ selected }) => (
-                      <div className={`flex items-center ${selected ? 'font-medium' : 'font-normal'}`}>
+                      <div
+                        className={`flex items-center ${selected ? 'font-medium' : 'font-normal'}`}>
                         {/* <language.icon className="text-xl mr-2" /> */}
                         <span className="block truncate">{language.name}</span>
                         {selected && (
@@ -70,6 +76,6 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
       </Listbox>
     </div>
   );
-}
+};
 
 export default DropDown;

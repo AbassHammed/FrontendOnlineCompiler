@@ -1,18 +1,21 @@
-import { auth } from "@/firebase/firebase";
-import React from "react";
-import { useSignOut } from "react-firebase-hooks/auth";
-import { FiLogOut } from "react-icons/fi";
+import { auth } from '@/firebase/firebase';
+import React from 'react';
+import { Button, Tooltip } from '@nextui-org/react';
+import { useSignOut } from 'react-firebase-hooks/auth';
+import { FiLogOut } from 'react-icons/fi';
 
 const Logout: React.FC = () => {
-	const [signOut, loading, error] = useSignOut(auth);
+  const [signOut, loading, error] = useSignOut(auth);
 
-	const handleLogout = () => {
-		signOut();
-	};
-	return (
-		<button className='bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-[#FF004D] hover:' onClick={handleLogout}>
-			<FiLogOut />
-		</button>
-	);
+  const handleLogout = () => {
+    signOut();
+  };
+  return (
+    <Tooltip content="Logout" color="danger">
+      <Button size="sm" color="danger" isIconOnly onClick={handleLogout}>
+        <FiLogOut />
+      </Button>
+    </Tooltip>
+  );
 };
 export default Logout;

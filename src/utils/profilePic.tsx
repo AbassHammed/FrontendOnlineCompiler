@@ -1,10 +1,8 @@
 type ProfilePictureProps = {
-    email: string | null | undefined;
+  email: string | null | undefined;
 };
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ email }) => {
-    
-    if (!email)
-        return;
+  if (!email) return;
   const firstLetter = email.charAt(0).toUpperCase();
 
   const profilePicStyle = {
@@ -16,15 +14,11 @@ const ProfilePicture: React.FC<ProfilePictureProps> = ({ email }) => {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '18px', 
+    fontSize: '18px',
     fontWeight: '300px',
   };
 
-  return (
-    <div style={profilePicStyle}>
-      {firstLetter}
-    </div>
-  );
+  return <div style={profilePicStyle}>{firstLetter}</div>;
 };
 
 export default ProfilePicture;
