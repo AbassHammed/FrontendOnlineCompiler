@@ -69,7 +69,9 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
   );
 
   const fetchSession = () => {
-    if (!user) {return;}
+    if (!user) {
+      return;
+    }
 
     setIsLoading(true);
     const sessionsQuery = query(
@@ -192,9 +194,9 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         );
       case 'actions':
         return (
-          <div className="relative items-center gap-2">
+          <div>
             {!user.connected ? (
-              <Tooltip color="success" content="Edit user">
+              <Tooltip size="sm" color="success" content="Edit user">
                 <span
                   className="text-lg text-success-400 cursor-pointer active:opacity-50"
                   onClick={() => handleAdd(user.docId)}>
@@ -202,7 +204,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
                 </span>
               </Tooltip>
             ) : (
-              <Tooltip color="danger" content="Remove user">
+              <Tooltip size="sm" color="danger" content="Remove user">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
                   onClick={() => handleQuit(user.docId)}>
@@ -238,10 +240,11 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         items={users.map((user, index) => ({ ...user, id: index }))}>
         {(item: {
           id: any;
-          name?: string;
-          connected?: boolean;
-          joinedAt?: string;
-          quittedAt?: string;
+          docId: string;
+          name: string;
+          connected: boolean;
+          joinedAt: string | undefined;
+          quitedAt?: string | null;
         }) => (
           <TableRow key={item.id}>
             {(columnKey: React.Key) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

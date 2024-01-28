@@ -58,6 +58,12 @@ const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
           }}>
           {session.sessionId}
         </Snippet>
+        <p className="text-md m-1">
+          <span className="text-blue-500">Time:</span>
+          <span className="text-white mx-2">{session.time}</span>
+          <span className="text-green-500">Date:</span>
+          <span className="text-white ml-2">{session.date}</span>
+        </p>
       </CardBody>
       <Divider />
       <CardFooter>
