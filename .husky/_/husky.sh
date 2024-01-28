@@ -1,21 +1,36 @@
 #!/usr/bin/env sh
-H="$HUSKY"
-[ "$H" = "2" ] && set -x
-h="${0##*/}"
-s="${0%/*/*}/$h"
+if [ -z "$husky_skip_init" ]; then
+  debug () {
+    if [ "$HUSKY_DEBUG" = "1" ]; then
+      echo "husky (debug) - $1"
+    fi
+  }
 
-[ ! -f "$s" ] && exit 0
+  readonly hook_name="$(basename -- "$0")"
+  debug "starting $hook_name..."
 
-for f in "${XDG_CONFIG_HOME:-$HOME/.config}/husky/init.sh" "$HOME/.huskyrc.sh"; do
-	# shellcheck disable=SC1090
-	[ -f "$f" ] && . "$f"
-done
+  if [ "$HUSKY" = "0" ]; then
+    debug "HUSKY env variable is set to 0, skipping hook"
+    exit 0
+  fi
 
-[ "$H" = "0" ] && exit 0
+  if [ -f ~/.huskyrc ]; then
+    debug "sourcing ~/.huskyrc"
+    . ~/.huskyrc
+  fi
 
-sh -e "$s" "$@"
-c=$?
+  readonly husky_skip_init=1
+  export husky_skip_init
+  sh -e "$0" "$@"
+  exitCode="$?"
 
-[ $c != 0 ] && echo "husky - $h script failed (code $c)"
-[ $c = 127 ] && echo "husky - command not found in PATH=$PATH"
-exit $c
+  if [ $exitCode != 0 ]; then
+    echo "husky - $hook_name hook exited with code $exitCode (error)"
+  fi
+
+  if [ $exitCode = 127 ]; then
+    echo "husky - command not found in PATH=$PATH"
+  fi
+
+  exit $exitCode
+fi
