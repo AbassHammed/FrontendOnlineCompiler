@@ -33,12 +33,11 @@ const Signup: React.FC<SignupProps> = () => {
       passwordRegex.test(inputs.password) && inputs.password === inputs.confirmPassword;
     setIsFormValid(isValid);
 
-    if (!passwordRegex.test(inputs.password))
+    if (!passwordRegex.test(inputs.password)) {
       setPasswordError(
         'Password must be at least 8 characters long and include uppercase, lowercase, numeric, and special characters.',
       );
-    else if (inputs.password != inputs.confirmPassword) setPasswordError('Passwords do not match');
-    else setPasswordError('');
+    } else if (inputs.password != inputs.confirmPassword) {setPasswordError('Passwords do not match');} else {setPasswordError('');}
   }, [inputs]);
 
   const handleClick = () => {
@@ -47,10 +46,10 @@ const Signup: React.FC<SignupProps> = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputs.email || !inputs.password) return toast.info('Please fill all fields');
+    if (!inputs.email || !inputs.password) {return toast.info('Please fill all fields');}
     try {
       const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password);
-      if (!newUser) return;
+      if (!newUser) {return;}
       router.push('/');
     } catch (error: any) {
       toast.error(error.message);
@@ -58,7 +57,7 @@ const Signup: React.FC<SignupProps> = () => {
   };
 
   useEffect(() => {
-    if (error) toast.error(error.message);
+    if (error) {toast.error(error.message);}
   }, [error]);
 
   return (

@@ -9,7 +9,7 @@ type DashboardProps = {};
 const Dashboard: React.FC<DashboardProps> = () => {
   const { user, loading } = useAuth();
 
-  if (loading || !user) return <Loadin />;
+  if (loading || !user) {return <Loadin />;}
 
   return (
     <div className="bg-[#0f0f0f] h-screen">

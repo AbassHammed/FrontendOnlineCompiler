@@ -18,7 +18,7 @@ const SessionPage: React.FC<SessionPageProps> = () => {
     setAuthModalState(prev => ({ ...prev, isOpen: false }));
   }, [setAuthModalState]);
 
-  if (loading || !user) return <Loadin />;
+  if (loading || !user) {return <Loadin />;}
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">

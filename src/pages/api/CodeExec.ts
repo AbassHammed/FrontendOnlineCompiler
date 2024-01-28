@@ -48,11 +48,9 @@ const executeRemoteCode = async ({
 export const CodeExec = async ({
   code,
   language,
-}: ExecuteCodeParams): Promise<ExecuteCodeResponse> => {
-  return language === 'javascript'
-    ? executeJavaScript(code)
-    : executeRemoteCode({ code, language });
-};
+}: ExecuteCodeParams): Promise<ExecuteCodeResponse> => language === 'javascript'
+  ? executeJavaScript(code)
+  : executeRemoteCode({ code, language });
 
 function safeJavaScriptEvaluator(code: string) {
   throw new Error('Function not implemented.');

@@ -63,8 +63,7 @@ const Compiler: React.FC = () => {
       !user ||
       typeof sessionData.sessionId !== 'string' ||
       typeof sessionData.userId !== 'string'
-    )
-      return;
+    ) {return;}
 
     const unsubscribe = onSnapshot(
       doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userId),
@@ -82,7 +81,7 @@ const Compiler: React.FC = () => {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.removeEventListener('mouseleave', notifyUserOfDisconnection);
-      if (warningTimeoutId) clearTimeout(warningTimeoutId);
+      if (warningTimeoutId) {clearTimeout(warningTimeoutId);}
       unsubscribe();
     };
   }, [user, authLoading, sessionData, sessionData, router]);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -9,11 +9,11 @@ import {
   User,
   Chip,
   Tooltip,
-} from "@nextui-org/react";
-import { EditIcon } from "./EditIcon";
-import { DeleteIcon } from "./DeleteIcon";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, firestore } from "@/firebase/firebase";
+} from '@nextui-org/react';
+import { EditIcon } from './EditIcon';
+import { DeleteIcon } from './DeleteIcon';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, firestore } from '@/firebase/firebase';
 import {
   collection,
   getDocs,
@@ -27,10 +27,10 @@ import {
   updateDoc,
   serverTimestamp,
   QueryDocumentSnapshot,
-} from "firebase/firestore";
-import { useRouter } from "next/router";
-import Loadin from "../Loading/Loading";
-import { toast } from "sonner";
+} from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import Loadin from '../Loading/Loading';
+import { toast } from 'sonner';
 
 type Session = {
   sessionId: string;
@@ -50,11 +50,11 @@ type User = {
 };
 
 const columns = [
-  { name: "NAME", uid: "name" },
-  { name: "STATUS", uid: "status" },
-  { name: "CONNECTED", uid: "connect" },
-  { name: "DISCONNECTED", uid: "disconnect" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: 'NAME', uid: 'name' },
+  { name: 'STATUS', uid: 'status' },
+  { name: 'CONNECTED', uid: 'connect' },
+  { name: 'DISCONNECTED', uid: 'disconnect' },
+  { name: 'ACTIONS', uid: 'actions' },
 ];
 
 type DashTableProps = {};
@@ -69,38 +69,38 @@ const DashTable: React.FC<DashTableProps> = () => {
 
   const classNames = React.useMemo(
     () => ({
-      wrapper: ["max-h-[382px]", "max-w-[1200px]", "bg-[#282828]", "w-3xl"],
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
+      wrapper: ['max-h-[382px]', 'max-w-[1200px]', 'bg-[#282828]', 'w-3xl'],
+      th: ['bg-transparent', 'text-default-500', 'border-b', 'border-divider'],
       td: [
         // changing the rows border radius
         // first
-        "group-data-[first=true]:first:before:rounded-none",
-        "group-data-[first=true]:last:before:rounded-none",
+        'group-data-[first=true]:first:before:rounded-none',
+        'group-data-[first=true]:last:before:rounded-none',
         // middle
-        "group-data-[middle=true]:before:rounded-none",
+        'group-data-[middle=true]:before:rounded-none',
         // last
-        "group-data-[last=true]:first:before:rounded-none",
-        "group-data-[last=true]:last:before:rounded-none",
+        'group-data-[last=true]:first:before:rounded-none',
+        'group-data-[last=true]:last:before:rounded-none',
       ],
     }),
     [],
   );
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {return;}
     let unsubscribeUsers: Unsubscribe | undefined;
 
     const fetchSession = async () => {
       try {
         setIsLoading(true);
         const sessionsQuery = query(
-          collection(firestore, "sessions"),
-          where("userId", "==", user.email),
+          collection(firestore, 'sessions'),
+          where('userId', '==', user.email),
         );
         const querySnapshot = await getDocs(sessionsQuery);
 
         if (querySnapshot.empty) {
-          toast.error("You don't have any open session.");
+          toast.error('You don\'t have any open session.');
           return;
         }
 
@@ -117,12 +117,12 @@ const DashTable: React.FC<DashTableProps> = () => {
 
         const usersRef = collection(
           firestore,
-          "sessions",
+          'sessions',
           sessionDoc.id,
-          "users",
+          'users',
         );
-        return onSnapshot(usersRef, (snapshot) => {
-          const usersData: User[] = snapshot.docs.map((doc) => {
+        return onSnapshot(usersRef, snapshot => {
+          const usersData: User[] = snapshot.docs.map(doc => {
             const userData = doc.data() as DocumentData;
             const quitedAt = userData.quitedAt
               ? userData.quitedAt.toDate().toLocaleTimeString()
@@ -138,7 +138,7 @@ const DashTable: React.FC<DashTableProps> = () => {
           setUsers(usersData);
         });
       } catch (e) {
-        toast.error("An error occurred while fetching session details.");
+        toast.error('An error occurred while fetching session details.');
       } finally {
         setIsLoading(false);
       }
@@ -149,13 +149,13 @@ const DashTable: React.FC<DashTableProps> = () => {
     })();
 
     return () => {
-      if (unsubscribeUsers) unsubscribeUsers();
+      if (unsubscribeUsers) {unsubscribeUsers();}
     };
   }, [user]);
 
   const handleQuit = async (docId: string) => {
     if (!docId || !sessionDoc) {
-      toast.warning("An internal error occured");
+      toast.warning('An internal error occured');
       return;
     }
 
@@ -170,13 +170,13 @@ const DashTable: React.FC<DashTableProps> = () => {
         quitedAt: serverTimestamp(),
       });
     } catch (error) {
-      toast.error("Error quitting session");
+      toast.error('Error quitting session');
     }
   };
 
   const handleAdd = async (docId: string) => {
     if (!docId || !sessionDoc) {
-      toast.warning("An internal error occured");
+      toast.warning('An internal error occured');
       return;
     }
 
@@ -191,7 +191,7 @@ const DashTable: React.FC<DashTableProps> = () => {
         quitedAt: null,
       });
     } catch (error) {
-      toast.error("Error quitting session");
+      toast.error('Error quitting session');
     }
   };
 
@@ -199,32 +199,32 @@ const DashTable: React.FC<DashTableProps> = () => {
     const cellValue = user[columnKey as keyof User];
 
     switch (columnKey) {
-      case "name":
+      case 'name':
         return <User name={cellValue}></User>;
-      case "disconnect":
+      case 'disconnect':
         return (
           <div className="relative flex items-center">
             <p>{user.quitedAt}</p>
           </div>
         );
-      case "connect":
+      case 'connect':
         return (
           <div className="relative flex items-center">
             <p>{user.joinedAt}</p>
           </div>
         );
-      case "status":
+      case 'status':
         return (
           <Chip
             className="capitalize"
-            color={user.connected ? "success" : "danger"}
+            color={user.connected ? 'success' : 'danger'}
             size="sm"
             variant="flat"
           >
-            {user.connected ? "Active" : "Disconnected"}
+            {user.connected ? 'Active' : 'Disconnected'}
           </Chip>
         );
-      case "actions":
+      case 'actions':
         return (
           <div className="relative items-center gap-2">
             {!user.connected ? (
@@ -253,7 +253,7 @@ const DashTable: React.FC<DashTableProps> = () => {
     }
   }, []);
 
-  if (isLoading) return <Loadin />;
+  if (isLoading) {return <Loadin />;}
 
   return (
     <Table
@@ -265,7 +265,7 @@ const DashTable: React.FC<DashTableProps> = () => {
         {(column: { uid: string; name: any }) => (
           <TableColumn
             key={column.uid}
-            align={column.uid === "actions" ? "center" : "start"}
+            align={column.uid === 'actions' ? 'center' : 'start'}
           >
             {column.name}
           </TableColumn>

@@ -19,11 +19,11 @@ const AuthPage: React.FC<AuthPageProps> = () => {
 
   useEffect(() => {
     setAuthModalState(prev => ({ ...prev, isOpen: false }));
-    if (user) router.push('/session');
-    if (!loading && !user) setPageLoading(false);
+    if (user) {router.push('/session');}
+    if (!loading && !user) {setPageLoading(false);}
   }, [user, router, loading, setAuthModalState]);
 
-  if (pageLoading) return null;
+  if (pageLoading) {return null;}
 
   return (
     <div className="bg-[#1A1A1A] h-screen relative">

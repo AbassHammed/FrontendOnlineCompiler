@@ -31,7 +31,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
   return (
     <div className="fixed z-50 w-50">
       <Listbox value={selectedLanguage} onChange={handleLanguageChange}>
-        {({ open }) => (
+        {() => (
           <div className="relative mt-1">
             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-[#303030] py-2 pl-3 pr-10 text-left text-white shadow-md focus:outline-none sm:text-sm">
               <div className="flex items-center">

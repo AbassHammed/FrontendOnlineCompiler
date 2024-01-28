@@ -42,7 +42,7 @@ const CreateSession = () => {
   };
 
   const handleUploadFile = async () => {
-    if (!pdfFile) return;
+    if (!pdfFile) {return;}
 
     const uniqueId = uuidv4();
     const storageRef = ref(storage, `pdfFiles/${uniqueId}-${pdfFile.name}`);
@@ -61,8 +61,8 @@ const CreateSession = () => {
   const handleCreate = async (e: any) => {
     setIsLoading(true);
     e.preventDefault();
-    if (!user) return toast.error('No user logged in');
-    if (!inputs.sessionName) return toast.warning('Please fill all fields');
+    if (!user) {return toast.error('No user logged in');}
+    if (!inputs.sessionName) {return toast.warning('Please fill all fields');}
 
     try {
       const filePath = await handleUploadFile();

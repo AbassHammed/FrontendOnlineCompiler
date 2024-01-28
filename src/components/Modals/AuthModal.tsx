@@ -8,9 +8,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import CreateSession from './CreateSession';
 import JoinSession from './JoinSession';
 
-type AuthModalProps = {};
-
-const AuthModal: React.FC<AuthModalProps> = () => {
+const AuthModal: React.FC = () => {
   const authModal = useRecoilValue(authModalState);
   const closeModal = useCloseModal();
   return (
@@ -57,7 +55,9 @@ function useCloseModal() {
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+      }
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);

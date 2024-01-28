@@ -48,7 +48,7 @@ const ResetPasswordPage = () => {
   }, [inputs.password, inputs.confirmPassword]);
 
   useEffect(() => {
-    if (error) toast.error(error.message);
+    if (error) {toast.error(error.message);}
   }, [error]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

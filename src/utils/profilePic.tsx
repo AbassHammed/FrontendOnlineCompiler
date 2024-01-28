@@ -2,7 +2,7 @@ type ProfilePictureProps = {
   email: string | null | undefined;
 };
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ email }) => {
-  if (!email) return;
+  if (!email) {return;}
   const firstLetter = email.charAt(0).toUpperCase();
 
   const profilePicStyle = {
