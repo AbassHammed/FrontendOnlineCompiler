@@ -7,7 +7,17 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,css,json,md,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "@codemirror/lang-cpp": "^6.0.2",
@@ -23,6 +33,7 @@
     "@uiw/react-codemirror": "^4.21.21",
     "firebase": "^10.7.1",
     "framer-motion": "^11.0.3",
+    "husky": "^9.0.6",
     "next": "14.0.4",
     "nextui-org-react-old": "npm:@nextui-org/react@^1.0.0-beta.12",
     "react": "^18",
