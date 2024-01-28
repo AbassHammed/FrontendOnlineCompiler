@@ -16,30 +16,19 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, firestore } from '@/firebase/firebase';
 import {
   collection,
-  getDocs,
   query,
   where,
-  Timestamp,
   DocumentData,
   onSnapshot,
-  Unsubscribe,
   doc,
   updateDoc,
   serverTimestamp,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
-import { useRouter } from 'next/router';
 import Loadin from '../Loading/Loading';
 import { toast } from 'sonner';
 
-type Session = {
-  sessionId: string;
-  sessionName: string;
-  filePath: string;
-  time: string;
-  date: string;
-  userId: string;
-};
+import { Session, columns } from '@/utils/types';
 
 type User = {
   docId: string;
@@ -49,19 +38,12 @@ type User = {
   quitedAt?: string | null;
 };
 
-const columns = [
-  { name: 'NAME', uid: 'name' },
-  { name: 'STATUS', uid: 'status' },
-  { name: 'CONNECTED', uid: 'connect' },
-  { name: 'DISCONNECTED', uid: 'disconnect' },
-  { name: 'ACTIONS', uid: 'actions' },
-];
+type DashTableProps = {
+  setSession: React.Dispatch<React.SetStateAction<Session | null>>;
+};
 
-type DashTableProps = {};
-
-const DashTable: React.FC<DashTableProps> = () => {
+const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
   const [user] = useAuthState(auth);
-  const [session, setSession] = useState<Session | null>(null);
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -86,70 +68,63 @@ const DashTable: React.FC<DashTableProps> = () => {
     [],
   );
 
-  useEffect(() => {
+  const fetchSession = () => {
     if (!user) {return;}
-    let unsubscribeUsers: Unsubscribe | undefined;
 
-    const fetchSession = async () => {
-      try {
-        setIsLoading(true);
-        const sessionsQuery = query(
-          collection(firestore, 'sessions'),
-          where('userId', '==', user.email),
-        );
-        const querySnapshot = await getDocs(sessionsQuery);
+    setIsLoading(true);
+    const sessionsQuery = query(
+      collection(firestore, 'sessions'),
+      where('userId', '==', user.email),
+    );
 
-        if (querySnapshot.empty) {
-          toast.error('You don\'t have any open session.');
-          return;
-        }
-
-        sessionDoc = querySnapshot.docs[0];
-        const sessionData = sessionDoc.data() as DocumentData;
-        setSession({
-          sessionId: sessionData.sessionId,
-          sessionName: sessionData.sessionName,
-          filePath: sessionData.filePath,
-          time: sessionData.timestamp.toDate().toLocaleTimeString(),
-          date: sessionData.timestamp.toDate().toDateString(),
-          userId: sessionData.userId,
-        });
-
-        const usersRef = collection(
-          firestore,
-          'sessions',
-          sessionDoc.id,
-          'users',
-        );
-        return onSnapshot(usersRef, snapshot => {
-          const usersData: User[] = snapshot.docs.map(doc => {
-            const userData = doc.data() as DocumentData;
-            const quitedAt = userData.quitedAt
-              ? userData.quitedAt.toDate().toLocaleTimeString()
-              : null;
-            return {
-              docId: doc.id,
-              name: userData.name,
-              connected: userData.connected,
-              joinedAt: userData.joinedAt.toDate().toLocaleTimeString(),
-              quitedAt,
-            };
-          });
-          setUsers(usersData);
-        });
-      } catch (e) {
-        toast.error('An error occurred while fetching session details.');
-      } finally {
+    const unsubscribeSession = onSnapshot(sessionsQuery, querySnapshot => {
+      if (querySnapshot.empty) {
+        toast.error('You don\'t have any open session.');
         setIsLoading(false);
+        return;
       }
-    };
 
-    (async () => {
-      unsubscribeUsers = await fetchSession();
-    })();
+      sessionDoc = querySnapshot.docs[0];
+      const sessionData = sessionDoc.data() as DocumentData;
+      setSession({
+        sessionDoc: sessionDoc.id,
+        sessionId: sessionData.sessionId,
+        sessionName: sessionData.sessionName,
+        filePath: sessionData.filePath,
+        time: sessionData.timestamp.toDate().toLocaleTimeString(),
+        date: sessionData.timestamp.toDate().toDateString(),
+        userId: sessionData.userId,
+      });
+      setIsLoading(false);
 
+      const usersRef = collection(firestore, 'sessions', sessionDoc.id, 'users');
+      return onSnapshot(usersRef, snapshot => {
+        const usersData: User[] = snapshot.docs.map(doc => {
+          const userData = doc.data() as DocumentData;
+          const quitedAt = userData.quitedAt
+            ? userData.quitedAt.toDate().toLocaleTimeString()
+            : null;
+          return {
+            docId: doc.id,
+            name: userData.name,
+            connected: userData.connected,
+            joinedAt: userData.joinedAt.toDate().toLocaleTimeString(),
+            quitedAt,
+          };
+        });
+        setUsers(usersData);
+      });
+    });
+
+    return unsubscribeSession;
+  };
+
+  useEffect(() => {
+    const unsubscribe = fetchSession();
     return () => {
-      if (unsubscribeUsers) {unsubscribeUsers();}
+      if (unsubscribe) {
+        unsubscribe();
+      }
     };
   }, [user]);
 
@@ -160,11 +135,7 @@ const DashTable: React.FC<DashTableProps> = () => {
     }
 
     try {
-      const userDocRef = doc(
-        firestore,
-        `sessions/${sessionDoc.id}/users`,
-        docId,
-      );
+      const userDocRef = doc(firestore, `sessions/${sessionDoc.id}/users`, docId);
       await updateDoc(userDocRef, {
         connected: false,
         quitedAt: serverTimestamp(),
@@ -181,11 +152,7 @@ const DashTable: React.FC<DashTableProps> = () => {
     }
 
     try {
-      const userDocRef = doc(
-        firestore,
-        `sessions/${sessionDoc.id}/users`,
-        docId,
-      );
+      const userDocRef = doc(firestore, `sessions/${sessionDoc.id}/users`, docId);
       await updateDoc(userDocRef, {
         connected: true,
         quitedAt: null,
@@ -219,8 +186,7 @@ const DashTable: React.FC<DashTableProps> = () => {
             className="capitalize"
             color={user.connected ? 'success' : 'danger'}
             size="sm"
-            variant="flat"
-          >
+            variant="flat">
             {user.connected ? 'Active' : 'Disconnected'}
           </Chip>
         );
@@ -231,8 +197,7 @@ const DashTable: React.FC<DashTableProps> = () => {
               <Tooltip color="success" content="Edit user">
                 <span
                   className="text-lg text-success-400 cursor-pointer active:opacity-50"
-                  onClick={() => handleAdd(user.docId)}
-                >
+                  onClick={() => handleAdd(user.docId)}>
                   <EditIcon />
                 </span>
               </Tooltip>
@@ -240,8 +205,7 @@ const DashTable: React.FC<DashTableProps> = () => {
               <Tooltip color="danger" content="Remove user">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
-                  onClick={() => handleQuit(user.docId)}
-                >
+                  onClick={() => handleQuit(user.docId)}>
                   <DeleteIcon />
                 </span>
               </Tooltip>
@@ -253,25 +217,25 @@ const DashTable: React.FC<DashTableProps> = () => {
     }
   }, []);
 
-  if (isLoading) {return <Loadin />;}
+  if (isLoading) {
+    return <Loadin />;
+  }
 
   return (
     <Table
       classNames={classNames}
       className="text-gray-100 items-center"
-      aria-label="Example table with custom cells"
-    >
+      aria-label="Example table with custom cells">
       <TableHeader columns={columns}>
-        {(column: { uid: string; name: any }) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === 'actions' ? 'center' : 'start'}
-          >
+        {(column: { uid: string; name: string }) => (
+          <TableColumn key={column.uid} align={column.uid === 'actions' ? 'center' : 'start'}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users.map((user, index) => ({ ...user, id: index }))}>
+      <TableBody
+        emptyContent={'No one is connected to the session for now'}
+        items={users.map((user, index) => ({ ...user, id: index }))}>
         {(item: {
           id: any;
           name?: string;
@@ -280,9 +244,7 @@ const DashTable: React.FC<DashTableProps> = () => {
           quittedAt?: string;
         }) => (
           <TableRow key={item.id}>
-            {(columnKey: React.Key) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
+            {(columnKey: React.Key) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
           </TableRow>
         )}
       </TableBody>

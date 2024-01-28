@@ -1,4 +1,4 @@
-import { auth } from '@/firebase/firebase';
+import { auth, storage, firestore } from '@/firebase/firebase';
 import Link from 'next/link';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -8,12 +8,20 @@ import Image from 'next/image';
 import Timer from '../Timer/Timer';
 import styled from 'styled-components';
 import Logout from '../Buttons/Logout';
-import { firestore } from '@/firebase/firebase';
-import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { toast } from 'sonner';
 import ProfilePicture from '@/utils/profilePic';
 import { Button, Tooltip } from '@nextui-org/react';
+import { Session } from '@/utils/types';
+import { ref, deleteObject } from 'firebase/storage';
 
 type TopbarProps = {
   compilerPage?: boolean;
@@ -22,6 +30,7 @@ type TopbarProps = {
   UserId?: string;
   UserName?: string;
   dashboardpage?: boolean;
+  session?: Session | null;
 };
 
 const TopLeftContainer = styled.div`
@@ -40,6 +49,7 @@ const Topbar: React.FC<TopbarProps> = ({
   UserId,
   UserName,
   dashboardpage,
+  session,
 }) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -64,7 +74,47 @@ const Topbar: React.FC<TopbarProps> = ({
     }
   };
 
-  const handleClose = async () => {};
+  const handleCloseSession = async () => {
+    if (!session || !session.sessionId) {
+      toast.error('Invalid session data');
+      return;
+    }
+
+    const sessionDocRef = doc(firestore, 'sessions', session.sessionDoc);
+
+    try {
+      const usersSubcollectionRef = collection(sessionDocRef, 'users');
+
+      const usersSnapshot = await getDocs(usersSubcollectionRef);
+
+      const usersDeletions = usersSnapshot.docs.map(userDoc => deleteDoc(userDoc.ref));
+
+      await Promise.all(usersDeletions);
+
+      await deleteDoc(sessionDocRef);
+
+      if (session.filePath) {
+        const fileRef = ref(storage, session.filePath);
+        await deleteObject(fileRef);
+      }
+
+      toast.success('Session closed and file deleted successfully');
+      router.push('/session');
+    } catch (error) {
+      toast.error('Error closing session');
+    }
+  };
+
+  const handleClose = async () => {
+    toast.warning('Closing this session will delete it', {
+      action: {
+        label: 'Close',
+        onClick: () => {
+          handleCloseSession();
+        },
+      },
+    });
+  };
 
   return (
     <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">

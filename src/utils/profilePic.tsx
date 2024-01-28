@@ -2,13 +2,15 @@ type ProfilePictureProps = {
   email: string | null | undefined;
 };
 const ProfilePicture: React.FC<ProfilePictureProps> = ({ email }) => {
-  if (!email) {return;}
+  if (!email) {
+    return;
+  }
   const firstLetter = email.charAt(0).toUpperCase();
 
   const profilePicStyle = {
-    width: '25px',
-    height: '25px',
-    borderRadius: '50%',
+    width: '30px',
+    height: '30px',
+    borderRadius: '10px',
     backgroundColor: '#801792',
     color: 'white',
     display: 'flex',
