@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>LetsCode</title>
         <meta name="description" content="Online compiler for C, C++ and Python programs." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/Icon.png" sizes="180*180" />
       </Head>
       <Toaster richColors position="top-center" closeButton />
       <SessionProvider>
