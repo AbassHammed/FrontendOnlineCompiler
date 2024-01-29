@@ -7,6 +7,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/firebase';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Loadin from '@/components/Loading/Loading';
 
 const AuthPage: React.FC = () => {
   const authModal = useRecoilValue(authModalState);
@@ -26,7 +27,7 @@ const AuthPage: React.FC = () => {
   }, [user, router, loading, setAuthModalState]);
 
   if (pageLoading) {
-    return null;
+    return <Loadin />;
   }
 
   return (
