@@ -31,7 +31,7 @@
     "@table-library/react-table-library": "^4.1.7",
     "@uiw/codemirror-theme-vscode": "^4.21.21",
     "@uiw/react-codemirror": "^4.21.21",
-    "firebase": "^10.7.1",
+    "firebase": "^10.9.0",
     "framer-motion": "^11.0.3",
     "husky": "^9.0.6",
     "lint-staged": "^15.2.0",
