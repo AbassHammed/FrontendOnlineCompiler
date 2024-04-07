@@ -1,15 +1,5 @@
 import { firestore } from '@/firebase/firebase';
-import {
-  DocumentData,
-  QueryDocumentSnapshot,
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -75,7 +65,8 @@ const JoinSession = () => {
         // If user found, check if they are connected
         const userDoc = userSnapshot.docs[0];
         if (!userDoc.data().connected) {
-          toast.error('You\'ve been disconnected, please contact your session Admin');
+          // eslint-disable-next-line quotes
+          toast.error("You've been disconnected, please contact your session Admin");
           return;
         }
         setSessionData({
@@ -89,7 +80,7 @@ const JoinSession = () => {
         router.push(`/compiler/${inputs.sessionId}`);
       }
     } catch (error: any) {
-      toast.error(`Error joining session: ${  error.message}`);
+      toast.error(`Error joining session: ${error.message}`);
     } finally {
       setIsLoading(false);
     }

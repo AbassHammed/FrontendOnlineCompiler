@@ -7,13 +7,10 @@ import { useRouter } from 'next/router';
 import { toast } from 'sonner';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-type SignupProps = {};
-
-const Signup: React.FC<SignupProps> = () => {
+const Signup: React.FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
-  const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, loading] = useCreateUserWithEmailAndPassword(auth);
 
   const [inputs, setInputs] = useState({ email: '', password: '', confirmPassword: '' });
   const [isFormValid, setIsFormValid] = useState(false);
@@ -26,6 +23,7 @@ const Signup: React.FC<SignupProps> = () => {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
@@ -37,8 +35,12 @@ const Signup: React.FC<SignupProps> = () => {
       setPasswordError(
         'Password must be at least 8 characters long and include uppercase, lowercase, numeric, and special characters.',
       );
-    } else if (inputs.password != inputs.confirmPassword) {setPasswordError('Passwords do not match');} else {setPasswordError('');}
-  }, [inputs]);
+    } else if (inputs.password !== inputs.confirmPassword) {
+      setPasswordError('Passwords do not match');
+    } else {
+      setPasswordError('');
+    }
+  }, [inputs, passwordRegex]);
 
   const handleClick = () => {
     setAuthModalState(prev => ({ ...prev, type: 'login' }));
@@ -46,19 +48,19 @@ const Signup: React.FC<SignupProps> = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputs.email || !inputs.password) {return toast.info('Please fill all fields');}
+    if (!inputs.email || !inputs.password) {
+      return toast.info('Please fill all fields');
+    }
     try {
       const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password);
-      if (!newUser) {return;}
+      if (!newUser) {
+        return;
+      }
       router.push('/');
     } catch (error: any) {
       toast.error(error.message);
     }
   };
-
-  useEffect(() => {
-    if (error) {toast.error(error.message);}
-  }, [error]);
 
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleRegister}>

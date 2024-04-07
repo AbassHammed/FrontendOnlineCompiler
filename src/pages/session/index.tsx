@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
@@ -7,9 +7,7 @@ import Navbar from '@/components/Navbar/Navbar';
 import { useAuth } from '@/hooks/useAuth';
 import Loadin from '@/components/Loading/Loading';
 
-type SessionPageProps = {};
-
-const SessionPage: React.FC<SessionPageProps> = () => {
+const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();
   const authModal = useRecoilValue(authModalState);
   const setAuthModalState = useSetRecoilState(authModalState);
@@ -18,7 +16,9 @@ const SessionPage: React.FC<SessionPageProps> = () => {
     setAuthModalState(prev => ({ ...prev, isOpen: false }));
   }, [setAuthModalState]);
 
-  if (loading || !user) {return <Loadin />;}
+  if (loading || !user) {
+    return <Loadin />;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">

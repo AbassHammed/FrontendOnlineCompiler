@@ -6,16 +6,15 @@ import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';
-type LoginProps = {};
 
-const Login: React.FC<LoginProps> = () => {
+const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const setAuthModalState = useSetRecoilState(authModalState);
   const handleClick = (type: 'login' | 'register' | 'forgotPassword') => {
     setAuthModalState(prev => ({ ...prev, type }));
   };
   const [inputs, setInputs] = useState({ email: '', password: '' });
-  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, loading, error] = useSignInWithEmailAndPassword(auth);
   const router = useRouter();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,10 +24,14 @@ const Login: React.FC<LoginProps> = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputs.email || !inputs.password) {return toast.warning('Please fill all fields');}
+    if (!inputs.email || !inputs.password) {
+      return toast.warning('Please fill all fields');
+    }
     try {
       const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
-      if (!newUser) {return;}
+      if (!newUser) {
+        return;
+      }
       router.push('/');
     } catch (error: any) {
       toast.error(error.message);
@@ -36,7 +39,9 @@ const Login: React.FC<LoginProps> = () => {
   };
 
   useEffect(() => {
-    if (error) {toast.error(error.message);}
+    if (error) {
+      toast.error(error);
+    }
   }, [error]);
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleLogin}>

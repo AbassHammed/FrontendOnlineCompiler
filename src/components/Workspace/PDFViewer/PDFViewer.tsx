@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { HiOutlineChevronRight, HiOutlineChevronLeft } from 'react-icons/hi2';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -44,11 +43,9 @@ const Nav = ({ pageNumber, numPages, goToPrevPage, goToNextPage }: NavProps) => 
 const PDFViewer = ({ file }: PDFViewerProps) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [loading, setLoading] = useState(true);
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
-    setLoading(false);
   }, []);
 
   const goToPrevPage = useCallback(() => setPageNumber(prev => Math.max(prev - 1, 1)), []);

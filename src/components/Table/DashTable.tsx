@@ -68,6 +68,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
     [],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSession = () => {
     if (!user) {
       return;
@@ -81,7 +82,8 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
 
     const unsubscribeSession = onSnapshot(sessionsQuery, querySnapshot => {
       if (querySnapshot.empty) {
-        toast.error('You don\'t have any open session.');
+        // eslint-disable-next-line quotes
+        toast.error("You don't have any open session.");
         setIsLoading(false);
         return;
       }
@@ -128,8 +130,9 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         unsubscribe();
       }
     };
-  }, [user]);
+  }, [fetchSession, user]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleQuit = async (docId: string) => {
     if (!docId || !sessionDoc) {
       toast.warning('An internal error occured');
@@ -147,6 +150,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleAdd = async (docId: string) => {
     if (!docId || !sessionDoc) {
       toast.warning('An internal error occured');
@@ -164,60 +168,63 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
     }
   };
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback(
+    (user: User, columnKey: React.Key) => {
+      const cellValue = user[columnKey as keyof User];
 
-    switch (columnKey) {
-      case 'name':
-        return <User name={cellValue}></User>;
-      case 'disconnect':
-        return (
-          <div className="relative flex items-center">
-            <p>{user.quitedAt}</p>
-          </div>
-        );
-      case 'connect':
-        return (
-          <div className="relative flex items-center">
-            <p>{user.joinedAt}</p>
-          </div>
-        );
-      case 'status':
-        return (
-          <Chip
-            className="capitalize"
-            color={user.connected ? 'success' : 'danger'}
-            size="sm"
-            variant="flat">
-            {user.connected ? 'Active' : 'Disconnected'}
-          </Chip>
-        );
-      case 'actions':
-        return (
-          <div>
-            {!user.connected ? (
-              <Tooltip size="sm" color="success" content="Edit user">
-                <span
-                  className="text-lg text-success-400 cursor-pointer active:opacity-50"
-                  onClick={() => handleAdd(user.docId)}>
-                  <EditIcon />
-                </span>
-              </Tooltip>
-            ) : (
-              <Tooltip size="sm" color="danger" content="Remove user">
-                <span
-                  className="text-lg text-danger cursor-pointer active:opacity-50"
-                  onClick={() => handleQuit(user.docId)}>
-                  <DeleteIcon />
-                </span>
-              </Tooltip>
-            )}
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+      switch (columnKey) {
+        case 'name':
+          return <User name={cellValue}></User>;
+        case 'disconnect':
+          return (
+            <div className="relative flex items-center">
+              <p>{user.quitedAt}</p>
+            </div>
+          );
+        case 'connect':
+          return (
+            <div className="relative flex items-center">
+              <p>{user.joinedAt}</p>
+            </div>
+          );
+        case 'status':
+          return (
+            <Chip
+              className="capitalize"
+              color={user.connected ? 'success' : 'danger'}
+              size="sm"
+              variant="flat">
+              {user.connected ? 'Active' : 'Disconnected'}
+            </Chip>
+          );
+        case 'actions':
+          return (
+            <div>
+              {!user.connected ? (
+                <Tooltip size="sm" color="success" content="Edit user">
+                  <span
+                    className="text-lg text-success-400 cursor-pointer active:opacity-50"
+                    onClick={() => handleAdd(user.docId)}>
+                    <EditIcon />
+                  </span>
+                </Tooltip>
+              ) : (
+                <Tooltip size="sm" color="danger" content="Remove user">
+                  <span
+                    className="text-lg text-danger cursor-pointer active:opacity-50"
+                    onClick={() => handleQuit(user.docId)}>
+                    <DeleteIcon />
+                  </span>
+                </Tooltip>
+              )}
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [handleAdd, handleQuit],
+  );
 
   if (isLoading) {
     return <Loadin />;

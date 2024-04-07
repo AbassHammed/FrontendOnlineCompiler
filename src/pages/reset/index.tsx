@@ -23,7 +23,6 @@ const ResetPasswordPage = () => {
   useEffect(() => {
     if (router.isReady) {
       const code = router.query.oobCode as string;
-      console.log('oobCode:', oobCode);
       if (code) {
         setOobCode(code);
       } else {
@@ -48,13 +47,13 @@ const ResetPasswordPage = () => {
   }, [inputs.password, inputs.confirmPassword]);
 
   useEffect(() => {
-    if (error) {toast.error(error.message);}
+    if (error) {
+      toast.error(error.message);
+    }
   }, [error]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(oobCode);
-    console.log('Hello');
 
     if (!oobCode) {
       toast.error('Invalid or missing code for password reset.');

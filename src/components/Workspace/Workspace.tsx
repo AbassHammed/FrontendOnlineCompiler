@@ -9,7 +9,7 @@ type WorkspaceProps = {
   UserId: string;
 };
 
-const Workspace: React.FC<WorkspaceProps> = ({ filePath, sessionId, UserId }) => (
+const Workspace: React.FC<WorkspaceProps> = ({ filePath }) => (
   <Split sizes={[59, 75]} className="split bg-[#0f0f0f]">
     <PDFViewer file={filePath} />
     <Playground />

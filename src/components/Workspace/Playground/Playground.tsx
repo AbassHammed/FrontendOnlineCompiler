@@ -8,8 +8,6 @@ import { javascript } from '@codemirror/lang-javascript';
 import { cpp } from '@codemirror/lang-cpp';
 import EditorFooter from './EditorFooter';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/firebase/firebase';
 import { CodeExec } from '@/pages/api/CodeExec';
 
 export interface ISettings {
@@ -19,8 +17,8 @@ export interface ISettings {
 }
 
 const Playground = () => {
-  const [user] = useAuthState(auth);
   const [output, setOutput] = useState('You have to run your code to see results');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fontSize, setFontSize] = useLocalStorage('lcc-fontSize', '16px');
   const [settings, setSettings] = useState({
     fontSize,
@@ -63,7 +61,7 @@ const Playground = () => {
 
   useEffect(() => {
     setCurrentCode(languages[selectedLanguage as keyof typeof languages].initialCode);
-  }, [selectedLanguage]);
+  }, [languages, selectedLanguage]);
 
   const handleLanguageSelect = (language: string) => setSelectedLanguage(language);
 

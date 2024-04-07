@@ -49,6 +49,7 @@ export default AuthModal;
 function useCloseModal() {
   const setAuthModal = useSetRecoilState(authModalState);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const closeModal = () => {
     setAuthModal(prev => ({ ...prev, isOpen: false, type: 'login' }));
   };
@@ -61,7 +62,7 @@ function useCloseModal() {
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, []);
+  }, [closeModal]);
 
   return closeModal;
 }

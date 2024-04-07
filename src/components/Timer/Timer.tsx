@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiRefreshCcw } from 'react-icons/fi';
 import { LuAlarmClock } from 'react-icons/lu';
 
-type TimerProps = {};
-
-const Timer: React.FC<TimerProps> = () => {
+const Timer: React.FC = () => {
   const [showTimer, setShowTimer] = useState<boolean>(false);
   const [time, setTime] = useState<number>(0);
 
@@ -13,8 +11,8 @@ const Timer: React.FC<TimerProps> = () => {
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
 
-    return `${hours < 10 ? `0${  hours}` : hours}:${minutes < 10 ? `0${  minutes}` : minutes}:${
-      seconds < 10 ? `0${  seconds}` : seconds
+    return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
     }`;
   };
 

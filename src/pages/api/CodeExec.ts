@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ExecuteCodeResponse {
   statusCode: number;
   messageContent: string;
@@ -10,9 +8,9 @@ interface ExecuteCodeParams {
   language: string;
 }
 
-const executeJavaScript = async (code: string): Promise<ExecuteCodeResponse> => {
+const executeJavaScript = async (): Promise<ExecuteCodeResponse> => {
   try {
-    const result = safeJavaScriptEvaluator(code);
+    const result = safeJavaScriptEvaluator();
     return { statusCode: 200, messageContent: String(result) };
   } catch (error) {
     return {
@@ -48,10 +46,9 @@ const executeRemoteCode = async ({
 export const CodeExec = async ({
   code,
   language,
-}: ExecuteCodeParams): Promise<ExecuteCodeResponse> => language === 'javascript'
-  ? executeJavaScript(code)
-  : executeRemoteCode({ code, language });
+}: ExecuteCodeParams): Promise<ExecuteCodeResponse> =>
+  language === 'javascript' ? executeJavaScript() : executeRemoteCode({ code, language });
 
-function safeJavaScriptEvaluator(code: string) {
+function safeJavaScriptEvaluator() {
   throw new Error('Function not implemented.');
 }
