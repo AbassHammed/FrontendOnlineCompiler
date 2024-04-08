@@ -1,9 +1,11 @@
-import { firestore } from '@/firebase/firebase';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { toast } from 'sonner';
+
+import { useRouter } from 'next/router';
+
+import { firestore } from '@/firebase/firebase';
 import { useSession } from '@/hooks/useSession';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { toast } from 'sonner';
 
 const JoinSession = () => {
   const [inputs, setInputs] = useState({ sessionId: '', userName: '' });

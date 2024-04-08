@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth } from '@/firebase/firebase';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useSetRecoilState } from 'recoil';

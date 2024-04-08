@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { authModalState } from '@/atoms/authModalAtom';
-import Navbar from '@/components/Navbar/Navbar';
-import AuthModal from '@/components/Modals/AuthModal';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/firebase/firebase';
-import { useRouter } from 'next/router';
+
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+
+import { authModalState } from '@/atoms/authModalAtom';
 import Loadin from '@/components/Loading/Loading';
+import AuthModal from '@/components/Modals/AuthModal';
+import Navbar from '@/components/Navbar/Navbar';
+import { auth } from '@/firebase/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const AuthPage: React.FC = () => {
   const authModal = useRecoilValue(authModalState);

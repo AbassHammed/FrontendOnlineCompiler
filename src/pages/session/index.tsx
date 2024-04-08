@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { FaPlus } from 'react-icons/fa';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import { authModalState } from '@/atoms/authModalAtom';
+import Loadin from '@/components/Loading/Loading';
 import AuthModal from '@/components/Modals/AuthModal';
 import Navbar from '@/components/Navbar/Navbar';
 import { useAuth } from '@/hooks/useAuth';
-import Loadin from '@/components/Loading/Loading';
+import { FaPlus } from 'react-icons/fa';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();

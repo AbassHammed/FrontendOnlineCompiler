@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
-import { ISettings } from '../Playground';
-import SettingsModal from '@/components/Modals/SettingsModal';
+import React, { useEffect, useState } from 'react';
+
 import DropDown from '@/components/Buttons/Dropdown';
+import SettingsModal from '@/components/Modals/SettingsModal';
+import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
+
+import { ISettings } from '../Playground';
 
 type PreferenceNavProps = {
   settings: ISettings;

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/router';
-import { toast } from 'sonner';
-import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
+
 import Navbar from '@/components/Navbar/Navbar';
 import { useResetPassword } from '@/hooks/useResetPassword';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
+import { toast } from 'sonner';
 
 const ResetPasswordPage = () => {
   const router = useRouter();

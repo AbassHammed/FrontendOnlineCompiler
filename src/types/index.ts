@@ -1,3 +1,11 @@
+export type UserInfo = {
+  uid: string;
+  email: string;
+  fullName: string;
+  imageUrl: string;
+  createdAt: string;
+};
+
 export type Session = {
   sessionDoc: string;
   sessionId: string;

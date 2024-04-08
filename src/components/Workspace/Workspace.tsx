@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Split from 'react-split';
+
 import PDFViewer from './PDFViewer/PDFViewer';
 import Playground from './Playground/Playground';
 

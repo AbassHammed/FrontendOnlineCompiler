@@ -1,13 +1,14 @@
-import { auth, storage, firestore } from '@/firebase/firebase';
-import Link from 'next/link';
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
-import { authModalState } from '@/atoms/authModalAtom';
+
 import Image from 'next/image';
-import Timer from '../Timer/Timer';
-import styled from 'styled-components';
-import Logout from '../Buttons/Logout';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { authModalState } from '@/atoms/authModalAtom';
+import { auth, firestore, storage } from '@/firebase/firebase';
+import ProfilePicture from '@/utils/profilePic';
+import { Session } from '@/utils/types';
+import { Button, Tooltip } from '@nextui-org/react';
 import {
   collection,
   deleteDoc,
@@ -16,12 +17,14 @@ import {
   serverTimestamp,
   updateDoc,
 } from 'firebase/firestore';
-import { useRouter } from 'next/router';
+import { deleteObject, ref } from 'firebase/storage';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';
-import ProfilePicture from '@/utils/profilePic';
-import { Button, Tooltip } from '@nextui-org/react';
-import { Session } from '@/utils/types';
-import { ref, deleteObject } from 'firebase/storage';
+import styled from 'styled-components';
+
+import Logout from '../Buttons/Logout';
+import Timer from '../Timer/Timer';
 
 type TopbarProps = {
   compilerPage?: boolean;

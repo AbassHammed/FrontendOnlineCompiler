@@ -1,35 +1,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  User,
-  Chip,
-  Tooltip,
-} from '@nextui-org/react';
-import { EditIcon } from './EditIcon';
-import { DeleteIcon } from './DeleteIcon';
-import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { auth, firestore } from '@/firebase/firebase';
+import { columns, Session } from '@/utils/types';
+import {
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  User,
+} from '@nextui-org/react';
 import {
   collection,
-  query,
-  where,
+  doc,
   DocumentData,
   onSnapshot,
-  doc,
-  updateDoc,
-  serverTimestamp,
+  query,
   QueryDocumentSnapshot,
+  serverTimestamp,
+  updateDoc,
+  where,
 } from 'firebase/firestore';
-import Loadin from '../Loading/Loading';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'sonner';
 
-import { Session, columns } from '@/utils/types';
+import Loadin from '../Loading/Loading';
+import { DeleteIcon } from './DeleteIcon';
+import { EditIcon } from './EditIcon';
 
 type User = {
   docId: string;

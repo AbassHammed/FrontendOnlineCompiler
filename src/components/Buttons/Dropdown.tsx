@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from 'react';
+
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { IconType } from 'react-icons';
-import { SiJavascript, SiCplusplus, SiPython, SiC } from 'react-icons/si';
+import { SiC, SiCplusplus, SiJavascript, SiPython } from 'react-icons/si';
 
 interface LanguageOption {
   name: string;

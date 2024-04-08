@@ -1,8 +1,10 @@
 import React from 'react';
+
 import Image from 'next/image';
-import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
+
 import { authModalState } from '@/atoms/authModalAtom';
+import { useSetRecoilState } from 'recoil';
+import styled from 'styled-components';
 
 type NavbarProps = {
   showSign?: boolean;

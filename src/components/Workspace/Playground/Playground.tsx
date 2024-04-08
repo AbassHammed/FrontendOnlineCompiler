@@ -1,14 +1,16 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import PreferenceNav from './PreferenceNav/PreferenceNav';
-import Split from 'react-split';
-import CodeMirror from '@uiw/react-codemirror';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import { python } from '@codemirror/lang-python';
-import { javascript } from '@codemirror/lang-javascript';
-import { cpp } from '@codemirror/lang-cpp';
-import EditorFooter from './EditorFooter';
+import React, { useEffect, useMemo, useState } from 'react';
+
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { CodeExec } from '@/pages/api/CodeExec';
+import { cpp } from '@codemirror/lang-cpp';
+import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import CodeMirror from '@uiw/react-codemirror';
+import Split from 'react-split';
+
+import EditorFooter from './EditorFooter';
+import PreferenceNav from './PreferenceNav/PreferenceNav';
 
 export interface ISettings {
   fontSize: string;

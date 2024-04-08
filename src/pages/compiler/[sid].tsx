@@ -1,13 +1,15 @@
+import React, { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
+import Loadin from '@/components/Loading/Loading';
 import Topbar from '@/components/Topbar/Topbar';
 import Workspace from '@/components/Workspace/Workspace';
 import { firestore } from '@/firebase/firebase';
-import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { toast } from 'sonner';
 import { useSession } from '@/hooks/useSession';
-import Loadin from '@/components/Loading/Loading';
+import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { toast } from 'sonner';
 
 const Compiler: React.FC = () => {
   const { sessionData } = useSession();
