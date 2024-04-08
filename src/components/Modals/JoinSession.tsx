@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { firestore } from '@/firebase/firebase';
 import { useSession } from '@/hooks/useSession';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { toast } from 'sonner';
 
 const JoinSession = () => {
@@ -44,18 +44,23 @@ const JoinSession = () => {
         const sessionDoc = querySnapshot.docs[0];
         const sessionDat = sessionDoc.data();
         const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
+        const userDocRef = doc(
+          firestore,
+          `sessions/${sessionDoc.id}/users/${sessionData.userInfo.uid}`,
+        );
         const userQuery = query(usersRef, where('name', '==', sessionData.userInfo.fullName));
         const userSnapshot = await getDocs(userQuery);
 
         if (userSnapshot.empty) {
           // If no user found, add them to the session
-          await addDoc(usersRef, {
+          await setDoc(userDocRef, {
             name: sessionData.userInfo.fullName,
             joinedAt: new Date(),
             connected: true,
             quitedAt: null,
           });
           setSessionData({
+            ...sessionData,
             filePath: sessionDat.filePath,
             sessionName: sessionDat.sessionName,
             sessionId: sessionDoc.id,
@@ -71,6 +76,7 @@ const JoinSession = () => {
             return;
           }
           setSessionData({
+            ...sessionData,
             filePath: sessionDat.filePath,
             sessionName: sessionDat.sessionName,
             sessionId: sessionDoc.id,

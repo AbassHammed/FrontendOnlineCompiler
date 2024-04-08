@@ -29,9 +29,6 @@ import Timer from '../Timer/Timer';
 type TopbarProps = {
   compilerPage?: boolean;
   sessionName?: string;
-  sessionId?: string;
-  UserId?: string;
-  UserName?: string;
   dashboardpage?: boolean;
   session?: Session | null;
 };
@@ -74,7 +71,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
   };
 
   const handleCloseSession = async () => {
-    if (!session || !session.sessionId) {
+    if (!session) {
       toast.error('Invalid session data');
       return;
     }
@@ -137,11 +134,11 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
             </Link>
           )}
           {user && compilerPage && <Timer />}
-          {user && (
+          {user && sessionData?.userInfo && (
             <div className="cursor-pointer group relative">
-              <Avatar isBordered size="sm" radius="sm" src={sessionData?.userInfo?.imageUrl} />
+              <Avatar isBordered size="sm" radius="sm" src={sessionData.userInfo.imageUrl} />
               <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out">
-                <p className="text-sm">{sessionData?.userInfo?.fullName}</p>
+                <p className="text-sm">{sessionData.userInfo.fullName}</p>
               </div>
             </div>
           )}

@@ -19,7 +19,6 @@ const AuthPage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setAuthModalState(prev => ({ ...prev, isOpen: false }));
     if (user) {
       router.push('/session');
     }

@@ -6,6 +6,7 @@ import { collection, DocumentData, getDocs, query, where } from 'firebase/firest
 
 import { firestore } from './firebase';
 
+//
 export const currentUserQuery = async (
   userId: string,
   setSessionData: Dispatch<SetStateAction<SessionData | null>>,

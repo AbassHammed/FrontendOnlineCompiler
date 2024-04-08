@@ -18,11 +18,6 @@ const Compiler: React.FC = () => {
   const [warningTimeoutId, setWarningTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!sessionData) {
-      router.push('/session');
-      return;
-    }
-
     const notifyUserOfDisconnection = () => {
       toast.warning('You will be disconnected if you leave the page.');
     };
@@ -31,7 +26,7 @@ const Compiler: React.FC = () => {
       const timeoutId = setTimeout(async () => {
         if (
           user &&
-          typeof sessionData.sessionId === 'string' &&
+          typeof sessionData?.sessionId === 'string' &&
           typeof sessionData.userInfo?.uid === 'string'
         ) {
           const userRef = doc(
@@ -60,12 +55,7 @@ const Compiler: React.FC = () => {
       }
     };
 
-    if (
-      authLoading ||
-      !user ||
-      typeof sessionData.sessionId !== 'string' ||
-      typeof sessionData.userInfo?.uid !== 'string'
-    ) {
+    if (!sessionData || !sessionData.userInfo) {
       return;
     }
 
@@ -101,7 +91,6 @@ const Compiler: React.FC = () => {
       <Topbar
         compilerPage={true}
         sessionName={typeof sessionData.sessionName === 'string' ? sessionData.sessionName : ''}
-        sessionId={sessionData.sessionId as string}
       />
       <Workspace />
     </div>

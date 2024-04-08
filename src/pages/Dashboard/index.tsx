@@ -6,7 +6,7 @@ import DashClock from '@/components/Table/DashClock';
 import DashTable from '@/components/Table/DashTable';
 import Topbar from '@/components/Topbar/Topbar';
 import { useAuth } from '@/hooks/useAuth';
-import { Session } from '@/utils/types';
+import { Session } from '@/types';
 
 const Dashboard: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);
