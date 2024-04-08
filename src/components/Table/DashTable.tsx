@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { auth, firestore } from '@/firebase/firebase';
-import { columns, Session } from '@/utils/types';
+import { columns, Session } from '@/types';
 import {
   Chip,
   Table,

@@ -120,14 +120,14 @@ const Signup: React.FC = () => {
         />
       </div>
       <div>
-        <label htmlFor="password" className="font-medium block leading-6 ">
+        <label htmlFor="password" className="text-sm font-medium block mb-2 text-gray-300 ">
           Password
         </label>
         <div className="relative flex items-center">
           <a
             className="text-gray-400 absolute right-3 inset-y-0 mt-4 active:text-gray-600"
             onClick={togglePasswordVisibility}>
-            {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+            {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
           </a>
           <input
             onChange={handleChangeInput}
@@ -135,7 +135,7 @@ const Signup: React.FC = () => {
             id="password"
             name="password"
             required
-            className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+            className="border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white"
           />
         </div>
       </div>

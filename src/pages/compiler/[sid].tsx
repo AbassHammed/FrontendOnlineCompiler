@@ -32,12 +32,12 @@ const Compiler: React.FC = () => {
         if (
           user &&
           typeof sessionData.sessionId === 'string' &&
-          typeof sessionData.userId === 'string'
+          typeof sessionData.userInfo?.uid === 'string'
         ) {
           const userRef = doc(
             firestore,
             `sessions/${sessionData.sessionId}/users`,
-            sessionData.userId,
+            sessionData.userInfo.uid,
           );
           await updateDoc(userRef, {
             connected: false,
@@ -64,13 +64,13 @@ const Compiler: React.FC = () => {
       authLoading ||
       !user ||
       typeof sessionData.sessionId !== 'string' ||
-      typeof sessionData.userId !== 'string'
+      typeof sessionData.userInfo?.uid !== 'string'
     ) {
       return;
     }
 
     const unsubscribe = onSnapshot(
-      doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userId),
+      doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userInfo.uid),
       docSnapshot => {
         if (!docSnapshot.exists() || !docSnapshot.data()?.connected) {
           router.push('/session');
@@ -102,14 +102,8 @@ const Compiler: React.FC = () => {
         compilerPage={true}
         sessionName={typeof sessionData.sessionName === 'string' ? sessionData.sessionName : ''}
         sessionId={sessionData.sessionId as string}
-        UserId={sessionData.userId as string}
-        UserName={sessionData.userName}
       />
-      <Workspace
-        filePath={typeof sessionData.filePath === 'string' ? sessionData.filePath : ''}
-        sessionId={sessionData.sessionId as string}
-        UserId={sessionData.userId as string}
-      />
+      <Workspace />
     </div>
   );
 };

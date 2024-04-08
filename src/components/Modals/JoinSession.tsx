@@ -11,7 +11,7 @@ const JoinSession = () => {
   const [inputs, setInputs] = useState({ sessionId: '', userName: '' });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setSessionData } = useSession();
+  const { setSessionData, sessionData } = useSession();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,7 +19,7 @@ const JoinSession = () => {
   };
 
   const validateInputs = () => {
-    if (!inputs.sessionId || !inputs.userName) {
+    if (!inputs.sessionId) {
       toast.warning('Please fill all fields');
       return false;
     }
@@ -39,47 +39,45 @@ const JoinSession = () => {
         toast.error('Session ID not found');
         return;
       }
+      // tout est bon ici
+      if (sessionData?.userInfo?.fullName) {
+        const sessionDoc = querySnapshot.docs[0];
+        const sessionDat = sessionDoc.data();
+        const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
+        const userQuery = query(usersRef, where('name', '==', sessionData.userInfo.fullName));
+        const userSnapshot = await getDocs(userQuery);
 
-      const sessionDoc = querySnapshot.docs[0];
-      const sessionData = sessionDoc.data();
-      const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
-      const userQuery = query(usersRef, where('name', '==', inputs.userName));
-      const userSnapshot = await getDocs(userQuery);
-
-      if (userSnapshot.empty) {
-        // If no user found, add them to the session
-        const userRef = await addDoc(usersRef, {
-          name: inputs.userName,
-          joinedAt: new Date(),
-          connected: true,
-          quitedAt: null,
-        });
-        setSessionData({
-          filePath: sessionData.filePath,
-          sessionName: sessionData.sessionName,
-          sessionId: sessionDoc.id,
-          userId: userRef.id,
-          userName: inputs.userName,
-        });
-        // After adding the user, redirect them to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
-      } else {
-        // If user found, check if they are connected
-        const userDoc = userSnapshot.docs[0];
-        if (!userDoc.data().connected) {
-          // eslint-disable-next-line quotes
-          toast.error("You've been disconnected, please contact your session Admin");
-          return;
+        if (userSnapshot.empty) {
+          // If no user found, add them to the session
+          await addDoc(usersRef, {
+            name: sessionData.userInfo.fullName,
+            joinedAt: new Date(),
+            connected: true,
+            quitedAt: null,
+          });
+          setSessionData({
+            filePath: sessionDat.filePath,
+            sessionName: sessionDat.sessionName,
+            sessionId: sessionDoc.id,
+          });
+          // After adding the user, redirect them to the compiler page
+          router.push(`/compiler/${inputs.sessionId}`);
+        } else {
+          // If user found, check if they are connected
+          const userDoc = userSnapshot.docs[0];
+          if (!userDoc.data().connected) {
+            // eslint-disable-next-line quotes
+            toast.error("You've been disconnected, please contact your session Admin");
+            return;
+          }
+          setSessionData({
+            filePath: sessionDat.filePath,
+            sessionName: sessionDat.sessionName,
+            sessionId: sessionDoc.id,
+          });
+          // If connected, redirect to the compiler page
+          router.push(`/compiler/${inputs.sessionId}`);
         }
-        setSessionData({
-          filePath: sessionData.filePath,
-          sessionName: sessionData.sessionName,
-          sessionId: sessionDoc.id,
-          userId: userDoc.id,
-          userName: inputs.userName,
-        });
-        // If connected, redirect to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
       }
     } catch (error: any) {
       toast.error(`Error joining session: ${error.message}`);

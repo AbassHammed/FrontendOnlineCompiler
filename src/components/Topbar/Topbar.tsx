@@ -6,9 +6,9 @@ import { useRouter } from 'next/router';
 
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth, firestore, storage } from '@/firebase/firebase';
-import ProfilePicture from '@/utils/profilePic';
-import { Session } from '@/utils/types';
-import { Button, Tooltip } from '@nextui-org/react';
+import { useSession } from '@/hooks/useSession';
+import { Session } from '@/types';
+import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import {
   collection,
   deleteDoc,
@@ -45,27 +45,23 @@ const TopLeftContainer = styled.div`
   justify-items: center;
 `;
 
-const Topbar: React.FC<TopbarProps> = ({
-  compilerPage,
-  sessionName,
-  sessionId,
-  UserId,
-  UserName,
-  dashboardpage,
-  session,
-}) => {
+const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpage, session }) => {
   const [user] = useAuthState(auth);
+  const { sessionData } = useSession();
   const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
 
   const handleQuit = async () => {
-    if (!UserId || !sessionId) {
+    if (!sessionData?.userInfo?.uid) {
       toast.warning('An internal error occured');
       return;
     }
-
     try {
-      const userDocRef = doc(firestore, `sessions/${sessionId}/users`, UserId);
+      const userDocRef = doc(
+        firestore,
+        `sessions/${sessionData.sessionId}/users`,
+        sessionData.userInfo.uid,
+      );
       await updateDoc(userDocRef, {
         connected: false,
         quitedAt: serverTimestamp(),
@@ -96,8 +92,8 @@ const Topbar: React.FC<TopbarProps> = ({
 
       await deleteDoc(sessionDocRef);
 
-      if (session.filePath) {
-        const fileRef = ref(storage, session.filePath);
+      if (sessionData?.filePath) {
+        const fileRef = ref(storage, sessionData.filePath);
         await deleteObject(fileRef);
       }
 
@@ -143,9 +139,9 @@ const Topbar: React.FC<TopbarProps> = ({
           {user && compilerPage && <Timer />}
           {user && (
             <div className="cursor-pointer group relative">
-              <ProfilePicture email={UserName} />
+              <Avatar isBordered size="sm" radius="sm" src={sessionData?.userInfo?.imageUrl} />
               <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out">
-                <p className="text-sm">{UserName}</p>
+                <p className="text-sm">{sessionData?.userInfo?.fullName}</p>
               </div>
             </div>
           )}

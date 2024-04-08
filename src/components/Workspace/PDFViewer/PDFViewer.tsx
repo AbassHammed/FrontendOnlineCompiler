@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 
+import { useSession } from '@/hooks/useSession';
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi2';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -7,10 +8,6 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
-interface PDFViewerProps {
-  file: string;
-}
 
 interface NavProps {
   pageNumber: number;
@@ -42,9 +39,10 @@ const Nav = ({ pageNumber, numPages, goToPrevPage, goToNextPage }: NavProps) => 
   </div>
 );
 
-const PDFViewer = ({ file }: PDFViewerProps) => {
+const PDFViewer = () => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
+  const { sessionData } = useSession();
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -67,7 +65,7 @@ const PDFViewer = ({ file }: PDFViewerProps) => {
       <div className="flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto">
         <div className="px-5">
           <Document
-            file={file}
+            file={sessionData?.filePath}
             onLoadSuccess={onDocumentLoadSuccess}
             className="w-full"
             renderMode="canvas">
