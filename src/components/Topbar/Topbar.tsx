@@ -4,8 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { authModalState } from '@/atoms/authModalAtom';
-import { auth, firestore, storage } from '@/firebase/firebase';
+import { firestore, storage } from '@/firebase/firebase';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
 import { Avatar, Button, Tooltip } from '@nextui-org/react';
@@ -18,8 +17,6 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';
 
 import Logout from '../Buttons/Logout';
@@ -32,10 +29,8 @@ type TopbarProps = {
   session?: Session | null;
 };
 
-const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpage, session }) => {
-  const [user] = useAuthState(auth);
+const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) => {
   const { sessionData } = useSession();
-  const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
 
   const handleQuit = async () => {
@@ -114,15 +109,8 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
         </div>
 
         <div className="flex items-center space-x-4 justify-end">
-          {!user && (
-            <Link
-              href="/auth"
-              onClick={() => setAuthModalState(prev => ({ ...prev, isOpen: true, type: 'login' }))}>
-              <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded">Sign In</button>
-            </Link>
-          )}
-          {user && compilerPage && <Timer />}
-          {user && sessionData?.userInfo && (
+          {compilerPage && <Timer />}
+          {sessionData?.userInfo && (
             <div className="cursor-pointer group relative">
               <Avatar
                 isBordered
@@ -136,7 +124,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
               </div>
             </div>
           )}
-          {!dashboardpage ? (
+          {compilerPage ? (
             <Tooltip content="Quit the session">
               <Button onClick={handleQuit} color="warning" size="sm">
                 Quit
@@ -150,7 +138,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
             </Tooltip>
           )}
 
-          {user && <Logout />}
+          <Logout />
         </div>
       </div>
     </nav>

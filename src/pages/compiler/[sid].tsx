@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -9,49 +9,25 @@ import { firestore } from '@/firebase/firebase';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { toast } from 'sonner';
 
 const Compiler: React.FC = () => {
   const { sessionData } = useSession();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [warningTimeoutId, setWarningTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const mount = typeof window === 'undefined';
 
   useEffect(() => {
-    const notifyUserOfDisconnection = () => {
-      toast.warning('You will be disconnected if you leave the page.');
-    };
-
-    const setDisconnectedAfterTimeout = () => {
-      const timeoutId = setTimeout(async () => {
-        if (
-          user &&
-          typeof sessionData?.sessionDocId === 'string' &&
-          typeof sessionData.userInfo?.uid === 'string'
-        ) {
-          const userRef = doc(
-            firestore,
-            `sessions/${sessionData.sessionDocId}/users`,
-            sessionData.userInfo.uid,
-          );
-          await updateDoc(userRef, {
-            connected: false,
-            quitedAt: serverTimestamp(),
-          });
-        }
-      }, 1000);
-      setWarningTimeoutId(timeoutId);
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        notifyUserOfDisconnection();
-        setDisconnectedAfterTimeout();
-      } else {
-        if (warningTimeoutId) {
-          clearTimeout(warningTimeoutId);
-          setWarningTimeoutId(null);
-        }
+    const handleDisconnect = async () => {
+      if (
+        user &&
+        typeof sessionData?.sessionDocId === 'string' &&
+        document.visibilityState === 'hidden'
+      ) {
+        const userRef = doc(firestore, `sessions/${sessionData.sessionDocId}/users`, user.uid);
+        await updateDoc(userRef, {
+          connected: false,
+          quitedAt: serverTimestamp(),
+        });
       }
     };
 
@@ -68,21 +44,16 @@ const Compiler: React.FC = () => {
       },
     );
 
-    document.addEventListener('mouseleave', notifyUserOfDisconnection);
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('visibilitychange', handleDisconnect);
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      document.removeEventListener('mouseleave', notifyUserOfDisconnection);
-      if (warningTimeoutId) {
-        clearTimeout(warningTimeoutId);
-      }
+      document.removeEventListener('visibilitychange', handleDisconnect);
+
       unsubscribe();
     };
-  }, [user, authLoading, sessionData, router, warningTimeoutId]);
+  }, [user, authLoading, sessionData, router]);
 
-  if (!user || authLoading || !sessionData) {
+  if (!user || authLoading || !sessionData || mount) {
     return <Loadin />;
   }
 
