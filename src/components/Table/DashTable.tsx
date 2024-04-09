@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
+import { useRouter } from 'next/router';
+
 import { auth, firestore } from '@/firebase/firebase';
 import { columns, Session } from '@/types';
 import {
@@ -48,6 +50,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
   const [user] = useAuthState(auth);
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   let sessionDoc: QueryDocumentSnapshot<DocumentData, DocumentData>;
 
@@ -86,6 +89,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         if (querySnapshot.empty) {
           // eslint-disable-next-line quotes
           toast.error("You don't have any open session.");
+          router.push('/session');
           setIsLoading(false);
           return;
         }

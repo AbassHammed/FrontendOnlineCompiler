@@ -119,6 +119,7 @@ const CreateSession = () => {
         </label>
         <div className="relative flex items-center">
           <input
+            readOnly
             value={sessionId}
             type="text"
             name="sessionId"

@@ -26,12 +26,12 @@ const Compiler: React.FC = () => {
       const timeoutId = setTimeout(async () => {
         if (
           user &&
-          typeof sessionData?.sessionId === 'string' &&
+          typeof sessionData?.sessionDocId === 'string' &&
           typeof sessionData.userInfo?.uid === 'string'
         ) {
           const userRef = doc(
             firestore,
-            `sessions/${sessionData.sessionId}/users`,
+            `sessions/${sessionData.sessionDocId}/users`,
             sessionData.userInfo.uid,
           );
           await updateDoc(userRef, {
@@ -60,7 +60,7 @@ const Compiler: React.FC = () => {
     }
 
     const unsubscribe = onSnapshot(
-      doc(firestore, `sessions/${sessionData.sessionId}/users`, sessionData.userInfo.uid),
+      doc(firestore, `sessions/${sessionData.sessionDocId}/users`, sessionData.userInfo.uid),
       docSnapshot => {
         if (!docSnapshot.exists() || !docSnapshot.data()?.connected) {
           router.push('/session');

@@ -63,7 +63,7 @@ const JoinSession = () => {
             ...sessionData,
             filePath: sessionDat.filePath,
             sessionName: sessionDat.sessionName,
-            sessionId: sessionDoc.id,
+            sessionDocId: sessionDoc.id,
           });
           // After adding the user, redirect them to the compiler page
           router.push(`/compiler/${inputs.sessionId}`);
@@ -79,7 +79,7 @@ const JoinSession = () => {
             ...sessionData,
             filePath: sessionDat.filePath,
             sessionName: sessionDat.sessionName,
-            sessionId: sessionDoc.id,
+            sessionDocId: sessionDoc.id,
           });
           // If connected, redirect to the compiler page
           router.push(`/compiler/${inputs.sessionId}`);

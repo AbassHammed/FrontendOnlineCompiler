@@ -21,7 +21,6 @@ import { deleteObject, ref } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';
-import styled from 'styled-components';
 
 import Logout from '../Buttons/Logout';
 import Timer from '../Timer/Timer';
@@ -32,15 +31,6 @@ type TopbarProps = {
   dashboardpage?: boolean;
   session?: Session | null;
 };
-
-const TopLeftContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-`;
 
 const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpage, session }) => {
   const [user] = useAuthState(auth);
@@ -56,7 +46,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
     try {
       const userDocRef = doc(
         firestore,
-        `sessions/${sessionData.sessionId}/users`,
+        `sessions/${sessionData.sessionDocId}/users`,
         sessionData.userInfo.uid,
       );
       await updateDoc(userDocRef, {
@@ -89,10 +79,8 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
 
       await deleteDoc(sessionDocRef);
 
-      if (sessionData?.filePath) {
-        const fileRef = ref(storage, sessionData.filePath);
-        await deleteObject(fileRef);
-      }
+      const fileRef = ref(storage, session.filePath);
+      await deleteObject(fileRef);
 
       toast.success('Session closed and file deleted successfully');
       router.push('/session');
@@ -115,11 +103,11 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
   return (
     <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
       <div className="flex justify-between w-full px-5">
-        <TopLeftContainer>
+        <div className="absolute top-0 left-0 flex items-center justify-center">
           <Link href="/" className="h-[22px]">
             <Image src="/Icon.png" alt="Logo" height={50} width={50} />
           </Link>
-        </TopLeftContainer>
+        </div>
 
         <div className="hidden md:flex justify-center flex-1 mt-2">
           <span className="font-bold">{sessionName}</span>
@@ -136,8 +124,14 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, dashboardpag
           {user && compilerPage && <Timer />}
           {user && sessionData?.userInfo && (
             <div className="cursor-pointer group relative">
-              <Avatar isBordered size="sm" radius="sm" src={sessionData.userInfo.imageUrl} />
-              <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out">
+              <Avatar
+                isBordered
+                color="default"
+                size="sm"
+                radius="sm"
+                src={sessionData.userInfo.imageUrl}
+              />
+              <div className="absolute top-10 left-2/4 -translate-x-2/4 bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
                 <p className="text-sm">{sessionData.userInfo.fullName}</p>
               </div>
             </div>

@@ -9,7 +9,7 @@ interface SessionProviderProps {
 export interface SessionData {
   filePath?: string;
   sessionName?: string;
-  sessionId?: string;
+  sessionDocId?: string;
   userInfo?: UserInfo;
 }
 
