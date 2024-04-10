@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { firestore, storage } from '@/firebase/firebase';
+import { userQuery } from '@/firebase/query';
+import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
 import { Avatar, Button, Tooltip } from '@nextui-org/react';
@@ -20,6 +22,7 @@ import { deleteObject, ref } from 'firebase/storage';
 import { toast } from 'sonner';
 
 import Logout from '../Buttons/Logout';
+import Loadin from '../Loading/Loading';
 import Timer from '../Timer/Timer';
 
 type TopbarProps = {
@@ -32,18 +35,16 @@ type TopbarProps = {
 const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) => {
   const { sessionData } = useSession();
   const router = useRouter();
+  const { user, loading } = useAuth();
+  const [userData, setUserData] = useState({ fullName: '', imageUrl: '' });
 
   const handleQuit = async () => {
-    if (!sessionData?.userInfo?.uid) {
+    if (!sessionData || !user) {
       toast.warning('An internal error occured');
       return;
     }
     try {
-      const userDocRef = doc(
-        firestore,
-        `sessions/${sessionData.sessionDocId}/users`,
-        sessionData.userInfo.uid,
-      );
+      const userDocRef = doc(firestore, `sessions/${sessionData.sessionDocId}/users`, user.uid);
       await updateDoc(userDocRef, {
         connected: false,
         quitedAt: serverTimestamp(),
@@ -95,6 +96,23 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
     });
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const data = await userQuery(user.uid);
+        if (data) {
+          setUserData(data);
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (loading && !user) {
+    return <Loadin />;
+  }
+
   return (
     <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
       <div className="flex justify-between w-full px-5">
@@ -109,18 +127,12 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
         </div>
 
         <div className="flex items-center space-x-4 justify-end">
-          {compilerPage && <Timer />}
-          {sessionData?.userInfo && (
+          {user && compilerPage && <Timer />}
+          {user && (
             <div className="cursor-pointer group relative">
-              <Avatar
-                isBordered
-                color="default"
-                size="sm"
-                radius="sm"
-                src={sessionData.userInfo.imageUrl}
-              />
+              <Avatar isBordered color="default" size="sm" radius="sm" src={userData.imageUrl} />
               <div className="absolute top-10 left-2/4 -translate-x-2/4 bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
-                <p className="text-sm">{sessionData.userInfo.fullName}</p>
+                <p className="text-sm">{userData.fullName}</p>
               </div>
             </div>
           )}
@@ -137,7 +149,6 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
               </Button>
             </Tooltip>
           )}
-
           <Logout />
         </div>
       </div>

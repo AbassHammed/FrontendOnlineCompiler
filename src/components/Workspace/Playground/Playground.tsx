@@ -92,7 +92,7 @@ const Playground = () => {
   };
 
   return (
-    <div className="flex flex-col relative bg-[#0f0f0f] rounded-lg shadow-xl overflow-hidden mr-2 mb-2">
+    <div className="flex flex-1 flex-col relative bg-[#0f0f0f] rounded-lg shadow-xl overflow-hidden mr-2 mb-2">
       <PreferenceNav
         settings={settings}
         setSettings={setSettings}

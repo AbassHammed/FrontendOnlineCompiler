@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Session } from '@/utils/types';
+import { Session } from '@/types';
 import {
   Card,
   CardBody,

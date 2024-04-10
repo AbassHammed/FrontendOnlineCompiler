@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react';
 
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
 import Loadin from '@/components/Loading/Loading';
-import Topbar from '@/components/Topbar/Topbar';
 import Workspace from '@/components/Workspace/Workspace';
 import { firestore } from '@/firebase/firebase';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
 
+// import Topbar from '@/components/Topbar/Topbar';
+const Topbar = dynamic(() => import('../../components/Topbar/Topbar'), { ssr: false });
+
 const Compiler: React.FC = () => {
   const { sessionData } = useSession();
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const mount = typeof window === 'undefined';
 
   useEffect(() => {
     const handleDisconnect = async () => {
@@ -53,7 +55,7 @@ const Compiler: React.FC = () => {
     };
   }, [user, authLoading, sessionData, router]);
 
-  if (!user || authLoading || !sessionData || mount) {
+  if (!user || authLoading || !sessionData) {
     return <Loadin />;
   }
 

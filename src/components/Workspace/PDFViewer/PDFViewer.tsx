@@ -55,7 +55,7 @@ const PDFViewer = () => {
   );
 
   return (
-    <div className="bg-[#282828] rounded-lg shadow-xl overflow-hidden ml-2 mb-2">
+    <div className="bg-[#282828] rounded-lg shadow-xl overflow-hidden ml-2 mb-2 flex-1">
       <Nav
         pageNumber={pageNumber}
         numPages={numPages}

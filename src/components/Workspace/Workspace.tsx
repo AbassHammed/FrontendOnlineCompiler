@@ -1,14 +1,17 @@
 import React from 'react';
 
-import Split from 'react-split';
+import dynamic from 'next/dynamic';
 
-import PDFViewer from './PDFViewer/PDFViewer';
-import Playground from './Playground/Playground';
+// import Playground from './Playground/Playground';
+
+// import PDFViewer from './PDFViewer/PDFViewer';
+const PDFViewer = dynamic(() => import('./PDFViewer/PDFViewer'), { ssr: false });
+const Playground = dynamic(() => import('./Playground/Playground'), { ssr: false });
 
 const Workspace = () => (
-  <Split sizes={[59, 75]} className="split bg-[#0f0f0f]">
+  <div className="flex h-screen">
     <PDFViewer />
     <Playground />
-  </Split>
+  </div>
 );
 export default Workspace;

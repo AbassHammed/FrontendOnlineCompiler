@@ -1,7 +1,5 @@
 import '@/styles/globals.css';
 
-import { useEffect } from 'react';
-
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
@@ -12,14 +10,6 @@ import { RecoilRoot } from 'recoil';
 import { Toaster } from 'sonner';
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    const preventCopy = (event: { preventDefault: () => any }) => event.preventDefault();
-    document.addEventListener('copy', preventCopy);
-
-    return () => {
-      document.removeEventListener('copy', preventCopy);
-    };
-  }, []);
   return (
     <RecoilRoot>
       <Head>
