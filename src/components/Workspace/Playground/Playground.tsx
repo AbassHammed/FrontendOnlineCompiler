@@ -1,13 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { CodeExec } from '@/pages/api/CodeExec';
 import { cpp } from '@codemirror/lang-cpp';
 import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
-import Split from 'react-split';
 
 import EditorFooter from './EditorFooter';
 import PreferenceNav from './PreferenceNav/PreferenceNav';
@@ -19,7 +17,6 @@ export interface ISettings {
 }
 
 const Playground = () => {
-  const [output, setOutput] = useState('You have to run your code to see results');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fontSize, setFontSize] = useLocalStorage('lcc-fontSize', '16px');
   const [settings, setSettings] = useState({
@@ -79,41 +76,23 @@ const Playground = () => {
     document.body.removeChild(a);
   };
 
-  const executeCode = async () => {
-    try {
-      const result = await CodeExec({
-        code: currentCode,
-        language: languages[selectedLanguage as keyof typeof languages].backendIdentifier,
-      });
-      setOutput(`Status: ${result.statusCode}, Message: ${result.messageContent}`);
-    } catch (error: any) {
-      setOutput(`Error: ${error.message}`);
-    }
-  };
-
   return (
-    <div className="flex flex-1 flex-col relative bg-[#0f0f0f] rounded-lg shadow-xl overflow-hidden mr-2 mb-2">
+    <div className="flex flex-auto flex-col relative bg-[#0f0f0f] w-[55%] rounded-lg shadow-xl overflow-hidden px-2 mb-2">
       <PreferenceNav
         settings={settings}
         setSettings={setSettings}
         onLanguageSelect={handleLanguageSelect}
       />
-      <Split className="h-[calc(100vh-94px)]" direction="vertical" sizes={[60, 40]} minSize={60}>
-        <div className="w-full overflow-auto bg-[#282828] rounded-b-lg shadow-xl select-none">
-          <CodeMirror
-            value={currentCode}
-            onChange={setCurrentCode}
-            theme={vscodeDark}
-            extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
-            style={{ fontSize: settings.fontSize }}
-          />
-        </div>
-        <div className="bg-black text-white font-mono text-xs rounded-t-lg">
-          <div className="flex items-center justify-between bg-[#303030] h-9 w-full rounded-t-lg shadow-md"></div>
-          {output}
-        </div>
-      </Split>
-      <EditorFooter handleSubmit={executeCode} handleGenerate={handleGenerate} />
+      <div className="w-full overflow-auto bg-[#282828] rounded-b-lg shadow-xl select-none h-[calc(100vh-94px)]">
+        <CodeMirror
+          value={currentCode}
+          onChange={setCurrentCode}
+          theme={vscodeDark}
+          extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
+          style={{ fontSize: settings.fontSize }}
+        />
+      </div>
+      <EditorFooter handleGenerate={handleGenerate} />
     </div>
   );
 };
