@@ -11,21 +11,9 @@ type PreferenceNavProps = {
   setSettings: React.Dispatch<React.SetStateAction<ISettings>>;
   onLanguageSelect: (language: string) => void;
 };
-interface TooltipProps {
-  show: boolean;
-  children: string;
-}
-
-const Tooltip = ({ show, children }: TooltipProps) => (
-  <div
-    className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 ${show ? 'block' : 'hidden'} bg-dark-layer-1 text-brand-purple p-2 rounded shadow-lg z-50`}>
-    <p className="text-sm">{children}</p>
-  </div>
-);
 
 const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNavProps) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
   const handleFullScreenToggle = () => {
     if (isFullScreen) {
@@ -55,31 +43,32 @@ const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNa
   }, []);
 
   return (
-    <div className="flex items-center justify-between bg-[#303030] h-9 w-full overflow-x-hidden rounded-t-lg shadow-md">
+    <div className="flex items-center justify-between bg-[#303030] h-9 w-full rounded-t-lg shadow-md">
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>
       <div className="flex items-center m-1 relative">
         <button
-          className="preferenceBtn"
-          onClick={() => setSettings({ ...settings, settingsModalIsOpen: true })}
-          onMouseEnter={() => setShowTooltip('Settings')}
-          onMouseLeave={() => setShowTooltip(null)}>
+          className="relative flex group rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3"
+          onClick={() => setSettings({ ...settings, settingsModalIsOpen: true })}>
           <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            <AiOutlineSetting />
+            <AiOutlineSetting className="text-purple-500" />
           </div>
-          <Tooltip show={showTooltip === 'Settings'}>Settings</Tooltip>
+          <div className="absolute top-8 left-2/4 -translate-x-2/4 border border-default-200 bg-gradient-to-br from-default-100 to-default-50 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
+            <p className="text-sm text-dark-gray-7">Settings</p>
+          </div>
         </button>
 
         <button
-          className="preferenceBtn"
-          onClick={handleFullScreenToggle}
-          onMouseEnter={() => setShowTooltip('FullScreen')}
-          onMouseLeave={() => setShowTooltip(null)}>
+          className="flex rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3"
+          onClick={handleFullScreenToggle}>
           <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
+            {!isFullScreen ? (
+              <AiOutlineFullscreen className="text-purple-500" />
+            ) : (
+              <AiOutlineFullscreenExit className="text-purple-500" />
+            )}
           </div>
-          <Tooltip show={showTooltip === 'FullScreen'}>Full Screen</Tooltip>
         </button>
       </div>
       {settings.settingsModalIsOpen && (

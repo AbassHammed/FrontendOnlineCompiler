@@ -1,12 +1,18 @@
 import React, { useEffect } from 'react';
 
+import dynamic from 'next/dynamic';
+
 import { authModalState } from '@/atoms/authModalAtom';
-import Loadin from '@/components/Loading/Loading';
 import AuthModal from '@/components/Modals/AuthModal';
-import Navbar from '@/components/Navbar/Navbar';
 import { useAuth } from '@/hooks/useAuth';
 import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+
+// import Navbar from '@/components/Navbar/Navbar';
+const Navbar = dynamic(() => import('@/components/Navbar/Navbar'), { ssr: false });
+
+// import Loadin from '@/components/Loading/Loading';
+const Loadin = dynamic(() => import('@/components/Loading/Loading'), { ssr: false });
 
 const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();
