@@ -130,7 +130,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
           {user && compilerPage && <Timer />}
           {user && (
             <div className="cursor-pointer group relative">
-              <Avatar isBordered color="default" size="sm" radius="sm" src={userData.imageUrl} />
+              <Avatar color="default" size="sm" radius="full" src={userData.imageUrl} />
               <div className="absolute top-10 left-2/4 -translate-x-2/4 bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
                 <p className="text-sm">{userData.fullName}</p>
               </div>
