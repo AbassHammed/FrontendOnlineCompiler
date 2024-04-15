@@ -5,8 +5,6 @@ import { useRouter } from 'next/router';
 import { authModalState } from '@/atoms/authModalAtom';
 import { AvartarImg } from '@/data';
 import { auth, firestore } from '@/firebase/firebase';
-import { currentUserQuery } from '@/firebase/query';
-import { useSession } from '@/hooks/useSession';
 import { random } from '@/lib/utils';
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
@@ -19,7 +17,6 @@ import { Icons } from '../icons';
 const Signup: React.FC = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
   const router = useRouter();
-  const { setSessionData } = useSession();
   const [createUserWithEmailAndPassword, loading] = useCreateUserWithEmailAndPassword(auth);
 
   const [inputs, setInputs] = useState({
@@ -78,7 +75,6 @@ const Signup: React.FC = () => {
           createdAt: serverTimestamp(),
           imageUrl: random(AvartarImg),
         });
-        await currentUserQuery(newUser.user.uid, setSessionData);
         router.push('/session');
       }
     } catch (error: any) {

@@ -49,7 +49,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
           <ChevronDownIcon className="h-5 w-5" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className=" flex p-2 rounded-lg shadow-lg max-w-md mx-auto border border-default-200 bg-[#323232] text-white">
+      <PopoverContent className=" flex p-2 rounded-lg shadow-lg max-w-md mx-auto border border-gray-900 bg-[#323232] text-white">
         <div className="grid grid-cols-3">
           {languages.map(language => (
             <div

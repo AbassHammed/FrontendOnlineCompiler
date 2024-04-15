@@ -3,7 +3,6 @@ import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { Wrapper } from '@/components/wrapper';
 import { SessionProvider } from '@/hooks/useSession';
 import { NextUIProvider } from '@nextui-org/react';
 import { RecoilRoot } from 'recoil';
@@ -21,9 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Toaster richColors position="top-center" closeButton />
       <SessionProvider>
         <NextUIProvider>
-          <Wrapper>
-            <Component {...pageProps} />
-          </Wrapper>
+          <Component {...pageProps} />
         </NextUIProvider>
       </SessionProvider>
     </RecoilRoot>

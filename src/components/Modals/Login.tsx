@@ -4,15 +4,12 @@ import { useRouter } from 'next/router';
 
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth } from '@/firebase/firebase';
-import { currentUserQuery } from '@/firebase/query';
-import { useSession } from '@/hooks/useSession';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';
 
 const Login: React.FC = () => {
-  const { setSessionData } = useSession();
   const [showPassword, setShowPassword] = useState(false);
   const setAuthModalState = useSetRecoilState(authModalState);
   const handleClick = (type: 'login' | 'register' | 'forgotPassword') => {
@@ -35,7 +32,6 @@ const Login: React.FC = () => {
     try {
       const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
       if (newUser) {
-        await currentUserQuery(newUser.user.uid, setSessionData);
         router.push('/session');
       }
     } catch (error: any) {

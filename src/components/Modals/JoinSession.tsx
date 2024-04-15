@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { firestore } from '@/firebase/firebase';
+import { userQuery } from '@/firebase/query';
+import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { toast } from 'sonner';
@@ -11,11 +13,22 @@ const JoinSession = () => {
   const [inputs, setInputs] = useState({ sessionId: '', userName: '' });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const [userData, setUserData] = useState({ fullName: '', uid: '' });
   const { setSessionData, sessionData } = useSession();
+  const { user } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputs(prev => ({ ...prev, [name]: value }));
+  };
+
+  const fetchUser = async () => {
+    if (user) {
+      const userInfo = await userQuery(user.uid);
+      if (userInfo) {
+        setUserData({ fullName: userInfo.fullName, uid: user.uid });
+      }
+    }
   };
 
   const validateInputs = () => {
@@ -27,6 +40,7 @@ const JoinSession = () => {
   };
 
   const joinSession = async () => {
+    await fetchUser();
     try {
       setIsLoading(true);
       const sessionsQuery = query(
@@ -39,54 +53,49 @@ const JoinSession = () => {
         toast.error('Session ID not found');
         return;
       }
-      // tout est bon ici
-      if (sessionData?.userInfo?.fullName) {
-        const sessionDoc = querySnapshot.docs[0];
-        const sessionDat = sessionDoc.data();
-        const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
-        const userDocRef = doc(
-          firestore,
-          `sessions/${sessionDoc.id}/users/${sessionData.userInfo.uid}`,
-        );
-        const userQuery = query(usersRef, where('name', '==', sessionData.userInfo.fullName));
-        const userSnapshot = await getDocs(userQuery);
 
-        if (userSnapshot.empty) {
-          // If no user found, add them to the session
-          await setDoc(userDocRef, {
-            name: sessionData.userInfo.fullName,
-            joinedAt: new Date(),
-            connected: true,
-            quitedAt: null,
-          });
-          setSessionData({
-            ...sessionData,
-            filePath: sessionDat.filePath,
-            sessionName: sessionDat.sessionName,
-            sessionDocId: sessionDoc.id,
-          });
-          // After adding the user, redirect them to the compiler page
-          router.push(`/compiler/${inputs.sessionId}`);
-        } else {
-          // If user found, check if they are connected
-          const userDoc = userSnapshot.docs[0];
-          if (!userDoc.data().connected) {
-            // eslint-disable-next-line quotes
-            toast.error("You've been disconnected, please contact your session Admin");
-            return;
-          }
-          setSessionData({
-            ...sessionData,
-            filePath: sessionDat.filePath,
-            sessionName: sessionDat.sessionName,
-            sessionDocId: sessionDoc.id,
-          });
-          // If connected, redirect to the compiler page
-          router.push(`/compiler/${inputs.sessionId}`);
+      const sessionDoc = querySnapshot.docs[0];
+      const sessionDat = sessionDoc.data();
+      const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
+      const userDocRef = doc(firestore, `sessions/${sessionDoc.id}/users/${userData.uid}`);
+      const userQuery = query(usersRef, where('name', '==', userData.fullName));
+      const userSnapshot = await getDocs(userQuery);
+
+      if (userSnapshot.empty) {
+        // If no user found, add them to the session
+        await setDoc(userDocRef, {
+          name: userData.fullName,
+          joinedAt: new Date(),
+          connected: true,
+          quitedAt: null,
+        });
+        setSessionData({
+          ...sessionData,
+          filePath: sessionDat.filePath,
+          sessionName: sessionDat.sessionName,
+          sessionDocId: sessionDoc.id,
+        });
+        // After adding the user, redirect them to the compiler page
+        router.push(`/compiler/${inputs.sessionId}`);
+      } else {
+        // If user found, check if they are connected
+        const userDoc = userSnapshot.docs[0];
+        if (!userDoc.data().connected) {
+          // eslint-disable-next-line quotes
+          toast.error("You've been disconnected, please contact your session Admin");
+          return;
         }
+        setSessionData({
+          ...sessionData,
+          filePath: sessionDat.filePath,
+          sessionName: sessionDat.sessionName,
+          sessionDocId: sessionDoc.id,
+        });
+        // If connected, redirect to the compiler page
+        router.push(`/compiler/${inputs.sessionId}`);
       }
-    } catch (error: any) {
-      toast.error(`Error joining session: ${error.message}`);
+    } catch (error: unknown) {
+      toast.error(`Error joining session: ${(error as Error).message}`);
     } finally {
       setIsLoading(false);
     }

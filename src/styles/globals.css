@@ -9,6 +9,27 @@
   margin: 0;
 }
 
+::-webkit-scrollbar {
+  width: 0.2rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #282828;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4d4d4d;
+}
+
+.cm-scroller,
+.cm-gutters {
+  background-color: #282828 !important;
+}
+
+.cm-focused {
+  outline: none !important;
+}
+
 body {
   font-family:
     system-ui,
@@ -23,15 +44,6 @@ body {
     'Helvetica Neue',
     sans-serif;
   height: 100vh;
-}
-
-/* CODE EDITOR*/
-.cm-scroller,
-.cm-gutters {
-  background-color: #282828 !important;
-}
-.cm-focused {
-  outline: none !important;
 }
 
 code {
