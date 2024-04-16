@@ -83,7 +83,7 @@ const CreateSession = () => {
         filePath,
         timestamp: serverTimestamp(),
       });
-      router.push('/Dashboard');
+      router.push('/d');
     } catch (e) {
       toast.error('A problem when saving your data');
     } finally {

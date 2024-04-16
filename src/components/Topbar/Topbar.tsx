@@ -114,7 +114,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   }
 
   return (
-    <nav className="flex h-[48px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
+    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
       <div className="flex justify-between w-full px-5">
         <div className="absolute top-0 left-0 flex items-center justify-center">
           <Link href="/" className="h-[22px]">

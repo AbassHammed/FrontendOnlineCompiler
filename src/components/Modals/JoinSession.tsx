@@ -76,7 +76,7 @@ const JoinSession = () => {
           sessionDocId: sessionDoc.id,
         });
         // After adding the user, redirect them to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
+        router.push(`/c/${inputs.sessionId}`);
       } else {
         // If user found, check if they are connected
         const userDoc = userSnapshot.docs[0];
@@ -92,7 +92,7 @@ const JoinSession = () => {
           sessionDocId: sessionDoc.id,
         });
         // If connected, redirect to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
+        router.push(`/c/${inputs.sessionId}`);
       }
     } catch (error: unknown) {
       toast.error(`Error joining session: ${(error as Error).message}`);
