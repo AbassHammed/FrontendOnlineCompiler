@@ -7,7 +7,7 @@ type EditorFooterProps = {
 };
 
 const EditorFooter: React.FC<EditorFooterProps> = ({ handleGenerate }) => (
-  <div className="flex bg-black absolute bottom-0 z-10 rounded-lg w-full">
+  <div className="flex bg-[#303030] absolute bottom-0 z-10 rounded-lg w-full">
     <div className="mx-5 my-[10px] flex justify-between w-full">
       <div className="mr-2 flex flex-1 flex-nowrap items-center">
         <button

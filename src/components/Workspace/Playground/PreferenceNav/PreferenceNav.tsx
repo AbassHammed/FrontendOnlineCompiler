@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import DropDown from '@/components/Buttons/Dropdown';
-import SettingsModal from '@/components/Modals/SettingsModal';
-import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
+import Settings from '@/components/Modals/settings';
+import { ToolTip } from '@/components/Tooltip';
+import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
 
-import { ISettings } from '../Playground';
-
-type PreferenceNavProps = {
-  settings: ISettings;
-  setSettings: React.Dispatch<React.SetStateAction<ISettings>>;
+interface PreferenceNavProps {
   onLanguageSelect: (language: string) => void;
-};
+  onFontSizeChange: (fontSize: string) => void;
+}
 
-const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNavProps) => {
+const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontSizeChange }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleFullScreenToggle = () => {
@@ -47,33 +45,29 @@ const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNa
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>
-      <div className="flex items-center m-1 relative">
-        <button
-          className="relative flex group rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3"
-          onClick={() => setSettings({ ...settings, settingsModalIsOpen: true })}>
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            <AiOutlineSetting className="text-purple-500" />
-          </div>
-          <div className="absolute top-8 left-2/4 -translate-x-2/4 border border-default-200 bg-gradient-to-br from-default-100 to-default-50 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
-            <p className="text-sm text-dark-gray-7">Settings</p>
+      <div className="flex m-1 sticky top-0 right-0">
+        <button className="relative flex group rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3">
+          <div className="h-4 w-4 font-bold text-lg">
+            <ToolTip message="Settings">
+              <Settings onFontSizeChange={onFontSizeChange} />
+            </ToolTip>
           </div>
         </button>
 
         <button
           className="flex rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3"
           onClick={handleFullScreenToggle}>
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
+          <div className="h-4 w-4 font-bold text-lg">
             {!isFullScreen ? (
-              <AiOutlineFullscreen className="text-purple-500" />
+              <ToolTip message="Full Screen">
+                <AiOutlineFullscreen className="text-purple-500" />
+              </ToolTip>
             ) : (
               <AiOutlineFullscreenExit className="text-purple-500" />
             )}
           </div>
         </button>
       </div>
-      {settings.settingsModalIsOpen && (
-        <SettingsModal settings={settings} setSettings={setSettings} />
-      )}
     </div>
   );
 };

@@ -25,12 +25,12 @@ import Logout from '../Buttons/Logout';
 import Loadin from '../Loading/Loading';
 import Timer from '../Timer/Timer';
 
-type TopbarProps = {
+interface TopbarProps {
   compilerPage?: boolean;
   sessionName?: string;
   dashboardpage?: boolean;
   session?: Session | null;
-};
+}
 
 const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) => {
   const { sessionData } = useSession();

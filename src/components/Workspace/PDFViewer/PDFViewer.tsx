@@ -16,8 +16,8 @@ interface NavProps {
   goToNextPage: () => void;
 }
 
-const Nav = ({ pageNumber, numPages, goToPrevPage, goToNextPage }: NavProps) => (
-  <div className="flex h-9 w-full items-center justify-center bg-[#303030] text-white overflow-x-hidden rounded-t-lg shadow-md">
+const Nav: React.FC<NavProps> = ({ pageNumber, numPages, goToPrevPage, goToNextPage }) => (
+  <div className="flex h-9 w-full items-center justify-center bg-[#303030] text-gray-400 overflow-x-hidden rounded-t-lg shadow-md">
     <div className="flex items-center space-x-4 ">
       <button
         onClick={goToPrevPage}

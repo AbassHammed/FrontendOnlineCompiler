@@ -43,6 +43,7 @@
     "@nextjournal/lang-clojure": "^1.0.0",
     "@nextui-org/react": "^2.2.10",
     "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-tooltip": "^1.0.7",
     "@replit/codemirror-lang-csharp": "^6.2.0",
     "@table-library/react-table-library": "^4.1.7",
     "@uiw/codemirror-theme-vscode": "^4.21.25",
