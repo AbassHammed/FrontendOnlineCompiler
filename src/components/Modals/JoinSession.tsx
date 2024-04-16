@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -10,7 +10,7 @@ import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firesto
 import { toast } from 'sonner';
 
 const JoinSession = () => {
-  const [inputs, setInputs] = useState({ sessionId: '', userName: '' });
+  const [inputs, setInputs] = useState({ sessionId: '' });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [userData, setUserData] = useState({ fullName: '', uid: '' });
@@ -22,6 +22,7 @@ const JoinSession = () => {
     setInputs(prev => ({ ...prev, [name]: value }));
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchUser = async () => {
     if (user) {
       const userInfo = await userQuery(user.uid);
@@ -40,7 +41,6 @@ const JoinSession = () => {
   };
 
   const joinSession = async () => {
-    await fetchUser();
     try {
       setIsLoading(true);
       const sessionsQuery = query(
@@ -104,9 +104,16 @@ const JoinSession = () => {
   const handleJoin = async (e: any) => {
     e.preventDefault();
     if (validateInputs()) {
+      await fetchUser();
       await joinSession();
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
 
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleJoin}>
@@ -125,22 +132,6 @@ const JoinSession = () => {
             bg-gray-600 border-gray-500 placeholder-gray-400 text-white
         "
           placeholder="25AZ7R9B"
-        />
-      </div>
-      <div>
-        <label htmlFor="userName" className="text-sm font-medium block mb-2 text-gray-300">
-          Your name
-        </label>
-        <input
-          onChange={handleInputChange}
-          type="userName"
-          name="userName"
-          id="userName"
-          className="
-            border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-            bg-gray-600 border-gray-500 placeholder-gray-400 text-white
-        "
-          placeholder="Coco jojo"
         />
       </div>
 

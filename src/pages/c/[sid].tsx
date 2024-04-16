@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import Loadin from '@/components/Loading/Loading';
@@ -10,7 +11,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
 
-// import Topbar from '@/components/Topbar/Topbar';
 const Topbar = dynamic(() => import('../../components/Topbar/Topbar'), { ssr: false });
 
 const Compiler: React.FC = () => {
@@ -33,12 +33,12 @@ const Compiler: React.FC = () => {
       }
     };
 
-    if (!sessionData || !sessionData.userInfo) {
+    if (!sessionData || !user) {
       return;
     }
 
     const unsubscribe = onSnapshot(
-      doc(firestore, `sessions/${sessionData.sessionDocId}/users`, sessionData.userInfo.uid),
+      doc(firestore, `sessions/${sessionData.sessionDocId}/users`, user.uid),
       docSnapshot => {
         if (!docSnapshot.exists() || !docSnapshot.data()?.connected) {
           router.push('/session');
@@ -61,6 +61,9 @@ const Compiler: React.FC = () => {
 
   return (
     <div className="bg-[#0f0f0f] !min-h-full">
+      <Head>
+        <title>LetsCode | {sessionData.sessionName}</title>
+      </Head>
       <Topbar
         compilerPage={true}
         sessionName={typeof sessionData.sessionName === 'string' ? sessionData.sessionName : ''}

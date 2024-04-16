@@ -34,10 +34,11 @@ interface DropDownProps {
 }
 
 const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
-  const [selectedLanguage, setSelectedLanguage] = useState<LanguageOption>(languages[0]);
+  const language = sessionStorage.getItem('language');
+  const [selectedLanguage, setSelectedLanguage] = useState(language || languages[0].name);
 
   const handleLanguageChange = (language: LanguageOption) => {
-    setSelectedLanguage(language);
+    setSelectedLanguage(language.name);
     onLanguageSelect(language.name);
   };
 
@@ -45,7 +46,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
     <Popover placement="bottom-start">
       <PopoverTrigger>
         <div className="flex whitespace-nowrap !flex-row justify-center items-center m-1 rounded-md p-1 cursor-pointer hover:bg-gray-8 text-gray-400 font-normal">
-          {selectedLanguage.name}
+          {selectedLanguage}
           <ChevronDownIcon className="h-5 w-5" />
         </div>
       </PopoverTrigger>
@@ -58,7 +59,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
               className="relative flex w-[100px] p-2 rounded-lg text-white hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
               <span
                 className={`text-blue dark:text-dark-blue flex items-center pr-2 ${
-                  selectedLanguage.name === language.name ? 'visible' : 'invisible'
+                  selectedLanguage === language.name ? 'visible' : 'invisible'
                 }`}>
                 <BsCheckLg />
               </span>

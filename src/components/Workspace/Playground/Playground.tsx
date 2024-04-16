@@ -8,17 +8,29 @@ import EditorFooter from './EditorFooter';
 import PreferenceNav from './PreferenceNav/PreferenceNav';
 
 const Playground = () => {
-  const size = localStorage.getItem('lcc-fontSize');
-  const [fontSize, setFontSize] = useState(size || '13px');
-  const [selectedLanguage, setSelectedLanguage] = useState('C++');
-  const [currentCode, setCurrentCode] = useState('');
+  const [fontSize, setFontSize] = useState(localStorage.getItem('lcc-fontSize') || '13px');
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    sessionStorage.getItem('language') || 'C++',
+  );
+  const [currentCode, setCurrentCode] = useState(
+    sessionStorage.getItem('code') ||
+      languages[selectedLanguage as keyof typeof languages].initialCode,
+  );
 
   useEffect(() => {
-    setCurrentCode(languages[selectedLanguage as keyof typeof languages].initialCode);
-  }, [selectedLanguage]);
+    sessionStorage.setItem('language', selectedLanguage);
+    sessionStorage.setItem('code', currentCode);
+  }, [selectedLanguage, currentCode]);
 
-  const handleLanguageSelect = (language: string) => setSelectedLanguage(language);
-  const handleFontSizeChange = (fontSize: string) => setFontSize(fontSize);
+  const handleLanguageSelect = (language: string) => {
+    setSelectedLanguage(language);
+    setCurrentCode(languages[language as keyof typeof languages].initialCode);
+  };
+
+  const handleFontSizeChange = (fontSize: string) => {
+    localStorage.setItem('lcc-fontSize', fontSize);
+    setFontSize(fontSize);
+  };
 
   const handleGenerate = () => {
     const fileExtension = languages[selectedLanguage as keyof typeof languages].fileExtension;
@@ -26,14 +38,15 @@ const Playground = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `code${fileExtension}`;
+    a.download = `main${fileExtension}`;
+    a.style.display = 'none';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   };
 
   return (
-    <div className="flex flex-auto flex-col relative bg-[#0f0f0f] w-[55%] rounded-md shadow-xl overflow-hidden mx-2 mb-2 ">
+    <div className="flex flex-auto flex-col relative bg-[#0f0f0f] w-[55%] rounded-md shadow-xl overflow-hidden mx-2 mb-2">
       <PreferenceNav
         onFontSizeChange={handleFontSizeChange}
         onLanguageSelect={handleLanguageSelect}
