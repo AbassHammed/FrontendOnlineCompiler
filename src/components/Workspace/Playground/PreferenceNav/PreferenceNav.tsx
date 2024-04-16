@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import DropDown from '@/components/Buttons/Dropdown';
 import Settings from '@/components/Modals/settings';
 import { ToolTip } from '@/components/Tooltip';
+import { Button } from '@nextui-org/react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
 
 interface PreferenceNavProps {
@@ -45,28 +46,25 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontS
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>
-      <div className="flex m-1 sticky top-0 right-0">
-        <button className="relative flex group rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3">
-          <div className="h-4 w-4 font-bold text-lg">
-            <ToolTip message="Settings">
-              <Settings onFontSizeChange={onFontSizeChange} />
-            </ToolTip>
-          </div>
-        </button>
+      <div className="flex items-center relative justify-end mr-2">
+        <ToolTip message="Settings">
+          <Settings onFontSizeChange={onFontSizeChange} />
+        </ToolTip>
 
-        <button
-          className="flex rounded px-3 py-1.5 font-medium items-center justify-center transition-all focus:outline-none hover:bg-dark-fill-3"
+        <Button
+          isIconOnly
+          aria-label="FullSreen"
+          variant="light"
+          className="w-7 h-7 rounded-sm text-lg hover:!bg-[#3a3a3a] "
           onClick={handleFullScreenToggle}>
-          <div className="h-4 w-4 font-bold text-lg">
-            {!isFullScreen ? (
-              <ToolTip message="Full Screen">
-                <AiOutlineFullscreen className="text-purple-500" />
-              </ToolTip>
-            ) : (
-              <AiOutlineFullscreenExit className="text-purple-500" />
-            )}
-          </div>
-        </button>
+          {!isFullScreen ? (
+            <ToolTip message="Full Screen">
+              <AiOutlineFullscreen className="text-purple-500" />
+            </ToolTip>
+          ) : (
+            <AiOutlineFullscreenExit className="text-purple-500" />
+          )}
+        </Button>
       </div>
     </div>
   );

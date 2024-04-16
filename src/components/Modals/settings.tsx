@@ -33,12 +33,11 @@ const Settings: React.FC<SettingsProps> = ({ onFontSizeChange }) => {
     <div>
       <Button
         isIconOnly
-        color="primary"
         variant="light"
-        className="w-7 h-7 rounded-sm text-lg"
+        className="w-7 h-7 rounded-sm text-lg hover:!bg-[#3a3a3a]"
         aria-label="Settings"
         onPress={() => onOpen()}>
-        <AiOutlineSetting />
+        <AiOutlineSetting className="text-purple-500" />
       </Button>
       {isOpen && (
         <Modal

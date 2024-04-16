@@ -114,18 +114,21 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   }
 
   return (
-    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
-      <div className="flex justify-between w-full px-5">
-        <div className="absolute top-0 left-0 flex items-center justify-center">
-          <Link href="/" className="h-[22px]">
-            <Image src="/Icon.png" alt="Logo" height={50} width={50} />
-          </Link>
-        </div>
+    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7 px-5">
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center justify-center">
+          <div className="flex items-center">
+            <ul className="relative mr-2 flex h-10 items-center justify-center">
+              <Link href="/">
+                <Image src="/Icon.png" alt="Logo" height={50} width={50} />
+              </Link>
+              <li className="h-[16px] w-[1px] bg-gray-500"></li>
+              <span className="font-bold mx-5">{sessionName}</span>
+            </ul>
+          </div>
 
-        <div className="hidden md:flex justify-center flex-1 mt-2">
-          <span className="font-bold">{sessionName}</span>
+          <div className="hidden md:flex justify-center flex-1 mt-2"></div>
         </div>
-
         <div className="flex items-center space-x-4 justify-end">
           {user && compilerPage && <Timer />}
           {user && (

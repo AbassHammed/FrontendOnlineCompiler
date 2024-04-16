@@ -8,7 +8,8 @@ import EditorFooter from './EditorFooter';
 import PreferenceNav from './PreferenceNav/PreferenceNav';
 
 const Playground = () => {
-  const [fontSize, setFontSize] = useState('13px');
+  const size = localStorage.getItem('lcc-fontSize');
+  const [fontSize, setFontSize] = useState(size || '13px');
   const [selectedLanguage, setSelectedLanguage] = useState('C++');
   const [currentCode, setCurrentCode] = useState('');
 
