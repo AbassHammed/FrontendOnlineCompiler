@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Loading } from 'nextui-org-react-old';
 
 const Loadin: React.FC = () => (

@@ -1,5 +1,6 @@
-import { auth } from '@/firebase/firebase';
 import React from 'react';
+
+import { auth } from '@/firebase/firebase';
 import { Button, Tooltip } from '@nextui-org/react';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { FiLogOut } from 'react-icons/fi';

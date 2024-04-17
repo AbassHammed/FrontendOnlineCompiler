@@ -1,14 +1,13 @@
-import { useState, useCallback } from 'react';
-import { HiOutlineChevronRight, HiOutlineChevronLeft } from 'react-icons/hi2';
+import { useCallback, useState } from 'react';
+
+import { useSession } from '@/hooks/useSession';
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi2';
 import { Document, Page, pdfjs } from 'react-pdf';
+
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
-
-interface PDFViewerProps {
-  file: string;
-}
 
 interface NavProps {
   pageNumber: number;
@@ -17,8 +16,8 @@ interface NavProps {
   goToNextPage: () => void;
 }
 
-const Nav = ({ pageNumber, numPages, goToPrevPage, goToNextPage }: NavProps) => (
-  <div className="flex h-9 w-full items-center justify-center bg-[#303030] text-white overflow-x-hidden rounded-t-lg shadow-md">
+const Nav: React.FC<NavProps> = ({ pageNumber, numPages, goToPrevPage, goToNextPage }) => (
+  <div className="flex h-9 w-full items-center justify-center bg-[#303030] text-gray-400 overflow-x-hidden rounded-t-lg shadow-md">
     <div className="flex items-center space-x-4 ">
       <button
         onClick={goToPrevPage}
@@ -40,9 +39,10 @@ const Nav = ({ pageNumber, numPages, goToPrevPage, goToNextPage }: NavProps) => 
   </div>
 );
 
-const PDFViewer = ({ file }: PDFViewerProps) => {
+const PDFViewer = () => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
+  const { sessionData } = useSession();
 
   const onDocumentLoadSuccess = useCallback(({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
@@ -55,7 +55,7 @@ const PDFViewer = ({ file }: PDFViewerProps) => {
   );
 
   return (
-    <div className="bg-[#282828] rounded-lg shadow-xl overflow-hidden ml-2 mb-2">
+    <div className="bg-[#282828] rounded-lg shadow-xl overflow-hidden ml-2 mb-2 flex-auto w-[40%]">
       <Nav
         pageNumber={pageNumber}
         numPages={numPages}
@@ -65,7 +65,7 @@ const PDFViewer = ({ file }: PDFViewerProps) => {
       <div className="flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto">
         <div className="px-5">
           <Document
-            file={file}
+            file={sessionData?.filePath}
             onLoadSuccess={onDocumentLoadSuccess}
             className="w-full"
             renderMode="canvas">

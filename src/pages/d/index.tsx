@@ -1,11 +1,12 @@
+import React, { useState } from 'react';
+
+import SessionCard from '@/components/Cards/SessionCard';
 import Loadin from '@/components/Loading/Loading';
+import DashClock from '@/components/Table/DashClock';
 import DashTable from '@/components/Table/DashTable';
 import Topbar from '@/components/Topbar/Topbar';
 import { useAuth } from '@/hooks/useAuth';
-import React, { useState } from 'react';
-import { Session } from '@/utils/types';
-import SessionCard from '@/components/Cards/SessionCard';
-import DashClock from '@/components/Table/DashClock';
+import { Session } from '@/types';
 
 const Dashboard: React.FC = () => {
   const [session, setSession] = useState<Session | null>(null);

@@ -1,13 +1,15 @@
-import { auth, storage, firestore } from '@/firebase/firebase';
-import Link from 'next/link';
-import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { useSetRecoilState } from 'recoil';
-import { authModalState } from '@/atoms/authModalAtom';
+import React, { useEffect, useState } from 'react';
+
 import Image from 'next/image';
-import Timer from '../Timer/Timer';
-import styled from 'styled-components';
-import Logout from '../Buttons/Logout';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { firestore, storage } from '@/firebase/firebase';
+import { userQuery } from '@/firebase/query';
+import { useAuth } from '@/hooks/useAuth';
+import { useSession } from '@/hooks/useSession';
+import { Session } from '@/types';
+import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import {
   collection,
   deleteDoc,
@@ -16,53 +18,33 @@ import {
   serverTimestamp,
   updateDoc,
 } from 'firebase/firestore';
-import { useRouter } from 'next/router';
+import { deleteObject, ref } from 'firebase/storage';
 import { toast } from 'sonner';
-import ProfilePicture from '@/utils/profilePic';
-import { Button, Tooltip } from '@nextui-org/react';
-import { Session } from '@/utils/types';
-import { ref, deleteObject } from 'firebase/storage';
 
-type TopbarProps = {
+import Logout from '../Buttons/Logout';
+import Loadin from '../Loading/Loading';
+import Timer from '../Timer/Timer';
+
+interface TopbarProps {
   compilerPage?: boolean;
   sessionName?: string;
-  sessionId?: string;
-  UserId?: string;
-  UserName?: string;
   dashboardpage?: boolean;
   session?: Session | null;
-};
+}
 
-const TopLeftContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-`;
-
-const Topbar: React.FC<TopbarProps> = ({
-  compilerPage,
-  sessionName,
-  sessionId,
-  UserId,
-  UserName,
-  dashboardpage,
-  session,
-}) => {
-  const [user] = useAuthState(auth);
-  const setAuthModalState = useSetRecoilState(authModalState);
+const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) => {
+  const { sessionData } = useSession();
   const router = useRouter();
+  const { user, loading } = useAuth();
+  const [userData, setUserData] = useState({ fullName: '', imageUrl: '' });
 
   const handleQuit = async () => {
-    if (!UserId || !sessionId) {
+    if (!sessionData || !user) {
       toast.warning('An internal error occured');
       return;
     }
-
     try {
-      const userDocRef = doc(firestore, `sessions/${sessionId}/users`, UserId);
+      const userDocRef = doc(firestore, `sessions/${sessionData.sessionDocId}/users`, user.uid);
       await updateDoc(userDocRef, {
         connected: false,
         quitedAt: serverTimestamp(),
@@ -75,7 +57,7 @@ const Topbar: React.FC<TopbarProps> = ({
   };
 
   const handleCloseSession = async () => {
-    if (!session || !session.sessionId) {
+    if (!session) {
       toast.error('Invalid session data');
       return;
     }
@@ -93,10 +75,8 @@ const Topbar: React.FC<TopbarProps> = ({
 
       await deleteDoc(sessionDocRef);
 
-      if (session.filePath) {
-        const fileRef = ref(storage, session.filePath);
-        await deleteObject(fileRef);
-      }
+      const fileRef = ref(storage, session.filePath);
+      await deleteObject(fileRef);
 
       toast.success('Session closed and file deleted successfully');
       router.push('/session');
@@ -116,37 +96,50 @@ const Topbar: React.FC<TopbarProps> = ({
     });
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const data = await userQuery(user.uid);
+        if (data) {
+          setUserData(data);
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (loading && !user) {
+    return <Loadin />;
+  }
+
   return (
-    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7">
-      <div className="flex justify-between w-full px-5">
-        <TopLeftContainer>
-          <Link href="/" className="h-[22px]">
-            <Image src="/Icon.png" alt="Logo" height={50} width={50} />
-          </Link>
-        </TopLeftContainer>
+    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7 px-5">
+      <div className="flex justify-between items-center w-full">
+        <div className="flex items-center justify-center">
+          <div className="flex items-center">
+            <ul className="relative mr-2 flex h-10 items-center justify-center">
+              <Link href="/">
+                <Image src="/Icon.png" alt="Logo" height={50} width={50} />
+              </Link>
+              <li className="h-[16px] w-[1px] bg-gray-500"></li>
+              <span className="font-bold mx-5">{sessionName}</span>
+            </ul>
+          </div>
 
-        <div className="hidden md:flex justify-center flex-1 mt-2">
-          <span className="font-bold">{sessionName}</span>
+          <div className="hidden md:flex justify-center flex-1 mt-2"></div>
         </div>
-
         <div className="flex items-center space-x-4 justify-end">
-          {!user && (
-            <Link
-              href="/auth"
-              onClick={() => setAuthModalState(prev => ({ ...prev, isOpen: true, type: 'login' }))}>
-              <button className="bg-dark-fill-3 py-1 px-2 cursor-pointer rounded">Sign In</button>
-            </Link>
-          )}
           {user && compilerPage && <Timer />}
           {user && (
             <div className="cursor-pointer group relative">
-              <ProfilePicture email={UserName} />
-              <div className="absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out">
-                <p className="text-sm">{UserName}</p>
+              <Avatar color="default" size="sm" radius="full" src={userData.imageUrl} />
+              <div className="absolute top-10 left-2/4 -translate-x-2/4 bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
+                <p className="text-sm">{userData.fullName}</p>
               </div>
             </div>
           )}
-          {!dashboardpage ? (
+          {compilerPage ? (
             <Tooltip content="Quit the session">
               <Button onClick={handleQuit} color="warning" size="sm">
                 Quit
@@ -159,8 +152,7 @@ const Topbar: React.FC<TopbarProps> = ({
               </Button>
             </Tooltip>
           )}
-
-          {user && <Logout />}
+          <Logout />
         </div>
       </div>
     </nav>

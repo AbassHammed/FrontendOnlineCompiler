@@ -1,6 +1,7 @@
+import React, { useState } from 'react';
+
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth } from '@/firebase/firebase';
-import React, { useState } from 'react';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { useSetRecoilState } from 'recoil';
 import { toast } from 'sonner';

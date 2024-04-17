@@ -1,18 +1,17 @@
 import React from 'react';
-import Split from 'react-split';
-import PDFViewer from './PDFViewer/PDFViewer';
-import Playground from './Playground/Playground';
 
-type WorkspaceProps = {
-  filePath: string;
-  sessionId: string;
-  UserId: string;
-};
+import dynamic from 'next/dynamic';
 
-const Workspace: React.FC<WorkspaceProps> = ({ filePath }) => (
-  <Split sizes={[59, 75]} className="split bg-[#0f0f0f]">
-    <PDFViewer file={filePath} />
+// import Playground from './Playground/Playground';
+
+// import PDFViewer from './PDFViewer/PDFViewer';
+const PDFViewer = dynamic(() => import('./PDFViewer/PDFViewer'), { ssr: false });
+const Playground = dynamic(() => import('./Playground/Playground'), { ssr: false });
+
+const Workspace = () => (
+  <div className="flex h-[calc(100vh-50px)] bg-[#0f0f0f]">
+    <PDFViewer />
     <Playground />
-  </Split>
+  </div>
 );
 export default Workspace;

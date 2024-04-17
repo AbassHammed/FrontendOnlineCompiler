@@ -1,29 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { AiOutlineFullscreen, AiOutlineFullscreenExit, AiOutlineSetting } from 'react-icons/ai';
-import { ISettings } from '../Playground';
-import SettingsModal from '@/components/Modals/SettingsModal';
-import DropDown from '@/components/Buttons/Dropdown';
+import React, { useEffect, useState } from 'react';
 
-type PreferenceNavProps = {
-  settings: ISettings;
-  setSettings: React.Dispatch<React.SetStateAction<ISettings>>;
+import DropDown from '@/components/Buttons/Dropdown';
+import Settings from '@/components/Modals/settings';
+import { ToolTip } from '@/components/Tooltip';
+import { Button } from '@nextui-org/react';
+import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
+
+interface PreferenceNavProps {
   onLanguageSelect: (language: string) => void;
-};
-interface TooltipProps {
-  show: boolean;
-  children: string;
+  onFontSizeChange: (fontSize: string) => void;
 }
 
-const Tooltip = ({ show, children }: TooltipProps) => (
-  <div
-    className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 ${show ? 'block' : 'hidden'} bg-dark-layer-1 text-brand-purple p-2 rounded shadow-lg z-50`}>
-    <p className="text-sm">{children}</p>
-  </div>
-);
-
-const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNavProps) => {
+const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontSizeChange }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [showTooltip, setShowTooltip] = useState<string | null>(null);
 
   const handleFullScreenToggle = () => {
     if (isFullScreen) {
@@ -53,36 +42,30 @@ const PreferenceNav = ({ onLanguageSelect, setSettings, settings }: PreferenceNa
   }, []);
 
   return (
-    <div className="flex items-center justify-between bg-[#303030] h-9 w-full overflow-x-hidden rounded-t-lg shadow-md">
+    <div className="flex items-center justify-between bg-[#303030] h-9 w-full rounded-t-lg shadow-md">
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>
-      <div className="flex items-center m-1 relative">
-        <button
-          className="preferenceBtn"
-          onClick={() => setSettings({ ...settings, settingsModalIsOpen: true })}
-          onMouseEnter={() => setShowTooltip('Settings')}
-          onMouseLeave={() => setShowTooltip(null)}>
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            <AiOutlineSetting />
-          </div>
-          <Tooltip show={showTooltip === 'Settings'}>Settings</Tooltip>
-        </button>
+      <div className="flex items-center relative justify-end mr-2">
+        <ToolTip message="Settings">
+          <Settings onFontSizeChange={onFontSizeChange} />
+        </ToolTip>
 
-        <button
-          className="preferenceBtn"
-          onClick={handleFullScreenToggle}
-          onMouseEnter={() => setShowTooltip('FullScreen')}
-          onMouseLeave={() => setShowTooltip(null)}>
-          <div className="h-4 w-4 text-dark-gray-6 font-bold text-lg">
-            {!isFullScreen ? <AiOutlineFullscreen /> : <AiOutlineFullscreenExit />}
-          </div>
-          <Tooltip show={showTooltip === 'FullScreen'}>Full Screen</Tooltip>
-        </button>
+        <Button
+          isIconOnly
+          aria-label="FullSreen"
+          variant="light"
+          className="w-7 h-7 rounded-sm text-lg hover:!bg-[#3a3a3a] "
+          onClick={handleFullScreenToggle}>
+          {!isFullScreen ? (
+            <ToolTip message="Full Screen">
+              <AiOutlineFullscreen className="text-purple-500" />
+            </ToolTip>
+          ) : (
+            <AiOutlineFullscreenExit className="text-purple-500" />
+          )}
+        </Button>
       </div>
-      {settings.settingsModalIsOpen && (
-        <SettingsModal settings={settings} setSettings={setSettings} />
-      )}
     </div>
   );
 };

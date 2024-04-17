@@ -1,6 +1,10 @@
 [
   {
-    "origin": ["http://localhost:3000"],
+    "origin": [
+      "https://code-compile.netlify.app",
+      "http://localhost:3000",
+      "https://code.hammedabass.com"
+    ],
     "responseHeader": ["Content-Type"],
     "method": ["GET", "POST", "PUT"],
     "maxAgeSeconds": 3600

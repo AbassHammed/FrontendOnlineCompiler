@@ -1,21 +1,14 @@
 import '@/styles/globals.css';
-import Head from 'next/head';
+
 import type { AppProps } from 'next/app';
-import { RecoilRoot } from 'recoil';
-import { useEffect } from 'react';
-import { Toaster } from 'sonner';
+import Head from 'next/head';
+
 import { SessionProvider } from '@/hooks/useSession';
 import { NextUIProvider } from '@nextui-org/react';
+import { RecoilRoot } from 'recoil';
+import { Toaster } from 'sonner';
 
 export default function App({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    const preventCopy = (event: { preventDefault: () => any }) => event.preventDefault();
-    document.addEventListener('copy', preventCopy);
-
-    return () => {
-      document.removeEventListener('copy', preventCopy);
-    };
-  }, []);
   return (
     <RecoilRoot>
       <Head>

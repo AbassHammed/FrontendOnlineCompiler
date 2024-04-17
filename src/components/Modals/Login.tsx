@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { authModalState } from '@/atoms/authModalAtom';
 import { auth } from '@/firebase/firebase';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useSetRecoilState } from 'recoil';
@@ -29,10 +31,9 @@ const Login: React.FC = () => {
     }
     try {
       const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
-      if (!newUser) {
-        return;
+      if (newUser) {
+        router.push('/session');
       }
-      router.push('/');
     } catch (error: any) {
       toast.error(error.message);
     }

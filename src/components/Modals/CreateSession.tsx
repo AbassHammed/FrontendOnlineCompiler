@@ -1,12 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
+
 import { useRouter } from 'next/router';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { toast } from 'sonner';
-import { FaRegClipboard } from 'react-icons/fa';
-import { IoClose } from 'react-icons/io5';
+
 import { auth, firestore, storage } from '@/firebase/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaRegClipboard } from 'react-icons/fa';
+import { IoClose } from 'react-icons/io5';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 const MAX_FILE_SIZE = 10000000; // 10MB
@@ -81,7 +83,7 @@ const CreateSession = () => {
         filePath,
         timestamp: serverTimestamp(),
       });
-      router.push('/Dashboard');
+      router.push('/d');
     } catch (e) {
       toast.error('A problem when saving your data');
     } finally {
@@ -117,6 +119,7 @@ const CreateSession = () => {
         </label>
         <div className="relative flex items-center">
           <input
+            readOnly
             value={sessionId}
             type="text"
             name="sessionId"

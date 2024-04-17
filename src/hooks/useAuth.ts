@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
+
 import { useRouter } from 'next/router';
-import { useAuthState } from 'react-firebase-hooks/auth';
+
 import { auth } from '@/firebase/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type UseAuthReturnType = {
   user: ReturnType<typeof useAuthState>[0];

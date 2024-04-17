@@ -1,23 +1,39 @@
-import { firestore } from '@/firebase/firebase';
-import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { toast } from 'sonner';
+
+import { firestore } from '@/firebase/firebase';
+import { userQuery } from '@/firebase/query';
+import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
+import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+import { toast } from 'sonner';
 
 const JoinSession = () => {
-  const [inputs, setInputs] = useState({ sessionId: '', userName: '' });
+  const [inputs, setInputs] = useState({ sessionId: '' });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setSessionData } = useSession();
+  const [userData, setUserData] = useState({ fullName: '', uid: '' });
+  const { setSessionData, sessionData } = useSession();
+  const { user } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setInputs(prev => ({ ...prev, [name]: value }));
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchUser = async () => {
+    if (user) {
+      const userInfo = await userQuery(user.uid);
+      if (userInfo) {
+        setUserData({ fullName: userInfo.fullName, uid: user.uid });
+      }
+    }
+  };
+
   const validateInputs = () => {
-    if (!inputs.sessionId || !inputs.userName) {
+    if (!inputs.sessionId) {
       toast.warning('Please fill all fields');
       return false;
     }
@@ -39,28 +55,28 @@ const JoinSession = () => {
       }
 
       const sessionDoc = querySnapshot.docs[0];
-      const sessionData = sessionDoc.data();
+      const sessionDat = sessionDoc.data();
       const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
-      const userQuery = query(usersRef, where('name', '==', inputs.userName));
+      const userDocRef = doc(firestore, `sessions/${sessionDoc.id}/users/${userData.uid}`);
+      const userQuery = query(usersRef, where('name', '==', userData.fullName));
       const userSnapshot = await getDocs(userQuery);
 
       if (userSnapshot.empty) {
         // If no user found, add them to the session
-        const userRef = await addDoc(usersRef, {
-          name: inputs.userName,
+        await setDoc(userDocRef, {
+          name: userData.fullName,
           joinedAt: new Date(),
           connected: true,
           quitedAt: null,
         });
         setSessionData({
-          filePath: sessionData.filePath,
-          sessionName: sessionData.sessionName,
-          sessionId: sessionDoc.id,
-          userId: userRef.id,
-          userName: inputs.userName,
+          ...sessionData,
+          filePath: sessionDat.filePath,
+          sessionName: sessionDat.sessionName,
+          sessionDocId: sessionDoc.id,
         });
         // After adding the user, redirect them to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
+        router.push(`/c/${inputs.sessionId}`);
       } else {
         // If user found, check if they are connected
         const userDoc = userSnapshot.docs[0];
@@ -70,17 +86,16 @@ const JoinSession = () => {
           return;
         }
         setSessionData({
-          filePath: sessionData.filePath,
-          sessionName: sessionData.sessionName,
-          sessionId: sessionDoc.id,
-          userId: userDoc.id,
-          userName: inputs.userName,
+          ...sessionData,
+          filePath: sessionDat.filePath,
+          sessionName: sessionDat.sessionName,
+          sessionDocId: sessionDoc.id,
         });
         // If connected, redirect to the compiler page
-        router.push(`/compiler/${inputs.sessionId}`);
+        router.push(`/c/${inputs.sessionId}`);
       }
-    } catch (error: any) {
-      toast.error(`Error joining session: ${error.message}`);
+    } catch (error: unknown) {
+      toast.error(`Error joining session: ${(error as Error).message}`);
     } finally {
       setIsLoading(false);
     }
@@ -89,9 +104,16 @@ const JoinSession = () => {
   const handleJoin = async (e: any) => {
     e.preventDefault();
     if (validateInputs()) {
+      await fetchUser();
       await joinSession();
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
 
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleJoin}>
@@ -110,22 +132,6 @@ const JoinSession = () => {
             bg-gray-600 border-gray-500 placeholder-gray-400 text-white
         "
           placeholder="25AZ7R9B"
-        />
-      </div>
-      <div>
-        <label htmlFor="userName" className="text-sm font-medium block mb-2 text-gray-300">
-          Your name
-        </label>
-        <input
-          onChange={handleInputChange}
-          type="userName"
-          name="userName"
-          id="userName"
-          className="
-            border-2 outline-none sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-            bg-gray-600 border-gray-500 placeholder-gray-400 text-white
-        "
-          placeholder="Coco jojo"
         />
       </div>
 

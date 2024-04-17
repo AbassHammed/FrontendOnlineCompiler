@@ -1,15 +1,16 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+
+import { UserInfo } from '@/types';
 
 interface SessionProviderProps {
   children: React.ReactNode;
 }
 
-interface SessionData {
+export interface SessionData {
   filePath?: string;
   sessionName?: string;
-  sessionId?: string;
-  userId?: string;
-  userName?: string;
+  sessionDocId?: string;
+  userInfo?: UserInfo;
 }
 
 interface SessionContextProps {

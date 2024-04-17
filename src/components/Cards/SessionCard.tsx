@@ -1,15 +1,16 @@
 import React from 'react';
+
+import { Session } from '@/types';
 import {
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
+  CardHeader,
   Divider,
-  Link,
   Image,
+  Link,
   Snippet,
 } from '@nextui-org/react';
-import { Session } from '@/utils/types';
 
 type SessionCardProps = {
   session: Session | null;
