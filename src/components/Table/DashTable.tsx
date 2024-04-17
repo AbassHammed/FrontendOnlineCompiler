@@ -14,7 +14,6 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  Tooltip,
   User,
 } from '@nextui-org/react';
 import {
@@ -193,13 +192,11 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
   };
 
   const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
-
     switch (columnKey) {
       case 'name':
         return (
           <User
-            name={cellValue}
+            name={user.name}
             avatarProps={{ radius: 'lg', src: user.imageUrl }}
             description={user.email}></User>
         );
@@ -226,25 +223,25 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
           </Chip>
         );
       case 'actions':
-        return !user.connected ? (
-          <Tooltip size="sm" color="success" content="Edit user">
-            <span
-              className="text-lg text-success-400 cursor-pointer active:opacity-50"
-              onClick={() => handleAdd(user.docId)}>
-              <EditIcon />
-            </span>
-          </Tooltip>
-        ) : (
-          <Tooltip size="sm" color="danger" content="Remove user">
-            <span
-              className="text-lg text-danger cursor-pointer active:opacity-50"
-              onClick={() => handleQuit(user.docId)}>
-              <DeleteIcon />
-            </span>
-          </Tooltip>
+        return (
+          <div className="flex justify-center items-center">
+            {!user.connected ? (
+              <span
+                className="text-lg text-success-400 cursor-pointer active:opacity-50"
+                onClick={() => handleAdd(user.docId)}>
+                <EditIcon />
+              </span>
+            ) : (
+              <span
+                className="text-lg text-danger cursor-pointer active:opacity-50"
+                onClick={() => handleQuit(user.docId)}>
+                <DeleteIcon />
+              </span>
+            )}
+          </div>
         );
       default:
-        return cellValue;
+        return;
     }
   }, []);
 
