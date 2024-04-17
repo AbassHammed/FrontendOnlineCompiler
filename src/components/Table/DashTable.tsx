@@ -145,7 +145,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
 
         const combinedUsersData = (await Promise.all(usersDataPromises)).filter(
           user => user !== undefined,
-        );
+        ) as User[];
         setUsers(combinedUsersData);
       });
     });
