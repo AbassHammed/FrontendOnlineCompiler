@@ -46,7 +46,7 @@ const Playground = () => {
   };
 
   return (
-    <div className="flex flex-auto flex-col relative bg-[#0f0f0f] w-[55%] rounded-md shadow-xl overflow-hidden mx-2 mb-2">
+    <div className="flex flex-auto flex-col relative w-[55%] rounded-md shadow-xl overflow-hidden mx-2 mb-2">
       <PreferenceNav
         onFontSizeChange={handleFontSizeChange}
         onLanguageSelect={handleLanguageSelect}

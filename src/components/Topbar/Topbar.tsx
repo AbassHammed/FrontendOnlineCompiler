@@ -43,7 +43,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   const { user, loading } = useAuth();
   const [userData, setUserData] = useState({ fullName: '', imageUrl: '' });
 
-  const handleQuit = async () => {
+  const handleQuitSession = async () => {
     if (!sessionData || !user) {
       toast({ description: 'An internal error occured' });
       return;
@@ -59,6 +59,18 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
     } catch (error) {
       toast({ variant: 'destructive', description: 'Error quitting session' });
     }
+  };
+
+  const handleQuit = async () => {
+    toast({
+      title: 'Quit Session',
+      description: 'Are you sure you want to quit this session?',
+      action: (
+        <ToastAction altText="Quit" onClick={handleQuitSession}>
+          Quit
+        </ToastAction>
+      ),
+    });
   };
 
   const handleCloseSession = async () => {
@@ -120,7 +132,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   }
 
   return (
-    <nav className="flex h-[50px] w-full shrink-0 items-center px-5">
+    <nav className="flex h-[50px] w-full shrink-0 items-center pr-2">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center justify-center">
           <div className="flex items-center">
@@ -129,7 +141,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
                 <Image src="/Icon.png" alt="Logo" height={50} width={50} />
               </Link>
               {compilerPage && (
-                <div>
+                <div className="flex items-center justify-center">
                   <li className="h-[16px] w-[1px] bg-gray-500"></li>
                   <span className="font-bold mx-5">{sessionName}</span>
                 </div>
