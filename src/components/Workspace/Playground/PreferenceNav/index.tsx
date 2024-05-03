@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import DropDown from '@/components/Buttons/Dropdown';
 import Settings from '@/components/Modals/settings';
 import { ToolTip } from '@/components/ui/tooltip';
+import DropDown from '@/components/Workspace/Playground/PreferenceNav/Dropdown';
 import { Button } from '@nextui-org/react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
 
@@ -42,7 +42,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontS
   }, []);
 
   return (
-    <div className="flex items-center justify-between bg-[#303030] h-9 w-full rounded-t-lg shadow-md">
+    <div className="flex items-center justify-between bg-[#333] h-9 w-full rounded-t-lg shadow-md">
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>

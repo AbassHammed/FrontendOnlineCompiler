@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { Icons } from '@/components/icons';
+import Loading from '@/components/Loading';
+import { useToast } from '@/components/ui';
 import { auth, firestore } from '@/firebase/firebase';
 import { userInfoQuery } from '@/firebase/query';
 import { columns, Session } from '@/types';
@@ -28,11 +31,6 @@ import {
   where,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { toast } from 'sonner';
-
-import Loading from '../Loading/Loading';
-import { DeleteIcon } from './DeleteIcon';
-import { EditIcon } from './EditIcon';
 
 type User = {
   docId: string;
@@ -53,6 +51,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   let sessionDoc: QueryDocumentSnapshot<DocumentData, DocumentData>;
 
@@ -88,7 +87,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
     const unsubscribeSession = onSnapshot(sessionsQuery, querySnapshot => {
       if (querySnapshot.empty) {
         // eslint-disable-next-line quotes
-        toast.error("You don't have any open session.");
+        toast({ description: "You don't have any open session." });
         router.push('/session');
         setIsLoading(false);
         return;
@@ -158,7 +157,11 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
 
   const handleQuit = async (docId: string) => {
     if (!docId || !sessionDoc) {
-      toast.warning('An internal error occured');
+      toast({
+        variant: 'destructive',
+        title: 'An internal error occured',
+        description: 'Please try again',
+      });
       return;
     }
 
@@ -169,13 +172,17 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         quitedAt: serverTimestamp(),
       });
     } catch (error) {
-      toast.error('Error quitting session');
+      toast({ variant: 'destructive', description: 'Error quitting session' });
     }
   };
 
   const handleAdd = async (docId: string) => {
     if (!docId || !sessionDoc) {
-      toast.warning('An internal error occured');
+      toast({
+        variant: 'destructive',
+        title: 'An internal error occured',
+        description: 'Please try again',
+      });
       return;
     }
 
@@ -186,7 +193,7 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
         quitedAt: null,
       });
     } catch (error) {
-      toast.error('Error quitting session');
+      toast({ variant: 'destructive', description: 'Error adding user to session' });
     }
   };
 
@@ -228,13 +235,13 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
               <span
                 className="text-lg text-success-400 cursor-pointer active:opacity-50"
                 onClick={() => handleAdd(user.docId)}>
-                <EditIcon />
+                <Icons.editIcon />
               </span>
             ) : (
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
                 onClick={() => handleQuit(user.docId)}>
-                <DeleteIcon />
+                <Icons.deleteIcon />
               </span>
             )}
           </div>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { firestore } from '@/firebase/firebase';
-import { userQuery } from '@/firebase/query';
+import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
@@ -25,7 +25,7 @@ const JoinSession = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchUser = async () => {
     if (user) {
-      const userInfo = await userQuery(user.uid);
+      const userInfo = await userInfoQuery(user.uid);
       if (userInfo) {
         setUserData({ fullName: userInfo.fullName, uid: user.uid });
       }
@@ -58,8 +58,8 @@ const JoinSession = () => {
       const sessionDat = sessionDoc.data();
       const usersRef = collection(firestore, `sessions/${sessionDoc.id}/users`);
       const userDocRef = doc(firestore, `sessions/${sessionDoc.id}/users/${userData.uid}`);
-      const userQuery = query(usersRef, where('name', '==', userData.fullName));
-      const userSnapshot = await getDocs(userQuery);
+      const userInfoQuery = query(usersRef, where('name', '==', userData.fullName));
+      const userSnapshot = await getDocs(userInfoQuery);
 
       if (userSnapshot.empty) {
         // If no user found, add them to the session

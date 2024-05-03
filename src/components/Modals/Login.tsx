@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
 import { useToast } from '@/components/ui/use-toast';
 import { auth } from '@/firebase/firebase';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';

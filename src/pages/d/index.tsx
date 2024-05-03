@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import SessionCard from '@/components/Cards/SessionCard';
-import Loading from '@/components/Loading/Loading';
-import DashClock from '@/components/Table/DashClock';
-import DashTable from '@/components/Table/DashTable';
+import DashClock from '@/components/DashBoard/DashClock';
+import DashTable from '@/components/DashBoard/DashTable';
+import SessionCard from '@/components/DashBoard/SessionCard';
+import Loading from '@/components/Loading';
 import Topbar from '@/components/Topbar/Topbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Session } from '@/types';

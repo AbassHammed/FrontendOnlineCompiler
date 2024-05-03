@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
+import { CreateSession, JoinSession, Login, SendResetPassword, Signup } from '@/components/Modals';
 import { IoClose } from 'react-icons/io5';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import CreateSession from './CreateSession';
-import JoinSession from './JoinSession';
-import Login from './Login';
-import SendResetPassword from './SendResetPassword';
-import Signup from './Signup';
 
 const AuthModal: React.FC = () => {
   const authModal = useRecoilValue(authModalState);

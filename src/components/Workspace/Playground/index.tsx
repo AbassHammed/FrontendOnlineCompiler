@@ -5,7 +5,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
 
 import EditorFooter from './EditorFooter';
-import PreferenceNav from './PreferenceNav/PreferenceNav';
+import PreferenceNav from './PreferenceNav';
 
 const Playground = () => {
   const [fontSize, setFontSize] = useState(localStorage.getItem('lcc-fontSize') || '13px');
@@ -51,7 +51,7 @@ const Playground = () => {
         onFontSizeChange={handleFontSizeChange}
         onLanguageSelect={handleLanguageSelect}
       />
-      <div className="w-full overflow-auto bg-[#282828] rounded-b-lg shadow-xl select-none h-[calc(100vh-154px)]">
+      <div className="w-full overflow-auto bg-[#262626] rounded-b-lg shadow-xl select-none h-[calc(100vh-154px)]">
         <CodeMirror
           value={currentCode}
           onChange={setCurrentCode}

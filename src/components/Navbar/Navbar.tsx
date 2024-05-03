@@ -2,7 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
 import { useSetRecoilState } from 'recoil';
 
 type NavbarProps = {

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { BsCheckLg } from 'react-icons/bs';
 
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
 
 interface LanguageOption {
   id: string;

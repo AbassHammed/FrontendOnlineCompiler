@@ -5,8 +5,8 @@ import Head from 'next/head';
 
 // import { useRouter } from 'next/router';
 
-import Loading from '@/components/Loading/Loading';
-import Workspace from '@/components/Workspace/Workspace';
+import Loading from '@/components/Loading';
+import Workspace from '@/components/Workspace';
 // import { firestore } from '@/firebase/firebase';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';

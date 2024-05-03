@@ -17,15 +17,9 @@ type SessionCardProps = {
 };
 
 const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
-  const classNames = React.useMemo(
-    () => ({
-      base: ['bg-[#282828]'],
-    }),
-    [],
-  );
   if (!session) {
     return (
-      <Card classNames={classNames} className="max-w-[400px] text-dark-label-2 m-10">
+      <Card className="max-w-[400px] text-dark-label-2 m-10 bg-[#262626]">
         <CardBody>
           <p>Nothing to display.</p>
         </CardBody>
@@ -34,7 +28,7 @@ const SessionCard: React.FC<SessionCardProps> = ({ session }) => {
   }
 
   return (
-    <Card classNames={classNames} className="max-w-[400px] text-dark-label-2 m-10">
+    <Card className="max-w-[400px] text-dark-label-2 m-10 bg-[#262626]">
       <CardHeader className="flex gap-3">
         <Image
           alt="nextui logo"

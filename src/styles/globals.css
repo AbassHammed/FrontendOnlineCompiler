@@ -28,6 +28,9 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
 
+    --warn: 43 96.4% 53.6%;
+    --warn-foreground: 210 20% 98%;
+
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 216 12.2% 83.9%;
@@ -53,8 +56,14 @@
 }
 
 .cm-scroller,
+.cm-activeLine,
+.cm-activeLineGutter,
 .cm-gutters {
-  background-color: #282828 !important;
+  background-color: #262626 !important;
+}
+
+.cm-activeLine {
+  border: 1px solid #333 !important;
 }
 
 .cm-focused {
@@ -87,9 +96,9 @@ code {
   padding: 0.125rem;
   letter-spacing: 1px;
   white-space: pre-wrap;
-  background-color: hsla(0, 0%, 100%, 0.07);
+  /* background-color: hsla(0, 0%, 100%, 0.07);
   border-color: rgba(247, 250, 255, 0.12);
-  color: rgba(239, 241, 246, 0.75);
+  color: rgba(239, 241, 246, 0.75); */
 }
 
 .fonth1 {

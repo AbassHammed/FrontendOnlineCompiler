@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { firestore, storage } from '@/firebase/firebase';
-import { userQuery } from '@/firebase/query';
+import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
@@ -20,14 +20,14 @@ import {
 } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
 
-import Logout from '../Buttons/Logout';
-import Loading from '../Loading/Loading';
-import Timer from '../Timer/Timer';
+import Loading from '../Loading';
 import { UserAvatar } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ToastAction } from '../ui/toast';
 import { ToolTip } from '../ui/tooltip';
 import { useToast } from '../ui/use-toast';
+import Logout from './Logout';
+import Timer from './Timer';
 
 interface TopbarProps {
   compilerPage?: boolean;
@@ -117,7 +117,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        const data = await userQuery(user.uid);
+        const data = await userInfoQuery(user.uid);
         if (data) {
           setUserData(data);
         }

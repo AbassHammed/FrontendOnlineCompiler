@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Spinner } from '@nextui-org/react';
+import { Icons } from '@/components/icons';
 
 const Loading: React.FC = () => (
   <div className="flex justify-center items-center h-screen w-screen bg-[#303030]">
-    <Spinner color="secondary" size="lg" />
+    <Icons.spinner className="animate-spin" />
   </div>
 );
 

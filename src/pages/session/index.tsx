@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
 import AuthModal from '@/components/Modals/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
 import { FaPlus } from 'react-icons/fa';
@@ -12,7 +12,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 const Navbar = dynamic(() => import('@/components/Navbar/Navbar'), { ssr: false });
 
 // import Loading from '@/components/Loading/Loading';
-const Loading = dynamic(() => import('@/components/Loading/Loading'), { ssr: false });
+const Loading = dynamic(() => import('@/components/Loading'), { ssr: false });
 
 const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();
