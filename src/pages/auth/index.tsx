@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { authModalState } from '@/atoms/authModalAtom';
-import Loadin from '@/components/Loading/Loading';
+import Loading from '@/components/Loading/Loading';
 import AuthModal from '@/components/Modals/AuthModal';
 import Navbar from '@/components/Navbar/Navbar';
 import { auth } from '@/firebase/firebase';
@@ -28,7 +28,7 @@ const AuthPage: React.FC = () => {
   }, [user, router, loading, setAuthModalState]);
 
   if (pageLoading) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (

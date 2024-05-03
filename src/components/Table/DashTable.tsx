@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
@@ -31,7 +30,7 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'sonner';
 
-import Loadin from '../Loading/Loading';
+import Loading from '../Loading/Loading';
 import { DeleteIcon } from './DeleteIcon';
 import { EditIcon } from './EditIcon';
 
@@ -243,10 +242,11 @@ const DashTable: React.FC<DashTableProps> = ({ setSession }) => {
       default:
         return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (

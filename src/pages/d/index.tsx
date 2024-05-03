@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import SessionCard from '@/components/Cards/SessionCard';
-import Loadin from '@/components/Loading/Loading';
+import Loading from '@/components/Loading/Loading';
 import DashClock from '@/components/Table/DashClock';
 import DashTable from '@/components/Table/DashTable';
 import Topbar from '@/components/Topbar/Topbar';
@@ -13,11 +13,11 @@ const Dashboard: React.FC = () => {
   const { user, loading } = useAuth();
 
   if (loading || !user) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (
-    <div className="bg-[#0f0f0f] min-h-screen">
+    <div className="min-h-screen">
       <Topbar compilerPage={false} dashboardpage={true} session={session} />
       <div
         className="flex justify-between items-start max-w-4xl w-full mx-auto"

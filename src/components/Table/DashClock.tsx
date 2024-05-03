@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Card } from '@nextui-org/react';
-import { Text } from 'nextui-org-react-old';
 import Clock from 'react-live-clock';
 
 const DashClock: React.FC = () => {
@@ -14,18 +12,16 @@ const DashClock: React.FC = () => {
   });
 
   return (
-    <Card className="flex flex-col items-center justify-center max-w-[400px] bg-[#282828] text-white m-10 p-5">
-      <Text h3 className="mb-2 text-white">
-        {day}
-      </Text>
+    <div className="flex flex-col items-center justify-center max-w-[400px] bg-gray-8 rounded-lg text-white m-10 p-5">
+      <h1 className="mb-2 text-white">{day}</h1>
       <Clock
         format={'HH:mm'}
         ticking
         timezone={'Europe/Paris'}
         className="text-[100px] leading-none"
       />
-      <Text className="mt-2 text-white">{date}</Text>
-    </Card>
+      <h1 className="mt-2 text-white">{date}</h1>
+    </div>
   );
 };
 

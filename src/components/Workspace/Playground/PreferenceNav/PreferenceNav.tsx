@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import DropDown from '@/components/Buttons/Dropdown';
 import Settings from '@/components/Modals/settings';
-import { ToolTip } from '@/components/Tooltip';
+import { ToolTip } from '@/components/ui/tooltip';
 import { Button } from '@nextui-org/react';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
 

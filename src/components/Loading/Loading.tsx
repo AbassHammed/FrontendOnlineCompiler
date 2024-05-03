@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Loading } from 'nextui-org-react-old';
+import { Spinner } from '@nextui-org/react';
 
-const Loadin: React.FC = () => (
+const Loading: React.FC = () => (
   <div className="flex justify-center items-center h-screen w-screen bg-[#303030]">
-    <Loading type="points" color="secondary" size="xl" />
+    <Spinner color="secondary" size="lg" />
   </div>
 );
 
-export default Loadin;
+export default Loading;

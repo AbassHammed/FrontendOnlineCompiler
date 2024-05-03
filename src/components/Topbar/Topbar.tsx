@@ -9,7 +9,7 @@ import { userQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
-import { Avatar, Button, Tooltip } from '@nextui-org/react';
+// import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import {
   collection,
   deleteDoc,
@@ -19,11 +19,15 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
-import { toast } from 'sonner';
 
 import Logout from '../Buttons/Logout';
-import Loadin from '../Loading/Loading';
+import Loading from '../Loading/Loading';
 import Timer from '../Timer/Timer';
+import { UserAvatar } from '../ui/avatar';
+import { Button } from '../ui/button';
+import { ToastAction } from '../ui/toast';
+import { ToolTip } from '../ui/tooltip';
+import { useToast } from '../ui/use-toast';
 
 interface TopbarProps {
   compilerPage?: boolean;
@@ -33,6 +37,7 @@ interface TopbarProps {
 }
 
 const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) => {
+  const { toast } = useToast();
   const { sessionData } = useSession();
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -40,7 +45,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
 
   const handleQuit = async () => {
     if (!sessionData || !user) {
-      toast.warning('An internal error occured');
+      toast({ description: 'An internal error occured' });
       return;
     }
     try {
@@ -52,13 +57,13 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
 
       router.push('/');
     } catch (error) {
-      toast.error('Error quitting session');
+      toast({ variant: 'destructive', description: 'Error quitting session' });
     }
   };
 
   const handleCloseSession = async () => {
     if (!session) {
-      toast.error('Invalid session data');
+      toast({ variant: 'destructive', description: 'Invalid session data' });
       return;
     }
 
@@ -78,21 +83,22 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
       const fileRef = ref(storage, session.filePath);
       await deleteObject(fileRef);
 
-      toast.success('Session closed and file deleted successfully');
+      toast({ description: 'Session closed and file deleted successfully' });
       router.push('/session');
     } catch (error) {
-      toast.error('Error closing session');
+      toast({ variant: 'destructive', description: 'Error closing session' });
     }
   };
 
   const handleClose = async () => {
-    toast.warning('Closing this session will delete it', {
-      action: {
-        label: 'Close',
-        onClick: () => {
-          handleCloseSession();
-        },
-      },
+    toast({
+      title: 'Close Session',
+      description: 'Closing this session will delete it',
+      action: (
+        <ToastAction altText="Close" onClick={handleCloseSession}>
+          Close
+        </ToastAction>
+      ),
     });
   };
 
@@ -110,11 +116,11 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   }, [user]);
 
   if (loading && !user) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (
-    <nav className="flex h-[50px] w-full shrink-0 items-center bg-[#0f0f0f] text-dark-gray-7 px-5">
+    <nav className="flex h-[50px] w-full shrink-0 items-center px-5">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center justify-center">
           <div className="flex items-center">
@@ -122,8 +128,12 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
               <Link href="/">
                 <Image src="/Icon.png" alt="Logo" height={50} width={50} />
               </Link>
-              <li className="h-[16px] w-[1px] bg-gray-500"></li>
-              <span className="font-bold mx-5">{sessionName}</span>
+              {compilerPage && (
+                <div>
+                  <li className="h-[16px] w-[1px] bg-gray-500"></li>
+                  <span className="font-bold mx-5">{sessionName}</span>
+                </div>
+              )}
             </ul>
           </div>
 
@@ -133,24 +143,29 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
           {user && compilerPage && <Timer />}
           {user && (
             <div className="cursor-pointer group relative">
-              <Avatar color="default" size="sm" radius="full" src={userData.imageUrl} />
-              <div className="absolute top-10 left-2/4 -translate-x-2/4 bg-dark-layer-1 p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 transition-all duration-300 ease-in-out !whitespace-nowrap">
-                <p className="text-sm">{userData.fullName}</p>
-              </div>
+              <ToolTip message={userData.fullName}>
+                <UserAvatar
+                  ImageUrl={userData.imageUrl}
+                  fallBackInitials={userData.fullName
+                    .split(' ')
+                    .map(part => part[0])
+                    .join(' ')}
+                />
+              </ToolTip>
             </div>
           )}
           {compilerPage ? (
-            <Tooltip content="Quit the session">
+            <ToolTip message="Quit the session">
               <Button onClick={handleQuit} color="warning" size="sm">
                 Quit
               </Button>
-            </Tooltip>
+            </ToolTip>
           ) : (
-            <Tooltip content="End the session">
-              <Button onClick={handleClose} color="warning" size="sm">
+            <ToolTip message="End the session">
+              <Button onClick={handleClose} size="sm">
                 Close
               </Button>
-            </Tooltip>
+            </ToolTip>
           )}
           <Logout />
         </div>

@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Loadin from '@/components/Loading/Loading';
+import Loading from '@/components/Loading/Loading';
 import Workspace from '@/components/Workspace/Workspace';
 import { firestore } from '@/firebase/firebase';
 import { useAuth } from '@/hooks/useAuth';
@@ -56,7 +56,7 @@ const Compiler: React.FC = () => {
   }, [user, authLoading, sessionData, router]);
 
   if (!user || authLoading || !sessionData) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (

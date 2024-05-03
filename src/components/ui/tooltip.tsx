@@ -34,7 +34,7 @@ export const ToolTip: React.FC<TooltipProps> = ({ children, message }) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger>{children}</TooltipTrigger>
-      <TooltipContent className="bg-[#303030] text-white border-none font-normal">
+      <TooltipContent>
         <p>{message}</p>
       </TooltipContent>
     </Tooltip>

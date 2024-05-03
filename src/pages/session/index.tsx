@@ -11,8 +11,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 // import Navbar from '@/components/Navbar/Navbar';
 const Navbar = dynamic(() => import('@/components/Navbar/Navbar'), { ssr: false });
 
-// import Loadin from '@/components/Loading/Loading';
-const Loadin = dynamic(() => import('@/components/Loading/Loading'), { ssr: false });
+// import Loading from '@/components/Loading/Loading';
+const Loading = dynamic(() => import('@/components/Loading/Loading'), { ssr: false });
 
 const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();
@@ -24,7 +24,7 @@ const SessionPage: React.FC = () => {
   }, [setAuthModalState]);
 
   if (loading || !user) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (
