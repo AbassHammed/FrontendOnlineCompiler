@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <Topbar compilerPage={false} dashboardpage={true} session={session} />
+      <Topbar compilerPage={false} session={session} />
       <div
         className="flex justify-between items-start max-w-4xl w-full mx-auto"
         style={{ height: 'calc(100vh - TopbarHeight - TableHeight)' }}>

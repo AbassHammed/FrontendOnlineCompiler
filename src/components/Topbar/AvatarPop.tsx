@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
 import Loading from '@/components/Loading';
-import { firestore, storage } from '@/firebase/firebase';
+import { auth, firestore, storage } from '@/firebase/firebase';
 import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
 import {
@@ -18,11 +19,18 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
+import { Ban, ChevronRight, LogOut, Moon, Sun, SunMoon } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useSignOut } from 'react-firebase-hooks/auth';
+import { BsCheckLg } from 'react-icons/bs';
 
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -31,16 +39,79 @@ import {
   useToast,
 } from '../ui';
 
-interface AvatarPopProps {
-  session?: Session | null;
+const Themes = [
+  { name: 'System Default', value: 'system' },
+  { name: 'Light', value: 'light' },
+  { name: 'Dark', value: 'dark' },
+] as const;
+
+const Apparence: React.FC = () => {
+  const { setTheme } = useTheme();
+  const [themevariant, setThemeVariant] = useLocalStorage('theme', 'system');
+
+  useEffect(() => {
+    setTheme(themevariant);
+  }, [themevariant, setTheme]);
+
+  return (
+    <div>
+      <HoverCard>
+        <HoverCardTrigger className="rounded cursor-pointer flex flex-row items-center py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]">
+          <div className="leading-none">
+            {themevariant === 'dark' ? <Moon /> : themevariant === 'light' ? <Sun /> : <SunMoon />}
+          </div>
+          <div className="grow text-left"> Apparence</div>
+          <ChevronRight className="w-[14px] h-[14px]" />
+        </HoverCardTrigger>
+        <HoverCardContent className="w-48">
+          <div className="flex flex-col">
+            {Themes.map((theme, idx) => (
+              <div
+                onClick={() => setThemeVariant(theme.value)}
+                key={idx}
+                className="relative flex w-full p-1 m-1 rounded-[4px] text-[#f5f5f5] hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
+                <span
+                  className={`flex items-center mr-2 ${
+                    themevariant === theme.value ? 'visible' : 'invisible'
+                  }`}>
+                  <BsCheckLg />
+                </span>
+                <div className="text-left text-[14px]">{theme.name}</div>
+              </div>
+            ))}
+          </div>
+        </HoverCardContent>
+      </HoverCard>
+    </div>
+  );
+};
+
+interface ModuleProps {
+  onClick: () => void;
+  label: string;
+  icon: ReactNode;
 }
 
-const AvatarPop: React.FC<AvatarPopProps> = ({ session }) => {
+const Module: React.FC<ModuleProps> = ({ onClick, label, icon }) => (
+  <div
+    className="rounded cursor-pointer flex flex-row items-center py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]"
+    onClick={onClick}>
+    <div className="leading-none">{icon}</div>
+    <div className="grow text-left">{label}</div>
+  </div>
+);
+interface AvatarPopProps {
+  session?: Session | null;
+  compilerPage?: boolean;
+}
+
+const AvatarPop: React.FC<AvatarPopProps> = ({ session, compilerPage }) => {
   const { user, loading } = useAuth();
   const [userData, setUserData] = useState({ fullName: '', imageUrl: '', email: '' });
   const { toast } = useToast();
   const { sessionData } = useSession();
   const router = useRouter();
+  const [signOut] = useSignOut(auth);
 
   const handleQuitSession = async () => {
     if (!sessionData || !user) {
@@ -67,6 +138,18 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session }) => {
       action: (
         <ToastAction altText="Quit" onClick={handleQuitSession}>
           Quit
+        </ToastAction>
+      ),
+    });
+  };
+
+  const handleSignOut = async () => {
+    toast({
+      title: 'Sign Out',
+      description: 'You will be signed out of your account.',
+      action: (
+        <ToastAction altText="signOut" onClick={signOut}>
+          Sign Out
         </ToastAction>
       ),
     });
@@ -140,10 +223,10 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session }) => {
             .join(' ')}
         />
       </PopoverTrigger>
-      <PopoverContent className="w-[260px] flex">
-        <div className="flex">
-          <Avatar className="flex h-12 w-12">
-            <AvatarImage src={userData.imageUrl} sizes="" />
+      <PopoverContent className="relative w-[270px] flex top-3 flex-col">
+        <div className="flex shrink-0 items-center px-[1px]">
+          <Avatar className="flex h-14 w-14">
+            <AvatarImage src={userData.imageUrl} />
             <AvatarFallback>
               {userData.fullName
                 .split(' ')
@@ -151,12 +234,22 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session }) => {
                 .join(' ')}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col items-start justify-center pl-2">
-            <h4 className="text-small font-semibold leading-none text-[#f5f5f5]">
+          <div className="pl-3">
+            <h4 className="flex items-center text-small font-semibold dark:text-dark-label-2">
               {userData.fullName}
             </h4>
             <h5 className="text-small tracking-tight">{userData.email}</h5>
           </div>
+          <div className="flex flex-row"></div>
+        </div>
+        <div className="m-0  p-0 px-4 md:mt-4 md:border-none md:px-0">
+          <Apparence />
+          {compilerPage ? (
+            <Module onClick={handleQuit} label="Quit Session" icon={<Ban />} />
+          ) : (
+            <Module onClick={handleClose} label="Close Session" icon={<Ban />} />
+          )}
+          <Module onClick={handleSignOut} label="Sign Out" icon={<LogOut />} />
         </div>
       </PopoverContent>
     </Popover>

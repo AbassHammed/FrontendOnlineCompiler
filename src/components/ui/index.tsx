@@ -5,3 +5,4 @@ export { ToolTip } from './tooltip';
 export { useToast } from './use-toast';
 export { Popover, PopoverContent, PopoverTrigger } from './popover';
 export { Avatar, AvatarImage, AvatarFallback } from './avatar';
+export { HoverCard, HoverCardTrigger, HoverCardContent } from './hover-card';
