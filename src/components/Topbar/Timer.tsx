@@ -26,18 +26,18 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-10">
+    <div className="flex items-center justify-center h-8 text-[#fff9]">
       {isRunning || time !== 0 ? (
-        <div className="flex items-center h-10">
+        <div className="flex items-center h-8">
           <div
-            className="rounded-l-md bg-dark-fill-3 p-1.5 cursor-pointer"
+            className="flex rounded-l-md bg-[#222] p-1.5 h-8 justify-center items-center cursor-pointer"
             onClick={() => {
               setIsRunning(false);
               setTime(0);
             }}>
             <HiOutlineChevronLeft />
           </div>
-          <div className="bg-dark-fill-3 flex items-center space-x-2 justify-center p-1.5 mx-1">
+          <div className="bg-[#222] flex items-center space-x-2 h-8 justify-center p-1.5 mx-[1px]">
             {isRunning ? (
               <FiPause onClick={() => setIsRunning(false)} className="cursor-pointer" />
             ) : (
@@ -46,7 +46,7 @@ const Timer = () => {
             <span>{formatTime(time)}</span>
           </div>
           <div
-            className="rounded-r-md bg-dark-fill-3 p-1.5 cursor-pointer"
+            className="rounded-r-md bg-dark-fill-3 p-1.5 cursor-pointer h-8 flex justify-center items-center"
             onClick={() => setTime(0)}>
             <FiRefreshCcw />
           </div>

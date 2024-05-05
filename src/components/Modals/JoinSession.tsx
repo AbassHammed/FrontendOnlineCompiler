@@ -7,7 +7,8 @@ import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { toast } from 'sonner';
+
+import { useToast } from '../ui';
 
 const JoinSession = () => {
   const [inputs, setInputs] = useState({ sessionId: '' });
@@ -16,6 +17,7 @@ const JoinSession = () => {
   const [userData, setUserData] = useState({ fullName: '', uid: '' });
   const { setSessionData, sessionData } = useSession();
   const { user } = useAuth();
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,7 +36,7 @@ const JoinSession = () => {
 
   const validateInputs = () => {
     if (!inputs.sessionId) {
-      toast.warning('Please fill all fields');
+      toast({ title: 'Empty Inputs', description: 'Session ID is required' });
       return false;
     }
     return true;
@@ -50,7 +52,11 @@ const JoinSession = () => {
       const querySnapshot = await getDocs(sessionsQuery);
 
       if (querySnapshot.empty) {
-        toast.error('Session ID not found');
+        toast({
+          variant: 'destructive',
+          title: 'Session not found',
+          description: 'Please check the session ID',
+        });
         return;
       }
 
@@ -82,7 +88,11 @@ const JoinSession = () => {
         const userDoc = userSnapshot.docs[0];
         if (!userDoc.data().connected) {
           // eslint-disable-next-line quotes
-          toast.error("You've been disconnected, please contact your session Admin");
+          toast({
+            variant: 'destructive',
+            title: 'Connection Error',
+            description: 'You have been disconnected from the session',
+          });
           return;
         }
         setSessionData({
@@ -95,7 +105,7 @@ const JoinSession = () => {
         router.push(`/c/${inputs.sessionId}`);
       }
     } catch (error: unknown) {
-      toast.error(`Error joining session: ${(error as Error).message}`);
+      toast({ variant: 'destructive', title: 'Error', description: 'An error occurred' });
     } finally {
       setIsLoading(false);
     }

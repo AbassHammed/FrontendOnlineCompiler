@@ -4,7 +4,7 @@ import DashClock from '@/components/DashBoard/DashClock';
 import DashTable from '@/components/DashBoard/DashTable';
 import SessionCard from '@/components/DashBoard/SessionCard';
 import Loading from '@/components/Loading';
-import Topbar from '@/components/Topbar/Topbar';
+import Topbar from '@/components/Topbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Session } from '@/types';
 

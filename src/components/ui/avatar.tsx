@@ -42,6 +42,8 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
+export { Avatar, AvatarImage, AvatarFallback };
+
 export const UserAvatar = ({
   ImageUrl,
   fallBackInitials,
@@ -49,8 +51,8 @@ export const UserAvatar = ({
   ImageUrl: string;
   fallBackInitials: string;
 }) => (
-  <Avatar>
-    <AvatarImage src={ImageUrl} alt="avatar" />
+  <Avatar className="relative ml-1 mr-2 !h-5 !w-5">
+    <AvatarImage src={ImageUrl} alt="avatar" className="object-cover" />
     <AvatarFallback>{fallBackInitials}</AvatarFallback>
   </Avatar>
 );

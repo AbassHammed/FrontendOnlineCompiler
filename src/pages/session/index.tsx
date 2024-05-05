@@ -9,7 +9,7 @@ import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 // import Navbar from '@/components/Navbar/Navbar';
-const Navbar = dynamic(() => import('@/components/Navbar/Navbar'), { ssr: false });
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 
 // import Loading from '@/components/Loading/Loading';
 const Loading = dynamic(() => import('@/components/Loading'), { ssr: false });

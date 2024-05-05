@@ -13,7 +13,7 @@ import { useSession } from '@/hooks/useSession';
 
 // import { doc, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
 
-const Topbar = dynamic(() => import('../../components/Topbar/Topbar'), { ssr: false });
+const Topbar = dynamic(() => import('../../components/Topbar'), { ssr: false });
 
 const Compiler: React.FC = () => {
   const { sessionData } = useSession();

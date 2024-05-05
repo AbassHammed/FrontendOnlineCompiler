@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { firestore, storage } from '@/firebase/firebase';
-import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
 import { useSession } from '@/hooks/useSession';
 import { Session } from '@/types';
-// import { Avatar, Button, Tooltip } from '@nextui-org/react';
 import {
   collection,
   deleteDoc,
@@ -21,11 +19,11 @@ import {
 import { deleteObject, ref } from 'firebase/storage';
 
 import Loading from '../Loading';
-import { UserAvatar } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ToastAction } from '../ui/toast';
 import { ToolTip } from '../ui/tooltip';
 import { useToast } from '../ui/use-toast';
+import AvatarPop from './AvatarPop';
 import Logout from './Logout';
 import Timer from './Timer';
 
@@ -41,7 +39,6 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
   const { sessionData } = useSession();
   const router = useRouter();
   const { user, loading } = useAuth();
-  const [userData, setUserData] = useState({ fullName: '', imageUrl: '' });
 
   const handleQuitSession = async () => {
     if (!sessionData || !user) {
@@ -114,36 +111,23 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
     });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user) {
-        const data = await userInfoQuery(user.uid);
-        if (data) {
-          setUserData(data);
-        }
-      }
-    };
-
-    fetchData();
-  }, [user]);
-
   if (loading && !user) {
     return <Loading />;
   }
 
   return (
-    <nav className="flex h-[50px] w-full shrink-0 items-center pr-2">
+    <nav className="flex h-[48px] w-full shrink-0 items-center pr-2">
       <div className="flex justify-between items-center w-full">
         <div className="flex items-center justify-center">
           <div className="flex items-center">
-            <ul className="relative mr-2 flex h-10 items-center justify-center">
+            <ul className="relative flex h-10 items-center justify-center">
               <Link href="/">
-                <Image src="/Icon.png" alt="Logo" height={50} width={50} />
+                <Image src="/Icon.png" alt="Logo" height={30} width={40} />
               </Link>
               {compilerPage && (
                 <div className="flex items-center justify-center">
                   <li className="h-[16px] w-[1px] bg-gray-500"></li>
-                  <span className="font-bold mx-5">{sessionName}</span>
+                  <span className="font-medium text-[14px] mx-5 text-[#f5f5f5]">{sessionName}</span>
                 </div>
               )}
             </ul>
@@ -154,21 +138,13 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
         <div className="flex items-center space-x-4 justify-end">
           {user && compilerPage && <Timer />}
           {user && (
-            <div className="cursor-pointer group relative">
-              <ToolTip message={userData.fullName}>
-                <UserAvatar
-                  ImageUrl={userData.imageUrl}
-                  fallBackInitials={userData.fullName
-                    .split(' ')
-                    .map(part => part[0])
-                    .join(' ')}
-                />
-              </ToolTip>
+            <div>
+              <AvatarPop session={session} />
             </div>
           )}
           {compilerPage ? (
             <ToolTip message="Quit the session">
-              <Button onClick={handleQuit} color="warning" size="sm">
+              <Button onClick={handleQuit} color="warning" size="sm" className="h-8">
                 Quit
               </Button>
             </ToolTip>
