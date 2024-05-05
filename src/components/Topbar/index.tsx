@@ -43,7 +43,7 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
 
           <div className="hidden md:flex justify-center flex-1 mt-2"></div>
         </div>
-        <div className="flex items-center space-x-4 justify-end">
+        <div className="flex items-center space-x-2 justify-end">
           {user && compilerPage && <Timer />}
           {user && (
             <div>

@@ -28,9 +28,6 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -55,21 +52,21 @@ const Apparence: React.FC = () => {
 
   return (
     <div>
-      <HoverCard>
-        <HoverCardTrigger className="rounded cursor-pointer flex flex-row items-center py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]">
+      <Popover>
+        <PopoverTrigger className="rounded cursor-pointer flex flex-row items-center justify-between py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]">
           <div className="leading-none">
             {themevariant === 'dark' ? <Moon /> : themevariant === 'light' ? <Sun /> : <SunMoon />}
           </div>
           <div className="grow text-left"> Apparence</div>
           <ChevronRight className="w-[14px] h-[14px]" />
-        </HoverCardTrigger>
-        <HoverCardContent className="w-48">
+        </PopoverTrigger>
+        <PopoverContent className="w-48 dark:bg-[#303030] border-none">
           <div className="flex flex-col">
             {Themes.map((theme, idx) => (
               <div
                 onClick={() => setThemeVariant(theme.value)}
                 key={idx}
-                className="relative flex w-full p-1 m-1 rounded-[4px] text-[#f5f5f5] hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
+                className="relative flex w-full p-1 m-1 rounded-[4px] text-[#f5f5f5] dark:hover:bg-[#404040] focus:outline-none cursor-pointer">
                 <span
                   className={`flex items-center mr-2 ${
                     themevariant === theme.value ? 'visible' : 'invisible'
@@ -80,8 +77,8 @@ const Apparence: React.FC = () => {
               </div>
             ))}
           </div>
-        </HoverCardContent>
-      </HoverCard>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
@@ -94,7 +91,7 @@ interface ModuleProps {
 
 const Module: React.FC<ModuleProps> = ({ onClick, label, icon }) => (
   <div
-    className="rounded cursor-pointer flex flex-row items-center py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]"
+    className="rounded cursor-pointer flex flex-row items-center py-3 space-x-6 px-2 md:space-x-3 md:py-[10px] hover:bg-[#404040]"
     onClick={onClick}>
     <div className="leading-none">{icon}</div>
     <div className="grow text-left">{label}</div>
@@ -223,7 +220,7 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session, compilerPage }) => {
             .join(' ')}
         />
       </PopoverTrigger>
-      <PopoverContent className="relative w-[270px] flex top-3 flex-col">
+      <PopoverContent className="relative w-[270px] flex top-3 flex-col right-3 p-2 text-[14px] dark:bg-[#303030] border-none">
         <div className="flex shrink-0 items-center px-[1px]">
           <Avatar className="flex h-14 w-14">
             <AvatarImage src={userData.imageUrl} />
@@ -235,14 +232,12 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session, compilerPage }) => {
             </AvatarFallback>
           </Avatar>
           <div className="pl-3">
-            <h4 className="flex items-center text-small font-semibold dark:text-dark-label-2">
-              {userData.fullName}
-            </h4>
+            <h4 className="flex items-center text-small font-semibold">{userData.fullName}</h4>
             <h5 className="text-small tracking-tight">{userData.email}</h5>
           </div>
           <div className="flex flex-row"></div>
         </div>
-        <div className="m-0  p-0 px-4 md:mt-4 md:border-none md:px-0">
+        <div className="m-0  p-0 px-4 md:mt-4 md:border-none md:px-0 dark:text-[#ffffff99]">
           <Apparence />
           {compilerPage ? (
             <Module onClick={handleQuit} label="Quit Session" icon={<Ban />} />
