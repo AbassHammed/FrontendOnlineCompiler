@@ -46,21 +46,31 @@ const Playground = () => {
   };
 
   return (
-    <div className="flex flex-auto flex-col relative w-[55%] rounded-md shadow-xl overflow-hidden mx-2 mb-2">
-      <PreferenceNav
-        onFontSizeChange={handleFontSizeChange}
-        onLanguageSelect={handleLanguageSelect}
-      />
-      <div className="w-full overflow-auto bg-[#262626] rounded-b-lg shadow-xl select-none h-[calc(100vh-154px)]">
-        <CodeMirror
-          value={currentCode}
-          onChange={setCurrentCode}
-          theme={vscodeDark}
-          extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
-          style={{ fontSize: fontSize }}
+    <div className="flex flex-auto flex-col relative w-[55%] rounded-md shadow-xl overflow-hidden">
+      <div
+        tabIndex={0}
+        className="focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 
+                       active:ring-4 active:ring-blue-500 active:ring-opacity-50 m-2 rounded-md">
+        <PreferenceNav
+          onFontSizeChange={handleFontSizeChange}
+          onLanguageSelect={handleLanguageSelect}
         />
+        <div className="w-full overflow-auto bg-[#262626] rounded-b-lg shadow-xl select-none h-[calc(100vh-136px)]">
+          <CodeMirror
+            value={currentCode}
+            onChange={setCurrentCode}
+            theme={vscodeDark}
+            extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
+            style={{ fontSize: fontSize }}
+          />
+        </div>
       </div>
-      <EditorFooter handleGenerate={handleGenerate} />
+      <div
+        tabIndex={0}
+        className="focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 
+                       active:ring-4 active:ring-blue-500 active:ring-opacity-50 m-2 rounded-md">
+        <EditorFooter handleGenerate={handleGenerate} />
+      </div>
     </div>
   );
 };

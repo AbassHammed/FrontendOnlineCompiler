@@ -13,7 +13,7 @@ interface ProviderProps {
 }
 
 export const Provider: React.FC<ProviderProps> = ({ children }) => (
-  <ThemeProvider attribute="class" defaultTheme="dark">
+  <ThemeProvider attribute="class" enableSystem defaultTheme="system" disableTransitionOnChange>
     <SessionProvider>
       <NextUIProvider>{children}</NextUIProvider>
       <Toaster />

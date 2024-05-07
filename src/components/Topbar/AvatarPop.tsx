@@ -4,6 +4,23 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Loading from '@/components/Loading';
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  ToastAction,
+  UserAvatar,
+  useToast,
+} from '@/components/ui';
 import { auth, firestore, storage } from '@/firebase/firebase';
 import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
@@ -24,18 +41,6 @@ import { useTheme } from 'next-themes';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { BsCheckLg } from 'react-icons/bs';
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  ToastAction,
-  UserAvatar,
-  useToast,
-} from '../ui';
-
 const Themes = [
   { name: 'System Default', value: 'system' },
   { name: 'Light', value: 'light' },
@@ -45,6 +50,7 @@ const Themes = [
 const Apparence: React.FC = () => {
   const { setTheme } = useTheme();
   const [themevariant, setThemeVariant] = useLocalStorage('theme', 'system');
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setTheme(themevariant);
@@ -52,15 +58,17 @@ const Apparence: React.FC = () => {
 
   return (
     <div>
-      <Popover>
-        <PopoverTrigger className="rounded cursor-pointer flex flex-row items-center justify-between py-3 space-x-6 px-2 md:space-x-3 md:py-[10px]">
+      <DropdownMenu open={isOpen}>
+        <DropdownMenuTrigger
+          className="rounded cursor-pointer flex flex-row items-center justify-between w-full py-3 space-x-6 px-2 md:space-x-3 md:py-[10px] dark:hover:bg-[#404040]"
+          onClick={() => setIsOpen(prev => !prev)}>
           <div className="leading-none">
             {themevariant === 'dark' ? <Moon /> : themevariant === 'light' ? <Sun /> : <SunMoon />}
           </div>
           <div className="grow text-left"> Apparence</div>
           <ChevronRight className="w-[14px] h-[14px]" />
-        </PopoverTrigger>
-        <PopoverContent className="w-48 dark:bg-[#303030] border-none">
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-48 dark:bg-[#303030] border-none">
           <div className="flex flex-col">
             {Themes.map((theme, idx) => (
               <div
@@ -77,8 +85,8 @@ const Apparence: React.FC = () => {
               </div>
             ))}
           </div>
-        </PopoverContent>
-      </Popover>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
@@ -220,7 +228,9 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session, compilerPage }) => {
             .join(' ')}
         />
       </PopoverTrigger>
-      <PopoverContent className="relative w-[270px] flex top-3 flex-col right-3 p-2 text-[14px] dark:bg-[#303030] border-none">
+      <PopoverContent
+        onOpenAutoFocus={e => e.preventDefault()}
+        className="relative w-[270px] flex top-3 flex-col right-3 p-2 text-[14px] dark:bg-[#303030] border-none">
         <div className="flex shrink-0 items-center px-[1px]">
           <Avatar className="flex h-14 w-14">
             <AvatarImage src={userData.imageUrl} />
@@ -238,13 +248,13 @@ const AvatarPop: React.FC<AvatarPopProps> = ({ session, compilerPage }) => {
           <div className="flex flex-row"></div>
         </div>
         <div className="m-0  p-0 px-4 md:mt-4 md:border-none md:px-0 dark:text-[#ffffff99]">
-          <Apparence />
           {compilerPage ? (
             <Module onClick={handleQuit} label="Quit Session" icon={<Ban />} />
           ) : (
             <Module onClick={handleClose} label="Close Session" icon={<Ban />} />
           )}
           <Module onClick={handleSignOut} label="Sign Out" icon={<LogOut />} />
+          <Apparence />
         </div>
       </PopoverContent>
     </Popover>

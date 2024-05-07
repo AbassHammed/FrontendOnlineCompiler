@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+import { ToolTip } from '@/components/ui';
 import { FiPause, FiPlay, FiRefreshCcw } from 'react-icons/fi';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 import { LuAlarmClock } from 'react-icons/lu';
-
-import { ToolTip } from '../ui';
 
 const Timer = () => {
   const [isRunning, setIsRunning] = useState(false);
