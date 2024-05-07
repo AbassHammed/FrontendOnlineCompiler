@@ -15,7 +15,9 @@ interface ProviderProps {
 export const Provider: React.FC<ProviderProps> = ({ children }) => (
   <ThemeProvider attribute="class" enableSystem defaultTheme="system" disableTransitionOnChange>
     <SessionProvider>
-      <NextUIProvider>{children}</NextUIProvider>
+      <NextUIProvider>
+        <div className="bg-[#f0f0f0] dark:bg-[#0f0f0f]">{children}</div>
+      </NextUIProvider>
       <Toaster />
     </SessionProvider>
   </ThemeProvider>

@@ -9,10 +9,8 @@ import {
   AvatarFallback,
   AvatarImage,
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  DropdownMenuPortal,
   DropdownMenuTrigger,
   Popover,
   PopoverContent,
@@ -24,8 +22,9 @@ import {
 import { auth, firestore, storage } from '@/firebase/firebase';
 import { userInfoQuery } from '@/firebase/query';
 import { useAuth } from '@/hooks/useAuth';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useSession } from '@/hooks/useSession';
+import { stringToTheme } from '@/lib/utils';
 import { Session } from '@/types';
 import {
   collection,
@@ -46,46 +45,49 @@ const Themes = [
   { name: 'Light', value: 'light' },
   { name: 'Dark', value: 'dark' },
 ] as const;
-
+type Theme = (typeof Themes)[number];
+export type ThemeValue = Theme['value'];
 const Apparence: React.FC = () => {
   const { setTheme } = useTheme();
   const [themevariant, setThemeVariant] = useLocalStorage('theme', 'system');
-  const [isOpen, setIsOpen] = useState(false);
+  const [selectedKey, setSelectedKey] = useState(stringToTheme(themevariant));
 
-  useEffect(() => {
-    setTheme(themevariant);
-  }, [themevariant, setTheme]);
+  const handleThemeChange = (theme: Theme) => {
+    setThemeVariant(theme.value);
+    setTheme(theme.value);
+    setSelectedKey(theme.value);
+  };
 
   return (
     <div>
-      <DropdownMenu open={isOpen}>
-        <DropdownMenuTrigger
-          className="rounded cursor-pointer flex flex-row items-center justify-between w-full py-3 space-x-6 px-2 md:space-x-3 md:py-[10px] dark:hover:bg-[#404040]"
-          onClick={() => setIsOpen(prev => !prev)}>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="rounded cursor-pointer flex flex-row items-center justify-between w-full py-3 space-x-6 px-2 md:space-x-3 md:py-[10px] dark:hover:bg-[#404040]">
           <div className="leading-none">
-            {themevariant === 'dark' ? <Moon /> : themevariant === 'light' ? <Sun /> : <SunMoon />}
+            {selectedKey === 'dark' ? <Moon /> : selectedKey === 'light' ? <Sun /> : <SunMoon />}
           </div>
           <div className="grow text-left"> Apparence</div>
           <ChevronRight className="w-[14px] h-[14px]" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-48 dark:bg-[#303030] border-none">
-          <div className="flex flex-col">
-            {Themes.map((theme, idx) => (
-              <div
-                onClick={() => setThemeVariant(theme.value)}
-                key={idx}
-                className="relative flex w-full p-1 m-1 rounded-[4px] text-[#f5f5f5] dark:hover:bg-[#404040] focus:outline-none cursor-pointer">
-                <span
-                  className={`flex items-center mr-2 ${
-                    themevariant === theme.value ? 'visible' : 'invisible'
-                  }`}>
-                  <BsCheckLg />
-                </span>
-                <div className="text-left text-[14px]">{theme.name}</div>
-              </div>
-            ))}
-          </div>
-        </DropdownMenuContent>
+        <DropdownMenuPortal>
+          <DropdownMenuContent className="w-48 dark:bg-[#303030] border-none">
+            <div className="flex flex-col">
+              {Themes.map((theme, idx) => (
+                <div
+                  onClick={() => handleThemeChange(theme)}
+                  key={idx}
+                  className="relative flex w-full p-1 m-1 rounded-[4px] text-[#f5f5f5] dark:hover:bg-[#404040] focus:outline-none cursor-pointer">
+                  <span
+                    className={`flex items-center mr-2 ${
+                      selectedKey === theme.value ? 'visible' : 'invisible'
+                    }`}>
+                    <BsCheckLg />
+                  </span>
+                  <div className="text-left text-[14px]">{theme.name}</div>
+                </div>
+              ))}
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
       </DropdownMenu>
     </div>
   );

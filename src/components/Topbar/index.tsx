@@ -35,7 +35,9 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
               {compilerPage && (
                 <div className="flex items-center justify-center">
                   <li className="h-[16px] w-[1px] bg-gray-500"></li>
-                  <span className="font-medium text-[14px] mx-5 text-[#f5f5f5]">{sessionName}</span>
+                  <span className="font-medium text-[14px] mx-5 dark:text-[#f5f5f5]">
+                    {sessionName}
+                  </span>
                 </div>
               )}
             </ul>

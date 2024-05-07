@@ -46,16 +46,17 @@ const Playground = () => {
   };
 
   return (
-    <div className="flex flex-auto flex-col relative w-[55%] rounded-md shadow-xl overflow-hidden">
+    <div className="flex flex-auto flex-col w-[55%]">
       <div
-        tabIndex={0}
-        className="focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 
-                       active:ring-4 active:ring-blue-500 active:ring-opacity-50 m-2 rounded-md">
+        onClick={e => e.preventDefault()}
+        tabIndex={-1}
+        className="rounded-md overflow-hidden mx-2 focus:ring-1 focus-within:ring-blue-500 focus:ring-opacity-50 
+                       active:ring-1 active:ring-blue-500 active:ring-opacity-50">
         <PreferenceNav
           onFontSizeChange={handleFontSizeChange}
           onLanguageSelect={handleLanguageSelect}
         />
-        <div className="w-full overflow-auto bg-[#262626] rounded-b-lg shadow-xl select-none h-[calc(100vh-136px)]">
+        <div className="w-full overflow-auto bg-[#262626] select-none h-[calc(100vh-140px)]">
           <CodeMirror
             value={currentCode}
             onChange={setCurrentCode}
@@ -66,9 +67,9 @@ const Playground = () => {
         </div>
       </div>
       <div
-        tabIndex={0}
-        className="focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 
-                       active:ring-4 active:ring-blue-500 active:ring-opacity-50 m-2 rounded-md">
+        tabIndex={-1}
+        className="focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 
+                       active:ring-1 active:ring-blue-500 active:ring-opacity-50 rounded-lg mx-2 mt-2">
         <EditorFooter handleGenerate={handleGenerate} />
       </div>
     </div>

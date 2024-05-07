@@ -42,7 +42,7 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontS
   }, []);
 
   return (
-    <div className="flex items-center justify-between bg-[#333] h-9 w-full rounded-t-lg shadow-md">
+    <div className="flex items-center justify-between bg-[#333] h-9 w-full rounded-t-md shadow-md">
       <div className="flex items-center text-white">
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>

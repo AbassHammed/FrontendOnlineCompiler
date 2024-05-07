@@ -28,7 +28,7 @@ const SessionPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">
+    <div className="flex flex-col items-center justify-center h-screen dark:bg-[#1A1A1A] text-white relative">
       <div className="absolute w-full top-0">
         <Navbar />
       </div>

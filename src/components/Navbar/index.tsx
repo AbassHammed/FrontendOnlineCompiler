@@ -15,7 +15,7 @@ const Navbar: React.FC<NavbarProps> = ({ showSign }) => {
     setAuthModalState(prev => ({ ...prev, isOpen: true }));
   };
   return (
-    <div className="flex flex-col items-center justify-center h-[5rem] bg-[#1a1a1a] text-white relative">
+    <div className="flex flex-col items-center justify-center h-[5rem] dark:bg-[#1a1a1a] text-white relative">
       <div className="absolute top-4 left-4 flex items-center">
         <Image src="/Icon.png" alt="LetsCode Logo" width={50} height={50} />
         <h1 className="fonth1 ml-2">LetsCode</h1>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { BsCheckLg } from 'react-icons/bs';
-
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
 
 interface LanguageOption {
   id: string;
@@ -58,7 +57,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
           <ChevronDownIcon className="h-5 w-5" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] flex flex-row p-1 m-1 bg-[#323232]">
+      <PopoverContent className="w-[400px] flex flex-row p-1 m-1 bg-[#323232]" align="start">
         <div className="flex flex-col">
           {languages1.map(language => (
             <div

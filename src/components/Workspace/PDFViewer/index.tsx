@@ -7,7 +7,10 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
 
 interface NavProps {
   pageNumber: number;
@@ -17,22 +20,22 @@ interface NavProps {
 }
 
 const Nav: React.FC<NavProps> = ({ pageNumber, numPages, goToPrevPage, goToNextPage }) => (
-  <div className="flex h-9 w-full items-center justify-center bg-[#333] text-gray-400 overflow-x-hidden rounded-t-lg shadow-md">
+  <div className="flex h-9 w-full items-center justify-center dark:bg-[#333] bg-[#fafafa] text-gray-400 overflow-x-hidden rounded-t-md">
     <div className="flex items-center space-x-4 ">
       <button
         onClick={goToPrevPage}
         disabled={pageNumber <= 1}
-        className="flex items-center justify-center rounded-sm hover:bg-dark-fill-2 h-7 w-7 cursor-pointer">
+        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-gray-200 h-7 w-7 cursor-pointer">
         <HiOutlineChevronLeft />
       </button>
-      <div className="bg-[#0f0f0f] text-white rounded-md px-2 py-1 text-sm font-medium">
+      <div className="dark:bg-[#0f0f0f] bg-[#f0f0f0] dark:text-white text-black rounded-md px-2 py-1 text-sm font-medium">
         <span>{pageNumber}</span>
         <span className="text-gray-400"> / {numPages}</span>
       </div>
       <button
         onClick={goToNextPage}
         disabled={pageNumber >= numPages}
-        className="flex items-center justify-center rounded-sm hover:bg-dark-fill-2 h-7 w-7 cursor-pointer">
+        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-gray-200 h-7 w-7 cursor-pointer">
         <HiOutlineChevronRight />
       </button>
     </div>
@@ -55,7 +58,10 @@ const PDFViewer = () => {
   );
 
   return (
-    <div className="bg-[#282828] rounded-lg shadow-xl overflow-hidden ml-2 mb-2 flex-auto w-[40%]">
+    <div
+      tabIndex={-1}
+      className="dark:bg-[#282828] bg-white rounded-lg overflow-hidden ml-2 mb-2 flex-auto w-[40%] focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 
+                       active:ring-1 active:ring-blue-500 active:ring-opacity-50">
       <Nav
         pageNumber={pageNumber}
         numPages={numPages}

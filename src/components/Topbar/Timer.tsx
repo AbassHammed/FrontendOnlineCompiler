@@ -27,7 +27,7 @@ const Timer = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-8 text-[#fff9]">
+    <div className="flex items-center justify-center h-8 dark:text-[#fff9]">
       {isRunning || time !== 0 ? (
         <div className="flex items-center h-8">
           <div
