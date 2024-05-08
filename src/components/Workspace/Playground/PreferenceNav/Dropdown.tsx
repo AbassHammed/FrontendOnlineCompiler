@@ -52,18 +52,18 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <div className="flex whitespace-nowrap !flex-row justify-center items-center m-1 rounded-md p-1 cursor-pointer hover:bg-gray-8 text-[#a8a8a8] text-sm font-normal">
+        <div className="flex whitespace-nowrap !flex-row justify-center items-center m-1 rounded-md p-1 cursor-pointer dark:hover:bg-gray-8 hover:bg-[#e7e7e7] text-[#a8a8a8] text-sm font-normal">
           {selectedLanguage}
           <ChevronDownIcon className="h-5 w-5" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] flex flex-row p-1 m-1 bg-[#323232]" align="start">
+      <PopoverContent className="w-[400px] flex flex-row p-1 m-1 dark:bg-[#323232]" align="start">
         <div className="flex flex-col">
           {languages1.map(language => (
             <div
               onClick={() => handleLanguageChange(language)}
               key={language.id}
-              className="relative flex w-[120px] p-1 m-1 rounded-[4px] text-[#f5f5f5] hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
+              className="relative flex w-[120px] p-1 m-1 rounded-[4px] dark:text-[#f5f5f5] dark:hover:bg-[#4d4d4d] hover:bg-[#f5f5f5] focus:outline-none cursor-pointer">
               <span
                 className={`flex items-center mr-2 ${
                   selectedLanguage === language.name ? 'visible' : 'invisible'
@@ -80,7 +80,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
             <div
               onClick={() => handleLanguageChange(language)}
               key={language.id}
-              className="relative flex w-[120px] p-1 m-1 rounded-[4px] text-[#f5f5f5] hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
+              className="relative flex w-[120px] p-1 m-1 rounded-[4px] dark:text-[#f5f5f5] dark:hover:bg-[#4d4d4d] hover:bg-[#f5f5f5] focus:outline-none cursor-pointer">
               <span
                 className={`flex items-center mr-2 ${
                   selectedLanguage === language.name ? 'visible' : 'invisible'
@@ -97,7 +97,7 @@ const DropDown: React.FC<DropDownProps> = ({ onLanguageSelect }) => {
             <div
               onClick={() => handleLanguageChange(language)}
               key={language.id}
-              className="relative flex w-[120px] p-1 m-1 rounded-[4px] text-[#f5f5f5] hover:bg-[#4d4d4d] focus:outline-none cursor-pointer">
+              className="relative flex w-[120px] p-1 m-1 rounded-[4px] dark:text-[#f5f5f5] dark:hover:bg-[#4d4d4d] hover:bg-[#f5f5f5] focus:outline-none cursor-pointer">
               <span
                 className={`flex items-center mr-2 ${
                   selectedLanguage === language.name ? 'visible' : 'invisible'

@@ -31,14 +31,14 @@ const Timer = () => {
       {isRunning || time !== 0 ? (
         <div className="flex items-center h-8">
           <div
-            className="flex rounded-l-md bg-[#222] p-1.5 h-8 justify-center items-center cursor-pointer"
+            className="flex rounded-l-md dark:bg-[#222] bg-[#e7e7e7] p-1.5 h-8 justify-center items-center cursor-pointer"
             onClick={() => {
               setIsRunning(false);
               setTime(0);
             }}>
             <HiOutlineChevronLeft />
           </div>
-          <div className="bg-[#222] flex items-center space-x-2 h-8 justify-center p-1.5 mx-[1px]">
+          <div className="dark:bg-[#222] bg-[#e7e7e7] flex items-center space-x-2 h-8 justify-center p-1.5 mx-[1px]">
             {isRunning ? (
               <ToolTip message="Pause">
                 <FiPause onClick={() => setIsRunning(false)} className="cursor-pointer" />
@@ -52,7 +52,7 @@ const Timer = () => {
           </div>
           <ToolTip message="Reset">
             <div
-              className="rounded-r-md bg-dark-fill-3 p-1.5 cursor-pointer h-8 flex justify-center items-center"
+              className="rounded-r-md dark:bg-dark-fill-3 bg-[#e7e7e7] p-1.5 cursor-pointer h-8 flex justify-center items-center"
               onClick={() => setTime(0)}>
               <FiRefreshCcw />
             </div>
@@ -61,7 +61,7 @@ const Timer = () => {
       ) : (
         <ToolTip message="Start Timer">
           <div
-            className="flex items-center rounded cursor-pointer p-1 ease-in-out transition duration-300 hover:bg-dark-fill-3 h-8 justify-center"
+            className="flex items-center rounded cursor-pointer p-1 ease-in-out transition duration-300 hover:bg-[#e7e7e7] dark:hover:bg-dark-fill-3 h-8 justify-center"
             onClick={() => setIsRunning(true)}>
             <LuAlarmClock className="h-5 w-5" />
           </div>

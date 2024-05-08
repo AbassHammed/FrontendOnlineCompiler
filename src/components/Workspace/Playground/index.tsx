@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import { useDarkMode } from '@/hooks';
 import { languages } from '@/lib/lang';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
 
 import EditorFooter from './EditorFooter';
 import PreferenceNav from './PreferenceNav';
 
 const Playground = () => {
+  const { isDarkMode } = useDarkMode();
   const [fontSize, setFontSize] = useState(localStorage.getItem('lcc-fontSize') || '13px');
   const [selectedLanguage, setSelectedLanguage] = useState(
     sessionStorage.getItem('language') || 'C++',
@@ -56,11 +57,11 @@ const Playground = () => {
           onFontSizeChange={handleFontSizeChange}
           onLanguageSelect={handleLanguageSelect}
         />
-        <div className="w-full overflow-auto bg-[#262626] select-none h-[calc(100vh-140px)]">
+        <div className="w-full overflow-auto dark:bg-[#262626] bg-white select-none h-[calc(100vh-140px)]">
           <CodeMirror
             value={currentCode}
             onChange={setCurrentCode}
-            theme={vscodeDark}
+            theme={isDarkMode ? 'dark' : 'light'}
             extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
             style={{ fontSize: fontSize }}
           />

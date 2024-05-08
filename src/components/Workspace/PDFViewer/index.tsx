@@ -25,7 +25,7 @@ const Nav: React.FC<NavProps> = ({ pageNumber, numPages, goToPrevPage, goToNextP
       <button
         onClick={goToPrevPage}
         disabled={pageNumber <= 1}
-        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-gray-200 h-7 w-7 cursor-pointer">
+        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-[#e7e7e7] h-7 w-7 cursor-pointer">
         <HiOutlineChevronLeft />
       </button>
       <div className="dark:bg-[#0f0f0f] bg-[#f0f0f0] dark:text-white text-black rounded-md px-2 py-1 text-sm font-medium">
@@ -35,7 +35,7 @@ const Nav: React.FC<NavProps> = ({ pageNumber, numPages, goToPrevPage, goToNextP
       <button
         onClick={goToNextPage}
         disabled={pageNumber >= numPages}
-        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-gray-200 h-7 w-7 cursor-pointer">
+        className="flex items-center justify-center rounded-sm dark:hover:bg-dark-fill-2 hover:bg-[#e7e7e7] h-7 w-7 cursor-pointer">
         <HiOutlineChevronRight />
       </button>
     </div>

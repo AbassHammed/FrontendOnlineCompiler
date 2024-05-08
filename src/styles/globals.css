@@ -4,6 +4,11 @@
 
 @layer base {
   :root {
+    --cm-background: #ffffff;
+
+    --scroll-background: #f0f0f0;
+    --scrollthumb-background: #c1c1c1;
+
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
 
@@ -39,6 +44,11 @@
   }
 
   .dark {
+    --cm-background: #282828;
+
+    --scroll-background: #282828;
+    --scrollthumb-background: #4d4d4d;
+
     --background: 240 10% 3.9%;
     --foreground: 210 20% 98%;
 
@@ -83,18 +93,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #282828;
+  background: var(--scroll-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4d4d4d;
+  background: var(--scrollthumb-background);
 }
 
 .cm-scroller,
-/* .cm-activeLine, */
-/* .cm-activeLineGutter, */
+/* .cm-activeLine,
+.cm-activeLineGutter, */
 .cm-gutters {
-  background-color: #262626 !important;
+  background-color: var(--cm-background) !important;
 }
 
 .cm-focused {
