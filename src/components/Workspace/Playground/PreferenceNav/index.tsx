@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import Settings from '@/components/Modals/settings';
 import { ToolTip } from '@/components/ui/tooltip';
 import DropDown from '@/components/Workspace/Playground/PreferenceNav/Dropdown';
-import { Button } from '@nextui-org/react';
-import { AiOutlineFullscreen, AiOutlineFullscreenExit } from 'react-icons/ai';
+import { Maximize2, Minimize2 } from 'lucide-react';
 
 interface PreferenceNavProps {
   onLanguageSelect: (language: string) => void;
-  onFontSizeChange: (fontSize: string) => void;
 }
 
-const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontSizeChange }) => {
+const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleFullScreenToggle = () => {
@@ -47,24 +44,18 @@ const PreferenceNav: React.FC<PreferenceNavProps> = ({ onLanguageSelect, onFontS
         <DropDown onLanguageSelect={onLanguageSelect} />
       </div>
       <div className="flex items-center relative justify-end mr-2">
-        <ToolTip message="Settings">
-          <Settings onFontSizeChange={onFontSizeChange} />
+        <ToolTip message="Full Screen" side="bottom">
+          <button
+            aria-label="FullSreen"
+            className="rounded px-3 py-1.5 font-medium items-center whitespace-nowrap focus:outline-none inline-flex group ml-auto !p-1"
+            onClick={handleFullScreenToggle}>
+            {!isFullScreen ? (
+              <Maximize2 className="h-4 w-4 text-[#737373] dark:text-[#737373] group-hover:text-gray-7 dark:group-hover:text-dark-gray-7" />
+            ) : (
+              <Minimize2 className="h-4 w-4 text-[#737373] dark:text-[#737373] group-hover:text-gray-7 dark:group-hover:text-dark-gray-7" />
+            )}
+          </button>
         </ToolTip>
-
-        <Button
-          isIconOnly
-          aria-label="FullSreen"
-          variant="light"
-          className="w-7 h-7 rounded-sm text-lg hover:!bg-[#3a3a3a] "
-          onClick={handleFullScreenToggle}>
-          {!isFullScreen ? (
-            <ToolTip message="Full Screen">
-              <AiOutlineFullscreen className="text-purple-500" />
-            </ToolTip>
-          ) : (
-            <AiOutlineFullscreenExit className="text-purple-500" />
-          )}
-        </Button>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Session } from '@/types';
 
 import Loading from '../Loading';
+import Settings from '../Modals/settings';
 import AvatarPop from './AvatarPop';
 import Timer from './Timer';
 
@@ -42,13 +43,12 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
               )}
             </ul>
           </div>
-
-          <div className="hidden md:flex justify-center flex-1 mt-2"></div>
         </div>
-        <div className="flex items-center space-x-2 justify-end">
+        <div className="relative ml-4 flex items-center gap-2 justify-end">
           {user && compilerPage && <Timer />}
           {user && (
-            <div>
+            <div className="flex flex-row justify-center items-center gap-2">
+              <Settings />
               <AvatarPop session={session} compilerPage={compilerPage} />
             </div>
           )}

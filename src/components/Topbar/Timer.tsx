@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { ToolTip } from '@/components/ui';
 import { FiPause, FiPlay, FiRefreshCcw } from 'react-icons/fi';
@@ -8,15 +8,15 @@ import { LuAlarmClock } from 'react-icons/lu';
 const Timer = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0);
+  const intervalId = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
     if (isRunning) {
-      intervalId = setInterval(() => {
+      intervalId.current = setInterval(() => {
         setTime(prevTime => prevTime + 1);
       }, 1000);
     }
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId.current);
   }, [isRunning]);
 
   const formatTime = (time: number) => {
@@ -53,7 +53,10 @@ const Timer = () => {
           <ToolTip message="Reset">
             <div
               className="rounded-r-md dark:bg-dark-fill-3 bg-[#e7e7e7] p-1.5 cursor-pointer h-8 flex justify-center items-center"
-              onClick={() => setTime(0)}>
+              onClick={() => {
+                setTime(0);
+                setIsRunning(true);
+              }}>
               <FiRefreshCcw />
             </div>
           </ToolTip>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useDarkMode } from '@/hooks';
+import { useDarkMode, useReadLocalStorage } from '@/hooks';
 import { languages } from '@/lib/lang';
 import CodeMirror from '@uiw/react-codemirror';
 
@@ -9,7 +9,7 @@ import PreferenceNav from './PreferenceNav';
 
 const Playground = () => {
   const { isDarkMode } = useDarkMode();
-  const [fontSize, setFontSize] = useState(localStorage.getItem('lcc-fontSize') || '13px');
+  const fontSize = useReadLocalStorage<string>('lcc-fontSize');
   const [selectedLanguage, setSelectedLanguage] = useState(
     sessionStorage.getItem('language') || 'C++',
   );
@@ -26,11 +26,6 @@ const Playground = () => {
   const handleLanguageSelect = (language: string) => {
     setSelectedLanguage(language);
     setCurrentCode(languages[language as keyof typeof languages].initialCode);
-  };
-
-  const handleFontSizeChange = (fontSize: string) => {
-    localStorage.setItem('lcc-fontSize', fontSize);
-    setFontSize(fontSize);
   };
 
   const handleGenerate = () => {
@@ -53,17 +48,14 @@ const Playground = () => {
         tabIndex={-1}
         className="rounded-md overflow-hidden mx-2 focus:ring-1 focus-within:ring-blue-500 focus:ring-opacity-50 
                        active:ring-1 active:ring-blue-500 active:ring-opacity-50">
-        <PreferenceNav
-          onFontSizeChange={handleFontSizeChange}
-          onLanguageSelect={handleLanguageSelect}
-        />
+        <PreferenceNav onLanguageSelect={handleLanguageSelect} />
         <div className="w-full overflow-auto dark:bg-[#262626] bg-white select-none h-[calc(100vh-140px)]">
           <CodeMirror
             value={currentCode}
             onChange={setCurrentCode}
             theme={isDarkMode ? 'dark' : 'light'}
             extensions={[languages[selectedLanguage as keyof typeof languages].extension]}
-            style={{ fontSize: fontSize }}
+            style={{ fontSize: fontSize || '13px' }}
           />
         </div>
       </div>
