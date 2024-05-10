@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Settings as SettingsIcon } from 'lucide-react';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +10,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../ui';
+} from '@/components/ui';
+import { Settings as SettingsIcon } from 'lucide-react';
 
 export const EDITOR_FONT_SIZES = ['12px', '13px', '14px', '15px', '16px', '17px', '18px'];
 
