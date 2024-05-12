@@ -60,8 +60,8 @@ const PDFViewer = () => {
   return (
     <div
       tabIndex={-1}
-      className="dark:bg-[#282828] bg-white rounded-lg overflow-hidden ml-2 mb-2 flex-auto w-[40%] focus:ring-1 focus:ring-blue-500 focus:ring-opacity-50 
-                       active:ring-1 active:ring-blue-500 active:ring-opacity-50">
+      className="dark:bg-[#282828] bg-white rounded-lg overflow-hidden ml-2 mb-2 flex-auto w-[40%] focus:ring-1 focus:ring-[#969696] focus:ring-opacity-50 
+                       active:ring-1 active:ring-[#969696] active:ring-opacity-50">
       <Nav
         pageNumber={pageNumber}
         numPages={numPages}

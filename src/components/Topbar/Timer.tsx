@@ -64,7 +64,7 @@ const Timer = () => {
       ) : (
         <ToolTip message="Start Timer">
           <div
-            className="flex items-center rounded cursor-pointer p-1 ease-in-out transition duration-300 hover:bg-[#e7e7e7] dark:hover:bg-dark-fill-3 h-8 justify-center"
+            className="flex items-center rounded cursor-pointer p-2 ease-in-out transition duration-300 hover:bg-[#e7e7e7] dark:hover:bg-dark-fill-3 h-8 justify-center"
             onClick={() => setIsRunning(true)}>
             <LuAlarmClock className="h-5 w-5" />
           </div>

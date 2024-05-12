@@ -45,10 +45,14 @@ const Topbar: React.FC<TopbarProps> = ({ compilerPage, sessionName, session }) =
           </div>
         </div>
         <div className="relative ml-4 flex items-center gap-2 justify-end">
-          {user && compilerPage && <Timer />}
+          {user && compilerPage && (
+            <>
+              <Timer />
+              <Settings />
+            </>
+          )}
           {user && (
             <div className="flex flex-row justify-center items-center gap-2">
-              <Settings />
               <AvatarPop session={session} compilerPage={compilerPage} />
             </div>
           )}
