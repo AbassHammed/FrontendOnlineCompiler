@@ -1,5 +1,7 @@
 import { SVGProps } from 'react';
 
+export type settingNav = 'shortcut' | 'editor';
+
 export type UserInfo = {
   uid: string;
   email: string;

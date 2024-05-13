@@ -36,3 +36,4 @@ export {
   AlertDialogAction,
   AlertDialogCancel,
 } from './alert-dialog';
+export { default as SettingsNav } from './sidebarModal';
