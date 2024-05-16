@@ -1,7 +1,5 @@
 import React from 'react';
 
-// import { Icons } from '@/components/icons';
-
 const Loading: React.FC = () => (
   <div className="flex justify-center items-center h-screen w-screen">
     <div className="container">

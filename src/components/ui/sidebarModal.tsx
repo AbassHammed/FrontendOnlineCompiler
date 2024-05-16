@@ -12,12 +12,13 @@ interface SidebarNavProps {
 
 /**
  * Renders the SettingsNav component with a list of settings items.
- *
  * @param {SidebarNavProps} setVariant - Function to set the variant of settings
- * @param {settingNav} variant - The current selected setting
  * @return {JSX.Element} The rendered SettingsNav component
  */
-const SettingsNav: React.FC<SidebarNavProps> = ({ setVariant, variant }) => {
+const SettingsNav: React.FC<SidebarNavProps> = ({
+  setVariant,
+  variant,
+}: SidebarNavProps): JSX.Element => {
   const toggle = (path: settingNav) => {
     setVariant(path);
   };
@@ -37,6 +38,12 @@ const SettingsNav: React.FC<SidebarNavProps> = ({ setVariant, variant }) => {
                 : 'hover:bg-sd-accent hover:text-sd-accent-foreground',
               'relative inline-flex items-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sd-ring disabled:pointer-events-none disabled:opacity-50 h-9 rounded-sd-md text-sd-muted-foreground justify-start px-3 py-[10px]',
             )}>
+            <item.icon
+              className={cn(
+                'mr-2 h-4 w-4',
+                variant === item.href ? 'fill-sd-accent-foreground' : 'fill-sd-muted-foreground',
+              )}
+            />
             <span>{item.title}</span>
           </button>
         ))}
