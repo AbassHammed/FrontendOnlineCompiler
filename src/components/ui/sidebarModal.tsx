@@ -34,8 +34,8 @@ const SettingsNav: React.FC<SidebarNavProps> = ({
             className={cn(
               buttonVariants({ variant: 'ghost' }),
               variant === item.href
-                ? 'bg-sd-accent text-sd-accent-foreground hover:bg-sd-accent hover:text-sd-accent-foreground'
-                : 'hover:bg-sd-accent hover:text-sd-accent-foreground',
+                ? 'bg-sd-accent text-sd-accent-foreground hover:bg-sd-accent hover:text-sd-accent-foreground fill-sd-accent-foreground'
+                : 'hover:bg-sd-accent hover:text-sd-accent-foreground fill-sd-muted-foreground',
               'relative inline-flex items-center text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sd-ring disabled:pointer-events-none disabled:opacity-50 h-9 rounded-sd-md text-sd-muted-foreground justify-start px-3 py-[10px]',
             )}>
             <item.icon
@@ -44,7 +44,12 @@ const SettingsNav: React.FC<SidebarNavProps> = ({
                 variant === item.href ? 'fill-sd-accent-foreground' : 'fill-sd-muted-foreground',
               )}
             />
-            <span>{item.title}</span>
+            <span
+              className={cn(
+                variant === item.href ? 'fill-sd-accent-foreground' : 'fill-sd-muted-foreground',
+              )}>
+              {item.title}
+            </span>
           </button>
         ))}
       </div>

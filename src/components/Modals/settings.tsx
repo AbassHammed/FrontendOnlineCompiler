@@ -4,8 +4,6 @@ import { AlertDialog, AlertDialogContent, AlertDialogTrigger, SettingsNav } from
 import { settingNav } from '@/types';
 import { Settings as SettingsIcon } from 'lucide-react';
 
-export const EDITOR_FONT_SIZES = ['12px', '13px', '14px', '15px', '16px', '17px', '18px'];
-
 /**
  * Renders the Settings component.
  *
@@ -23,8 +21,8 @@ const Settings: React.FC = () => {
           <SettingsIcon className="h-[18px] w-[18px] dark:text-[#fff9] text-[#585c65] group-hover:text-black dark:group-hover:text-white" />
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="p-0 m-0 rounded-lg">
-        <div className="flex overflow-hidden rounded-xl h-[460px]">
+      <AlertDialogContent className="p-0 m-0 rounded-lg border-0 ring-1 ring-[#969696] ring-opacity-50 ">
+        <div className="flex overflow-hidden rounded-lg h-[460px]">
           <SettingsNav variant={variant} setVariant={setVariant} />
           <div className="flex-1 lg:max-w-2xl"></div>
         </div>

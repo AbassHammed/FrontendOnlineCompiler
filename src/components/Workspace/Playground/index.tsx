@@ -9,7 +9,7 @@ import PreferenceNav from './PreferenceNav';
 
 const Playground = () => {
   const { isDarkMode } = useDarkMode();
-  const fontSize = useReadLocalStorage<string>('lcc-fontSize');
+  const fontSize = useReadLocalStorage<string>('font-size');
   const [selectedLanguage, setSelectedLanguage] = useState(
     sessionStorage.getItem('language') || 'C++',
   );
