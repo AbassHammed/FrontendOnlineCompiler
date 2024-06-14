@@ -2,7 +2,230 @@
 @tailwind components;
 @tailwind utilities;
 
-/* RESET */
+@layer base {
+  :root {
+    --sd-gray-50: 0 0% 96%;
+    --sd-gray-100: 0 0% 90%;
+    --sd-gray-200: 0 0% 87%;
+    --sd-gray-300: 0 0% 71%;
+    --sd-gray-400: 0 0% 58%;
+    --sd-gray-500: 0 0% 46%;
+    --sd-gray-600: 0 0% 32%;
+    --sd-gray-700: 0 0% 16%;
+    --sd-gray-800: 0 0% 12%;
+    --sd-gray-900: 0 0% 10%;
+    --sd-gray-950: 0 0% 5%;
+    --sd-red-50: 10 100% 95%;
+    --sd-red-100: 8 93% 87%;
+    --sd-red-200: 6 92% 80%;
+    --sd-red-300: 3 92% 73%;
+    --sd-red-400: 1 91% 66%;
+    --sd-red-500: 0 91% 58%;
+    --sd-red-600: 358 71% 46%;
+    --sd-red-700: 356 79% 35%;
+    --sd-red-800: 354 88% 24%;
+    --sd-red-900: 352 100% 15%;
+    --sd-red-950: 352 100% 9%;
+    --sd-rose-50: 341 100% 95%;
+    --sd-rose-100: 336 100% 89%;
+    --sd-rose-200: 333 100% 86%;
+    --sd-rose-300: 330 100% 80%;
+    --sd-rose-400: 334 92% 69%;
+    --sd-rose-500: 332 91% 61%;
+    --sd-rose-600: 332 72% 52%;
+    --sd-rose-700: 333 93% 38%;
+    --sd-rose-800: 329 97% 26%;
+    --sd-rose-900: 323 100% 20%;
+    --sd-rose-950: 324 100% 12%;
+    --sd-purple-50: 289 100% 95%;
+    --sd-purple-100: 288 77% 87%;
+    --sd-purple-200: 286 73% 80%;
+    --sd-purple-300: 283 70% 73%;
+    --sd-purple-400: 282 67% 68%;
+    --sd-purple-500: 279 67% 59%;
+    --sd-purple-600: 277 56% 46%;
+    --sd-purple-700: 276 65% 38%;
+    --sd-purple-800: 273 82% 29%;
+    --sd-purple-900: 273 83% 24%;
+    --sd-purple-950: 273 90% 16%;
+    --sd-blue-50: 200 100% 95%;
+    --sd-blue-100: 203 100% 86%;
+    --sd-blue-200: 204 100% 77%;
+    --sd-blue-300: 207 100% 68%;
+    --sd-blue-400: 209 100% 55%;
+    --sd-blue-500: 211 100% 50%;
+    --sd-blue-600: 212 100% 45%;
+    --sd-blue-700: 214 100% 42%;
+    --sd-blue-800: 214 100% 36%;
+    --sd-blue-900: 216 100% 31%;
+    --sd-blue-950: 217 100% 20%;
+    --sd-teal-50: 169 100% 95%;
+    --sd-teal-100: 171 76% 85%;
+    --sd-teal-200: 174 71% 75%;
+    --sd-teal-300: 177 66% 56%;
+    --sd-teal-400: 178 52% 52%;
+    --sd-teal-500: 180 73% 41%;
+    --sd-teal-600: 180 81% 34%;
+    --sd-teal-700: 180 79% 26%;
+    --sd-teal-800: 180 73% 23%;
+    --sd-teal-900: 180 79% 18%;
+    --sd-teal-950: 180 90% 12%;
+    --sd-green-50: 122 100% 95%;
+    --sd-green-100: 124 68% 81%;
+    --sd-green-200: 127 62% 68%;
+    --sd-green-300: 129 58% 56%;
+    --sd-green-400: 130 65% 45%;
+    --sd-green-500: 133 98% 35%;
+    --sd-green-600: 135 98% 30%;
+    --sd-green-700: 136 100% 25%;
+    --sd-green-800: 138 100% 20%;
+    --sd-green-900: 141 100% 15%;
+    --sd-green-950: 141 100% 9%;
+    --sd-yellow-50: 52 100% 95%;
+    --sd-yellow-100: 50 100% 81%;
+    --sd-yellow-200: 49 100% 73%;
+    --sd-yellow-300: 46 100% 66%;
+    --sd-yellow-400: 45 95% 54%;
+    --sd-yellow-500: 43 100% 50%;
+    --sd-yellow-600: 43 100% 46%;
+    --sd-yellow-700: 39 100% 44%;
+    --sd-yellow-800: 36 100% 39%;
+    --sd-yellow-900: 36 100% 30%;
+    --sd-yellow-950: 36 100% 17%;
+    --sd-brand-lc-orange: 35 100% 54%;
+    --sd-brand-lc-gray: 0 0% 70%;
+    --sd-fixed-black: 0 0% 0%;
+    --sd-fixed-white: 0 0% 100%;
+    --sd-easy: 180 74% 42%;
+    --sd-medium: 43 100% 50%;
+    --sd-hard: 0 91% 59%;
+    --sd-background: 0 0% 100%;
+    --sd-background-gray: 0 0% 94.1%;
+    --sd-foreground: 0 0% 10%;
+    --sd-card: 0 0% 100%;
+    --sd-card-foreground: 0 0% 10%;
+    --sd-popover: 0 0% 100%;
+    --sd-popover-foreground: 240 10% 3.9%;
+    --sd-primary: 0 0% 10%;
+    --sd-primary-foreground: 0 0% 98%;
+    --sd-secondary: 0 0% 96%;
+    --sd-secondary-foreground: 240 5.9% 10%;
+    --sd-muted: 0 0% 94%;
+    --sd-muted-foreground: 0 0% 45%;
+    --sd-accent: 0, 0%, 0%, 0.04;
+    --sd-accent-foreground: 240 10% 3.9%;
+    --sd-destructive: 0 91% 59%;
+    --sd-destructive-foreground: 0 0% 98%;
+    --sd-border: 0, 0%, 0%, 0.08;
+    --sd-input: 0, 0%, 0%, 0.06;
+    --sd-ring: 240 10% 3.9%;
+    --sd-danger: var(--sd-red-500);
+    --sd-warning: var(--sd-yellow-500);
+    --sd-info: var(--sd-blue-500);
+    --sd-success: var(--sd-green-500);
+    --sd-radius: 0.5rem;
+    --cm-background: #ffffff;
+
+    --scroll-background: #f0f0f0;
+    --scrollthumb-background: #c1c1c1;
+
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+
+    --warn: 43 96.4% 53.6%;
+    --warn-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --sd-background: 0 0% 6%;
+    --sd-background-gray: 0 0% 6%;
+    --sd-foreground: 0 0% 96%;
+    --sd-card: 0 0% 15%;
+    --sd-card-foreground: 0 0% 96%;
+    --sd-popover: 0 0% 20%;
+    --sd-popover-foreground: 0 0% 98%;
+    --sd-primary: 0 0% 96%;
+    --sd-primary-foreground: 240 5.9% 10%;
+    --sd-secondary: 0 0% 22%;
+    --sd-secondary-foreground: 0 0% 98%;
+    --sd-muted: 0 0% 22%;
+    --sd-muted-foreground: 0 0% 66%;
+    --sd-accent: 0, 0%, 100%, 0.08;
+    --sd-accent-foreground: 0 0% 98%;
+    --sd-destructive: 356 80% 35%;
+    --sd-destructive-foreground: 0 0% 98%;
+    --sd-border: 0, 0%, 100%, 0.1;
+    --sd-input: 0, 0%, 100%, 0.14;
+    --sd-ring: 240 4.9% 83.9%;
+    --sd-danger: var(--sd-red-600);
+    --sd-warning: var(--sd-yellow-600);
+    --sd-info: var(--sd-blue-600);
+    --sd-success: var(--sd-green-600);
+    --cm-background: #282828;
+
+    --scroll-background: #282828;
+    --scrollthumb-background: #4d4d4d;
+
+    --background: 240 10% 3.9%;
+    --foreground: 210 20% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --warn: 43 96.4% 53.6%;
+    --warn-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+  }
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -14,16 +237,18 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #282828;
+  background: var(--scroll-background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4d4d4d;
+  background: var(--scrollthumb-background);
 }
 
 .cm-scroller,
+/* .cm-activeLine,
+.cm-activeLineGutter, */
 .cm-gutters {
-  background-color: #282828 !important;
+  background-color: var(--cm-background) !important;
 }
 
 .cm-focused {
@@ -56,11 +281,204 @@ code {
   padding: 0.125rem;
   letter-spacing: 1px;
   white-space: pre-wrap;
-  background-color: hsla(0, 0%, 100%, 0.07);
+  /* background-color: hsla(0, 0%, 100%, 0.07);
   border-color: rgba(247, 250, 255, 0.12);
-  color: rgba(239, 241, 246, 0.75);
+  color: rgba(239, 241, 246, 0.75); */
 }
 
 .fonth1 {
   font-family: 'Irish Grover', cursive;
+}
+
+.container {
+  --uib-size: 45px;
+  --uib-color: #8341d2;
+  --uib-speed: 1.75s;
+  position: relative;
+  height: var(--uib-size);
+  width: var(--uib-size);
+  animation: rotate calc(var(--uib-speed) * 4) linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.particle {
+  position: absolute;
+  top: 0%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+
+  &:nth-child(1) {
+    --uib-delay: 0;
+    transform: rotate(8deg);
+  }
+  &:nth-child(2) {
+    --uib-delay: -0.4;
+    transform: rotate(36deg);
+  }
+
+  &:nth-child(3) {
+    --uib-delay: -0.9;
+    transform: rotate(72deg);
+  }
+  &:nth-child(4) {
+    --uib-delay: -0.5;
+    transform: rotate(90deg);
+  }
+  &:nth-child(5) {
+    --uib-delay: -0.3;
+    transform: rotate(144deg);
+  }
+  &:nth-child(6) {
+    --uib-delay: -0.2;
+    transform: rotate(180deg);
+  }
+  &:nth-child(7) {
+    --uib-delay: -0.6;
+    transform: rotate(216deg);
+  }
+  &:nth-child(8) {
+    --uib-delay: -0.7;
+    transform: rotate(252deg);
+  }
+  &:nth-child(9) {
+    --uib-delay: -0.1;
+    transform: rotate(300deg);
+  }
+  &:nth-child(10) {
+    --uib-delay: -0.8;
+    transform: rotate(324deg);
+  }
+  &:nth-child(11) {
+    --uib-delay: -1.2;
+    transform: rotate(335deg);
+  }
+  &:nth-child(12) {
+    --uib-delay: -0.5;
+    transform: rotate(290deg);
+  }
+  &:nth-child(13) {
+    --uib-delay: -0.2;
+    transform: rotate(240deg);
+  }
+}
+
+.particle::before {
+  content: '';
+  position: absolute;
+  height: 17.5%;
+  width: 17.5%;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+  --uib-d: calc(var(--uib-delay) * var(--uib-speed));
+  animation: orbit var(--uib-speed) linear var(--uib-d) infinite;
+}
+
+@keyframes orbit {
+  0% {
+    transform: translate(calc(var(--uib-size) * 0.5)) scale(0.73684);
+    opacity: 0.65;
+  }
+  5% {
+    transform: translate(calc(var(--uib-size) * 0.4)) scale(0.684208);
+    opacity: 0.58;
+  }
+  10% {
+    transform: translate(calc(var(--uib-size) * 0.3)) scale(0.631576);
+    opacity: 0.51;
+  }
+  15% {
+    transform: translate(calc(var(--uib-size) * 0.2)) scale(0.578944);
+    opacity: 0.44;
+  }
+  20% {
+    transform: translate(calc(var(--uib-size) * 0.1)) scale(0.526312);
+    opacity: 0.37;
+  }
+  25% {
+    transform: translate(0%) scale(0.47368);
+    opacity: 0.3;
+  }
+  30% {
+    transform: translate(calc(var(--uib-size) * -0.1)) scale(0.526312);
+    opacity: 0.37;
+  }
+  35% {
+    transform: translate(calc(var(--uib-size) * -0.2)) scale(0.578944);
+    opacity: 0.44;
+  }
+  40% {
+    transform: translate(calc(var(--uib-size) * -0.3)) scale(0.631576);
+    opacity: 0.51;
+  }
+  45% {
+    transform: translate(calc(var(--uib-size) * -0.4)) scale(0.684208);
+    opacity: 0.58;
+  }
+  50% {
+    transform: translate(calc(var(--uib-size) * -0.5)) scale(0.73684);
+    opacity: 0.65;
+  }
+  55% {
+    transform: translate(calc(var(--uib-size) * -0.4)) scale(0.789472);
+    opacity: 0.72;
+  }
+  60% {
+    transform: translate(calc(var(--uib-size) * -0.3)) scale(0.842104);
+    opacity: 0.79;
+  }
+  65% {
+    transform: translate(calc(var(--uib-size) * -0.2)) scale(0.894736);
+    opacity: 0.86;
+  }
+  70% {
+    transform: translate(calc(var(--uib-size) * -0.1)) scale(0.947368);
+    opacity: 0.93;
+  }
+  75% {
+    transform: translate(0%) scale(1);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(calc(var(--uib-size) * 0.1)) scale(0.947368);
+    opacity: 0.93;
+  }
+  85% {
+    transform: translate(calc(var(--uib-size) * 0.2)) scale(0.894736);
+    opacity: 0.86;
+  }
+  90% {
+    transform: translate(calc(var(--uib-size) * 0.3)) scale(0.842104);
+    opacity: 0.79;
+  }
+  95% {
+    transform: translate(calc(var(--uib-size) * 0.4)) scale(0.789472);
+    opacity: 0.72;
+  }
+  100% {
+    transform: translate(calc(var(--uib-size) * 0.5)) scale(0.73684);
+    opacity: 0.65;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

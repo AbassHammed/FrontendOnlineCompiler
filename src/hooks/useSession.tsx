@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import { UserInfo } from '@/types';
-
 interface SessionProviderProps {
   children: React.ReactNode;
 }
@@ -10,7 +8,6 @@ export interface SessionData {
   filePath?: string;
   sessionName?: string;
   sessionDocId?: string;
-  userInfo?: UserInfo;
 }
 
 interface SessionContextProps {

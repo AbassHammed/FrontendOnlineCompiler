@@ -1,87 +1,33 @@
 import React from 'react';
 
-import useLocalStorage from '@/hooks/useLocalStorage';
-import {
-  Button,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  useDisclosure,
-} from '@nextui-org/react';
-import { AiOutlineSetting } from 'react-icons/ai';
+import { AlertDialog, AlertDialogContent, AlertDialogTrigger, SettingsNav } from '@/components/ui';
+import { settingNav } from '@/types';
+import { Settings as SettingsIcon } from 'lucide-react';
 
-const EDITOR_FONT_SIZES = ['12px', '13px', '14px', '15px', '16px', '17px', '18px'];
+/**
+ * Renders the Settings component.
+ *
+ * @return {ReactNode} The rendered Settings component
+ */
+const Settings: React.FC = () => {
+  const [variant, setVariant] = React.useState<settingNav>('shortcut');
 
-interface SettingsProps {
-  onFontSizeChange: (fontSize: string) => void;
-}
-
-const Settings: React.FC<SettingsProps> = ({ onFontSizeChange }) => {
-  const [fontSize, setFontSize] = useLocalStorage('lcc-fontSize', '13px');
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const handleFontSizeChange = (fontSize: string) => {
-    setFontSize(fontSize);
-    onFontSizeChange(fontSize);
-  };
   return (
-    <div>
-      <Button
-        isIconOnly
-        variant="light"
-        className="w-7 h-7 rounded-sm text-lg hover:!bg-[#3a3a3a]"
-        aria-label="Settings"
-        onPress={() => onOpen()}>
-        <AiOutlineSetting className="text-purple-500" />
-      </Button>
-      {isOpen && (
-        <Modal
-          backdrop="blur"
-          isOpen={isOpen}
-          onClose={onClose}
-          className="bg-[#0f0f0f] text-white p-1">
-          <ModalContent>
-            {
-              <>
-                <ModalHeader className="flex flex-col gap-1">Settings</ModalHeader>
-                <ModalBody className="pb-2">
-                  <p>Choose your preferred font size </p>
-                  <Dropdown>
-                    <DropdownTrigger>
-                      <Button
-                        size="sm"
-                        variant="bordered"
-                        color="success"
-                        className="capitalize h-9 w-5">
-                        {fontSize as string}
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Single selection example"
-                      variant="flat"
-                      disallowEmptySelection
-                      selectionMode="single"
-                      selectedKeys={new Set([fontSize])}
-                      onSelectionChange={keys =>
-                        handleFontSizeChange(Array.from(keys)[0] as string)
-                      }>
-                      {EDITOR_FONT_SIZES.map(font => (
-                        <DropdownItem key={font}>{font}</DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </Dropdown>
-                </ModalBody>
-              </>
-            }
-          </ModalContent>
-        </Modal>
-      )}
-    </div>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <button
+          aria-label="Settings"
+          className="rounded px-2 py-2 font-medium items-center whitespace-nowrap focus:outline-none inline-flex group dark:text-[#585c65] hover:bg-[#e7e7e7] dark:hover:bg-[#ffffff14]">
+          <SettingsIcon className="h-[18px] w-[18px] dark:text-[#fff9] text-[#585c65] group-hover:text-black dark:group-hover:text-white" />
+        </button>
+      </AlertDialogTrigger>
+      <AlertDialogContent className="p-0 m-0 rounded-lg border-0 ring-1 ring-[#969696] ring-opacity-50 ">
+        <div className="flex overflow-hidden rounded-lg h-[460px]">
+          <SettingsNav variant={variant} setVariant={setVariant} />
+          <div className="flex-1 lg:max-w-2xl"></div>
+        </div>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 export default Settings;

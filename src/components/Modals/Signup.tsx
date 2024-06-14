@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
 import { AvartarImg } from '@/data';
 import { auth, firestore } from '@/firebase/firebase';
 import { random } from '@/lib/utils';

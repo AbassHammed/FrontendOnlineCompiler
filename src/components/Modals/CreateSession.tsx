@@ -2,13 +2,13 @@ import React, { useCallback, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
+import { useToast } from '@/components/ui';
 import { auth, firestore, storage } from '@/firebase/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaRegClipboard } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
-import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 const MAX_FILE_SIZE = 10000000; // 10MB
@@ -22,6 +22,7 @@ const CreateSession = () => {
   const [user] = useAuthState(auth);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const generateSessionId = () => Math.random().toString(36).slice(-8).toUpperCase();
 
@@ -35,12 +36,20 @@ const CreateSession = () => {
 
   const handleSelectedFile = (files: FileList | null) => {
     if (!files || files.length === 0) {
-      return toast.warning('No file selected');
+      return toast({
+        variant: 'warn',
+        title: 'No file selected',
+        description: 'Please select a file',
+      });
     }
     const file = files[0];
 
     if (file.size > MAX_FILE_SIZE || file.type !== FILE_TYPE) {
-      return toast.warning('Invalid file. Only PDF up to 10MB.');
+      return toast({
+        variant: 'warn',
+        title: 'Invalid file',
+        description: 'File must be a PDF and less than 10MB',
+      });
     }
     setPdfFile(file);
   };
@@ -59,19 +68,27 @@ const CreateSession = () => {
       setProgressUpload((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
       return await getDownloadURL(snapshot.ref);
     } catch (error) {
-      toast.error('Upload failed');
+      toast({
+        variant: 'destructive',
+        title: 'Upload failed',
+        description: 'An error occurred while uploading the file',
+      });
       throw error;
     }
   };
 
-  const handleCreate = async (e: any) => {
+  const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
     e.preventDefault();
     if (!user) {
-      return toast.error('No user logged in');
+      return toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'You need to be logged in to create a session',
+      });
     }
     if (!inputs.sessionName) {
-      return toast.warning('Please fill all fields');
+      return toast({ variant: 'warn', title: 'Error', description: 'Session name is required' });
     }
 
     try {
@@ -85,7 +102,11 @@ const CreateSession = () => {
       });
       router.push('/d');
     } catch (e) {
-      toast.error('A problem when saving your data');
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'An error occurred while creating the session',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +135,9 @@ const CreateSession = () => {
       </div>
 
       <div>
-        <label htmlFor="sessionId" className="text-sm font-medium block mb-2 text-gray-300">
+        <label
+          htmlFor="sessionId"
+          className="text-sm font-medium block mb-2 bg-amber text-gray-300">
           Session ID
         </label>
         <div className="relative flex items-center">

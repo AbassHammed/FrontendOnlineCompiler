@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import SessionCard from '@/components/Cards/SessionCard';
-import Loadin from '@/components/Loading/Loading';
-import DashClock from '@/components/Table/DashClock';
-import DashTable from '@/components/Table/DashTable';
-import Topbar from '@/components/Topbar/Topbar';
+import DashClock from '@/components/DashBoard/DashClock';
+import DashTable from '@/components/DashBoard/DashTable';
+import SessionCard from '@/components/DashBoard/SessionCard';
+import Loading from '@/components/Loading';
+import Topbar from '@/components/Topbar';
 import { useAuth } from '@/hooks/useAuth';
 import { Session } from '@/types';
 
@@ -13,12 +13,12 @@ const Dashboard: React.FC = () => {
   const { user, loading } = useAuth();
 
   if (loading || !user) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (
-    <div className="bg-[#0f0f0f] min-h-screen">
-      <Topbar compilerPage={false} dashboardpage={true} session={session} />
+    <div className="min-h-screen">
+      <Topbar compilerPage={false} session={session} />
       <div
         className="flex justify-between items-start max-w-4xl w-full mx-auto"
         style={{ height: 'calc(100vh - TopbarHeight - TableHeight)' }}>

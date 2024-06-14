@@ -1,9 +1,17 @@
+import { SVGProps } from 'react';
+
+export type settingNav = 'shortcut' | 'editor';
+
 export type UserInfo = {
   uid: string;
   email: string;
   fullName: string;
   imageUrl: string;
   createdAt: string;
+};
+
+export type IconSvgProps = SVGProps<SVGSVGElement> & {
+  size?: number;
 };
 
 export type Session = {

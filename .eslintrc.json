@@ -32,7 +32,7 @@
     "comma-spacing": "error",
     "comma-style": "error",
     "func-call-spacing": "error",
-    "indent": ["error", 2, { "SwitchCase": 1, "MemberExpression": 1 }],
+    "indent": ["warn", 2, { "SwitchCase": 1, "MemberExpression": 1 }],
     "key-spacing": ["error", { "mode": "minimum" }],
     "keyword-spacing": "error",
     "object-curly-spacing": ["error", "always"],

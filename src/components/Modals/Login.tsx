@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
+import { useToast } from '@/components/ui/use-toast';
 import { auth } from '@/firebase/firebase';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { useSetRecoilState } from 'recoil';
-import { toast } from 'sonner';
 
 const Login: React.FC = () => {
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const setAuthModalState = useSetRecoilState(authModalState);
   const handleClick = (type: 'login' | 'register' | 'forgotPassword') => {
     setAuthModalState(prev => ({ ...prev, type }));
   };
   const [inputs, setInputs] = useState({ email: '', password: '' });
-  const [signInWithEmailAndPassword, loading, error] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, loading] = useSignInWithEmailAndPassword(auth);
   const router = useRouter();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -27,7 +28,8 @@ const Login: React.FC = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputs.email || !inputs.password) {
-      return toast.warning('Please fill all fields');
+      toast({ title: 'Empty fields', description: 'Please fill in all fields' });
+      return;
     }
     try {
       const newUser = await signInWithEmailAndPassword(inputs.email, inputs.password);
@@ -35,15 +37,9 @@ const Login: React.FC = () => {
         router.push('/session');
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast({ description: error.message });
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-    }
-  }, [error]);
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleLogin}>
       <h3 className="text-xl font-medium text-white">Log In</h3>

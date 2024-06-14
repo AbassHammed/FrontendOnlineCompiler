@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-import { authModalState } from '@/atoms/authModalAtom';
-import Loadin from '@/components/Loading/Loading';
+import { authModalState } from '@/atoms';
+import Loading from '@/components/Loading';
 import AuthModal from '@/components/Modals/AuthModal';
-import Navbar from '@/components/Navbar/Navbar';
+import Navbar from '@/components/Navbar';
 import { auth } from '@/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -28,7 +28,7 @@ const AuthPage: React.FC = () => {
   }, [user, router, loading, setAuthModalState]);
 
   if (pageLoading) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (

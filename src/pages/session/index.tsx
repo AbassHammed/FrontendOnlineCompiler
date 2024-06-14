@@ -2,17 +2,17 @@ import React, { useEffect } from 'react';
 
 import dynamic from 'next/dynamic';
 
-import { authModalState } from '@/atoms/authModalAtom';
+import { authModalState } from '@/atoms';
 import AuthModal from '@/components/Modals/AuthModal';
 import { useAuth } from '@/hooks/useAuth';
 import { FaPlus } from 'react-icons/fa';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 // import Navbar from '@/components/Navbar/Navbar';
-const Navbar = dynamic(() => import('@/components/Navbar/Navbar'), { ssr: false });
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: false });
 
-// import Loadin from '@/components/Loading/Loading';
-const Loadin = dynamic(() => import('@/components/Loading/Loading'), { ssr: false });
+// import Loading from '@/components/Loading/Loading';
+const Loading = dynamic(() => import('@/components/Loading'), { ssr: false });
 
 const SessionPage: React.FC = () => {
   const { user, loading } = useAuth();
@@ -24,11 +24,11 @@ const SessionPage: React.FC = () => {
   }, [setAuthModalState]);
 
   if (loading || !user) {
-    return <Loadin />;
+    return <Loading />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#1A1A1A] text-white relative">
+    <div className="flex flex-col items-center justify-center h-screen dark:bg-[#1A1A1A] text-white relative">
       <div className="absolute w-full top-0">
         <Navbar />
       </div>

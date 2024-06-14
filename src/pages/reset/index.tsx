@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import Navbar from '@/components/Navbar/Navbar';
+import Navbar from '@/components/Navbar';
 import { useResetPassword } from '@/hooks/useResetPassword';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
